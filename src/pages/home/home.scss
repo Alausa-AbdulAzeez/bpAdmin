@@ -1,0 +1,28 @@
+.homeWrapper {
+  width: 100%;
+  display: flex;
+
+  .homepageRight {
+    flex: 5;
+
+    .homeMainWrapper {
+      padding: 30px 64px;
+
+      .homeMainTop {
+        display: flex;
+        justify-content: space-between;
+      }
+      // .homeMainTop {
+      //   display: flex;
+      //   justify-content: space-between;
+      // }
+
+      .homeMainBottom {
+        // & > h3 {
+        //   color: var(--text-silver-color);
+        //   text-decoration: underline;
+        // }
+      }
+    }
+  }
+}

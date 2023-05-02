@@ -1,0 +1,46 @@
+.manageClientsWrapper {
+  width: 100%;
+  display: flex;
+
+  .manageClientsRight {
+    flex: 5;
+
+    .manageClientsMainWrapper {
+      padding: 30px 64px;
+
+      .manageClientsMainTop {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & > h3 {
+          color: var(--text-silver-color);
+        }
+
+        .addClientBtn {
+          height: 36px;
+          border-radius: 16px;
+          background-color: #000;
+          color: #fff;
+          padding: 6px 12px;
+          display: flex;
+          align-items: center;
+          outline: none;
+          border: none;
+          cursor: pointer;
+
+          & > span {
+            display: flex;
+            align-items: center;
+            margin-left: 4px;
+
+            .addIcon {
+              color: white;
+              font-size: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+.manageStaffWrapper {
+  width: 100%;
+  display: flex;
+
+  .manageStaffRight {
+    flex: 5;
+
+    .manageStaffMainWrapper {
+      padding: 30px 64px;
+
+      .manageStaffMainTop {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & > h3 {
+          color: var(--text-silver-color);
+        }
+
+        .addStaffBtn {
+          height: 36px;
+          border-radius: 16px;
+          background-color: #000;
+          color: #fff;
+          padding: 6px 12px;
+          display: flex;
+          align-items: center;
+          outline: none;
+          border: none;
+          cursor: pointer;
+
+          & > span {
+            display: flex;
+            align-items: center;
+            margin-left: 4px;
+
+            .addIcon {
+              color: white;
+              font-size: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.role {
+  background: #999999;
+
+  padding: 6px 12px;
+  border-radius: 16px;
+  color: #fff;
+}
+
+.buttons {
+  display: flex;
+  gap: 18px;
+  .editWrapper {
+    display: flex;
+    align-items: center;
+    background: rgba(60, 73, 186, 0.2);
+    border-radius: 16px;
+    padding: 6px 12px;
+    gap: 6px;
+    color: #0007b3;
+
+    .editIcon {
+      font-size: 18px;
+    }
+  }
+  .deleteWrapper {
+    display: flex;
+    align-items: center;
+
+    background: #ba3c3c45;
+
+    border-radius: 16px;
+    padding: 6px 12px;
+    gap: 6px;
+    color: #470000;
+    .deleteIcon {
+      font-size: 18px;
+    }
+  }
+}
