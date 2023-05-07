@@ -1,105 +1,211 @@
-import { Box } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
-import React, { useState } from 'react'
-import { MdEdit } from 'react-icons/md'
-import Sidebar from '../../components/sidebar/Sidebar'
-import Topber from '../../components/topbar/Topber'
-import './testCategories.scss'
-import { useNavigate } from 'react-router-dom'
-import { RiAddLine } from 'react-icons/ri'
-// import axios from 'axios'
+import React, { useEffect, useState } from "react";
+import Sidebar from "../../components/sidebar/Sidebar";
+import Topber from "../../components/topbar/Topber";
+import "./testCategories.scss";
+import AlertDialogSlide from "../../components/Dialogue";
+import { Autocomplete, TextField } from "@mui/material";
+import { privateRequest, publicRequest } from "../../functions/requestMethods";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TestCategories = () => {
-  const [pageSize, setPageSize] = useState(5)
-  const navigate = useNavigate()
+  const [open, setOpen] = React.useState(false);
+  const toastId = React.useRef(null);
 
-  const columns = [
-    { field: 'id', headerName: 'Client ID', width: 190 },
-    {
-      field: 'firstName',
-      headerName: 'Client name',
-      width: 200,
-      editable: true,
-    },
-    {
-      field: 'lastName',
-      headerName: 'Company',
-      width: 200,
-      editable: true,
-    },
-    {
-      field: 'fullName',
-      headerName: 'Action',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 260,
-      renderCell: () => {
-        return (
-          <div className='buttons'>
-            <div
-              className='editWrapper'
-              onClick={() => navigate('/testCategories/editCategory')}
-            >
-              <div className='edit'>Edit</div>
-              <MdEdit className='editIcon' />
-            </div>
-          </div>
-        )
-      },
-    },
-  ]
+  const top100Films = [
+    { title: "The Shawshank Redemption", year: 1994 },
+    { title: "The Godfather", year: 1972 },
+    { title: "The Godfather: Part II", year: 1974 },
+    { title: "The Dark Knight", year: 2008 },
+    { title: "12 Angry Men", year: 1957 },
+    { title: "The Shawshank Redemption", year: 1994 },
+    { title: "The Godfather", year: 1972 },
+    { title: "The Godfather: Part II", year: 1974 },
+    { title: "The Dark Knight", year: 2008 },
+    { title: "12 Angry Men", year: 1957 },
+  ];
 
-  const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  ]
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  // useEffect(() => {
-  //   const clients = axios
-  //     .get('http://15.237.160.238:60/api/Client/Client-list')
-  //     .then((response) => console.log(response))
-  // }, [])
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  // FUNCTIONALITIES PARTAINING TO FETCHING AND SETTING ROLES
+
+  const [roles, setRoles] = useState([]);
+
+  // fetch roles
+  const getRoles = async () => {
+    try {
+      const res = await publicRequest.get("/Account/roles");
+
+      if (res) {
+        console.log(res.data.data);
+        setRoles(res.data.data);
+      } else {
+        console.log(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // end of fetch roles
+
+  // use effect for fetching roles
+  useEffect(() => {
+    getRoles();
+  }, []);
+  // end of use effect for fetching roles
+
+  // END FUNCTIONALITIES PARTAINING TO ROLES
+
+  // FUNCTIONALITIES FOR CREATING A NEW STAFF
+  const [staff, setStaff] = useState({
+    name: "",
+    phoneNumber: "",
+    email: "",
+    role: "",
+  });
+
+  // function for setting staff info
+  const handleStaffData = (e, dataName, data) => {
+    setStaff((prev) => {
+      return { ...prev, [dataName]: data ? data.name : e.target.value };
+    });
+  };
+  // end of function for setting staff info
+
+  const createStaff = async () => {
+    // const id = toast.loading('Please wait...')
+    toastId.current = toast("Please wait...", {
+      autoClose: false,
+      isLoading: true,
+    });
+
+    try {
+      await privateRequest
+        .post("/Account/profile-application-user", staff)
+        .then((response) => {
+          toast.update(toastId.current, {
+            render: "Staff has been added succesfully!",
+            type: "success",
+            isLoading: false,
+          });
+        });
+    } catch (error) {
+      console.log(error.response);
+      toast.update(toastId.current, {
+        type: "error",
+        autoClose: 3000,
+        isLoading: false,
+        render: `${
+          error.response.data.title ||
+          error.response.data.description ||
+          "Something went wrong, please try again"
+        }`,
+      });
+    }
+  };
+
+  //END OF FUNCTIONALITIES FOR CREATING A NEW STAFF
+
   return (
-    <div className='testCategoriesWrapper'>
-      <Sidebar />
-      <div className='testCategoriesRight'>
-        <Topber />
-        <div className='testCategoriesMainWrapper'>
-          <div className='testCategoriesMainTop'>
-            <h3>All Tests</h3>
-            <button className='addTestBtn'>
-              Add Test
-              <span>
-                <RiAddLine className='addIcon' />
-              </span>
-            </button>
-          </div>
-          <div className='partnerLabsMainBottom'>
-            <Box sx={{ height: 400, width: '100%' }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={pageSize}
-                checkboxSelection
-                disableSelectionOnClick
-                experimentalFeatures={{ newEditingApi: true }}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                rowsPerPageOptions={[5, 10, 20]}
-                pagination
-              />
-            </Box>
+    <>
+      <ToastContainer />
+      <div className="testCategoryWrapper">
+        <AlertDialogSlide
+          open={open}
+          handleClose={handleClose}
+          title="Cancel"
+          link="/manageStaff"
+          message="Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost."
+        />
+        <Sidebar />
+        <div className="testCategoryRight">
+          <Topber />
+          <div className="testCategoryMainWrapper">
+            <h2> Add New Test</h2>
+            <div className="testCategoryFormWrapper">
+              <div className="inputsWrapper">
+                <div className="singleInput">
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={roles}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(e, option) => handleStaffData(e, "role", option)}
+                    sx={{ width: 400 }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Client Name" />
+                    )}
+                  />
+                </div>
+                <div className="singleInput">
+                  <p>Test Category Name</p>
+                  <div className="inputWrapper">
+                    <input
+                      type="text"
+                      className="input"
+                      onChange={(e) => handleStaffData(e, "name")}
+                    />
+                  </div>
+                </div>
+                <div className="multipleSelectWrapper">
+                  {/* <div className="multipleSelectContainer"> */}
+                  <div className="multipleSelect">
+                    <Autocomplete
+                      multiple
+                      id="tags-outlined"
+                      options={top100Films}
+                      getOptionLabel={(option) => option.title}
+                      defaultValue={[top100Films[1]]}
+                      filterSelectedOptions
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="SelectedTests"
+                          placeholder="Test"
+                        />
+                      )}
+                    />
+                  </div>
+                  {/* </div> */}
+                </div>
+
+                <div className="textAreaInput">
+                  <p>Description</p>
+                  <div className="textAreaWrapper">
+                    <textarea
+                      type="text"
+                      className="textArea"
+                      cols={50}
+                      rows={5}
+                      onChange={(e) => handleStaffData(e, "email")}
+                      style={{ padding: "10px", outline: "none" }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="bottomButtons">
+                <button
+                  className="cancelClientEditBtn"
+                  onClick={handleClickOpen}
+                >
+                  Cancel
+                </button>
+                <button className="testCategoryEditBtn" onClick={createStaff}>
+                  Save
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
-}
+    </>
+  );
+};
 
-export default TestCategories
+export default TestCategories;
