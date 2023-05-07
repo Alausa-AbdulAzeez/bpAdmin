@@ -12,19 +12,6 @@ const TestCategories = () => {
   const [open, setOpen] = React.useState(false);
   const toastId = React.useRef(null);
 
-  const top100Films = [
-    { title: "The Shawshank Redemption", year: 1994 },
-    { title: "The Godfather", year: 1972 },
-    { title: "The Godfather: Part II", year: 1974 },
-    { title: "The Dark Knight", year: 2008 },
-    { title: "12 Angry Men", year: 1957 },
-    { title: "The Shawshank Redemption", year: 1994 },
-    { title: "The Godfather", year: 1972 },
-    { title: "The Godfather: Part II", year: 1974 },
-    { title: "The Dark Knight", year: 2008 },
-    { title: "12 Angry Men", year: 1957 },
-  ];
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -33,85 +20,119 @@ const TestCategories = () => {
     setOpen(false);
   };
 
-  // FUNCTIONALITIES PARTAINING TO FETCHING AND SETTING ROLES
-
-  const [roles, setRoles] = useState([]);
-
-  // fetch roles
-  const getRoles = async () => {
+  // TEST DATA FUNCTIONALITIES
+  const [tests, setTests] = useState([]);
+  const getAllTests = async () => {
     try {
-      const res = await publicRequest.get("/Account/roles");
+      const res = await publicRequest.get("/Test");
 
-      if (res) {
-        console.log(res.data.data);
-        setRoles(res.data.data);
+      if (res.data) {
+        console.log(res.data);
+        setTests(res.data);
       } else {
-        console.log(res);
+        console.log(res.data);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  // end of fetch roles
 
-  // use effect for fetching roles
+  // use effect to call the getAllTest function as the page loads
   useEffect(() => {
-    getRoles();
+    getAllTests();
   }, []);
-  // end of use effect for fetching roles
+  // end of use effect to call the getAllTest function as the page loads
+  // END OF TEST DATA FUNCTIONALITIES
 
-  // END FUNCTIONALITIES PARTAINING TO ROLES
+  //  FUNCTIONALITIES FOR FETCHING AND CLIENTS
+  const [clients, setClients] = useState([]);
+  const getAllClients = async () => {
+    try {
+      const res = await publicRequest.get("Client/Client-list");
 
-  // FUNCTIONALITIES FOR CREATING A NEW STAFF
+      if (res.data) {
+        setClients(res.data.data);
+        console.log(res.data);
+      } else {
+        console.log(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // use effect to call the getAllClients function as the page loads
+  useEffect(() => {
+    getAllClients();
+  }, []);
+  // end of use effect to call the getAllClients function as the page loads
+  //  END OF FUNCTIONALITIES FOR FETCHING AND CLIENTS
+
+  // FUNCTIONALITIES FOR CREATING A NEW TEST CATEGORY
   const [staff, setStaff] = useState({
-    name: "",
-    phoneNumber: "",
-    email: "",
-    role: "",
+    clientId: "",
+    categoryName: "",
+    categoryDescription: "",
+    tests: [],
   });
 
   // function for setting staff info
   const handleStaffData = (e, dataName, data) => {
-    setStaff((prev) => {
-      return { ...prev, [dataName]: data ? data.name : e.target.value };
-    });
+    console.log(data);
+    if (dataName === "tests") {
+      const tests = data.map((singleTest) => {
+        return {
+          testId: singleTest.testId,
+        };
+      });
+      setStaff((prev) => {
+        return {
+          ...prev,
+          tests: [...tests],
+        };
+      });
+    } else {
+      setStaff((prev) => {
+        return { ...prev, [dataName]: data ? data.clientId : e.target.value };
+      });
+    }
   };
   // end of function for setting staff info
 
   const createStaff = async () => {
     // const id = toast.loading('Please wait...')
-    toastId.current = toast("Please wait...", {
-      autoClose: false,
-      isLoading: true,
-    });
+    // toastId.current = toast("Please wait...", {
+    //   autoClose: false,
+    //   isLoading: true,
+    // });
 
-    try {
-      await privateRequest
-        .post("/Account/profile-application-user", staff)
-        .then((response) => {
-          toast.update(toastId.current, {
-            render: "Staff has been added succesfully!",
-            type: "success",
-            isLoading: false,
-          });
-        });
-    } catch (error) {
-      console.log(error.response);
-      toast.update(toastId.current, {
-        type: "error",
-        autoClose: 3000,
-        isLoading: false,
-        render: `${
-          error.response.data.title ||
-          error.response.data.description ||
-          "Something went wrong, please try again"
-        }`,
-      });
-    }
+    // try {
+    //   await privateRequest
+    //     .post("/Account/profile-application-user", staff)
+    //     .then((response) => {
+    //       toast.update(toastId.current, {
+    //         render: "Staff has been added succesfully!",
+    //         type: "success",
+    //         isLoading: false,
+    //       });
+    //     });
+    // } catch (error) {
+    //   console.log(error.response);
+    //   toast.update(toastId.current, {
+    //     type: "error",
+    //     autoClose: 3000,
+    //     isLoading: false,
+    //     render: `${
+    //       error.response.data.title ||
+    //       error.response.data.description ||
+    //       "Something went wrong, please try again"
+    //     }`,
+    //   });
+    // }
+    console.log(staff);
   };
 
-  //END OF FUNCTIONALITIES FOR CREATING A NEW STAFF
-
+  //END OF FUNCTIONALITIES FOR CREATING A NEW TEST CATEGORY
   return (
     <>
       <ToastContainer />
@@ -127,16 +148,18 @@ const TestCategories = () => {
         <div className="testCategoryRight">
           <Topber />
           <div className="testCategoryMainWrapper">
-            <h2> Add New Test</h2>
+            <h2> Add Test Category</h2>
             <div className="testCategoryFormWrapper">
               <div className="inputsWrapper">
                 <div className="singleInput">
                   <Autocomplete
                     disablePortal
                     id="combo-box-demo"
-                    options={roles}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(e, option) => handleStaffData(e, "role", option)}
+                    options={clients}
+                    getOptionLabel={(option) => option.clientName}
+                    onChange={(e, option) =>
+                      handleStaffData(e, "clientId", option)
+                    }
                     sx={{ width: 400 }}
                     renderInput={(params) => (
                       <TextField {...params} label="Client Name" />
@@ -149,7 +172,7 @@ const TestCategories = () => {
                     <input
                       type="text"
                       className="input"
-                      onChange={(e) => handleStaffData(e, "name")}
+                      onChange={(e) => handleStaffData(e, "categoryName")}
                     />
                   </div>
                 </div>
@@ -159,9 +182,11 @@ const TestCategories = () => {
                     <Autocomplete
                       multiple
                       id="tags-outlined"
-                      options={top100Films}
-                      getOptionLabel={(option) => option.title}
-                      defaultValue={[top100Films[1]]}
+                      options={tests}
+                      getOptionLabel={(option) => option.testName}
+                      onChange={(e, option) =>
+                        handleStaffData(e, "tests", option)
+                      }
                       filterSelectedOptions
                       renderInput={(params) => (
                         <TextField
@@ -183,7 +208,9 @@ const TestCategories = () => {
                       className="textArea"
                       cols={50}
                       rows={5}
-                      onChange={(e) => handleStaffData(e, "email")}
+                      onChange={(e) =>
+                        handleStaffData(e, "categoryDescription")
+                      }
                       style={{ padding: "10px", outline: "none" }}
                     />
                   </div>
