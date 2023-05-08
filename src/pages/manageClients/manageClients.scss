@@ -25,16 +25,24 @@
         box-shadow: 1px 1px 40px 4px #6b6a6a6b;
         transition: all ease-in-out 0.65s;
         padding: 32px;
-        & > .h3 > h3 {
-          margin-bottom: 0;
-          // margin-top: 0;
-        }
-        & > .h3 > p {
-          margin-bottom: 0;
-          margin-top: 0;
-          color: darkgray;
-          font-weight: bold;
-          font-size: 15px;
+
+        .slideMiddle {
+          display: flex;
+          flex-wrap: wrap;
+          .companyDetail {
+            width: 50%;
+          }
+          & > .h3 > h3 {
+            margin-bottom: 0;
+            // margin-top: 0;
+          }
+          & > .h3 > p {
+            margin-bottom: 0;
+            margin-top: 0;
+            color: darkgray;
+            font-weight: bold;
+            font-size: 15px;
+          }
         }
         .testCategoriesWrapper {
           max-height: 400px;
@@ -42,6 +50,7 @@
           box-shadow: 10px -2px 27px 0px rgba(233, 223, 223, 0.75);
           margin-top: 30px;
           overflow-y: auto;
+          padding: 5px;
         }
 
         .slideTop {

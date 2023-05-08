@@ -379,7 +379,7 @@ const AddClient = () => {
               </button>
 
               <button className='addClientEditBtn' onClick={addClient}>
-                Finish
+                Done
               </button>
             </div>
           </div>

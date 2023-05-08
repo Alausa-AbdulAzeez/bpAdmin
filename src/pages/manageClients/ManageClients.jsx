@@ -111,17 +111,21 @@ const ManageClients = () => {
   const [position, setPosition] = useState('-100%')
   const [client, setClient] = useState(null)
   const [clientInfo, setClientInfo] = useState(null)
+  const [fetchingTestInfo, setFetchingTestInfo] = useState(null)
 
   // functionalities for getting and updating client State
   //get client function
   const getClient = async (id) => {
     console.log(id)
     try {
+      setFetchingTestInfo(true)
       const res = await privateRequest.get(`Test/test-category/${id}`)
       setClient(res.data)
+      setFetchingTestInfo(false)
       console.log(res.data)
     } catch (error) {
       console.log(error)
+      setFetchingTestInfo(false)
     }
   }
   //end of get client function
@@ -173,56 +177,74 @@ const ManageClients = () => {
                 <div className='cancelconWrapper' onClick={handleHideSlide}>
                   <MdCancel className='cancelIcon' />
                 </div>
-                <div className='initials'>'client?'</div>
-                <div className='slideFullname'>Alausa Abdulazeez</div>
+                <div className='initials'>{clientInfo?.row?.clientName[0]}</div>
+                <div className='slideFullname'>
+                  {clientInfo?.row?.clientName}
+                </div>
               </div>
               <div className='slideMiddle'>
-                <div className='companyName h3'>
-                  <h3>Company Name</h3>
-                  <p>Chicken Republic</p>
+                <div className='companyName h3 companyDetail'>
+                  <h3>Email</h3>
+                  <p>{clientInfo?.row?.email}</p>
                 </div>
 
-                <div className='phoneNo h3'>
-                  <h3>Candidate Phone Number</h3>
-                  <p>+23456789010</p>
+                <div className='phoneNo h3 companyDetail'>
+                  <h3>Phone Number</h3>
+                  <p>{clientInfo?.row?.phoneNumber}</p>
+                </div>
+                <div className='companyName h3 companyDetail'>
+                  <h3>Contact Person Email</h3>
+                  <p>{clientInfo?.row?.contactPersonEmail}</p>
+                </div>
+
+                <div className='phoneNo h3 companyDetail'>
+                  <h3>Contact Person Phone Number</h3>
+                  <p>{clientInfo?.row?.contactPersonPhone}</p>
                 </div>
               </div>
 
               <div className='testCategoriesWrapper'>
-                {client?.data?.map((clientData, index) => {
-                  return (
-                    <Accordion
-                      expanded={expanded === `panel${index}`}
-                      onChange={handleChange(`panel${index}`)}
-                    >
-                      <AccordionSummary
-                        expandIcon={<FaAngleDown />}
-                        aria-controls={`panel${index}d-content`}
-                        id={`panel${index}d-header`}
-                      >
-                        <Typography>{clientData?.categoryName}</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        {clientData?.clientTestMappings?.map((clientTest) => {
-                          return (
-                            // <Typography>
+                <h3>Test Categories</h3>
+                {fetchingTestInfo
+                  ? 'Loading...'
+                  : client?.data?.length === 0
+                  ? 'No result '
+                  : client?.data?.map((clientData, index) => {
+                      return (
+                        <Accordion
+                          expanded={expanded === `panel${index}`}
+                          onChange={handleChange(`panel${index}`)}
+                        >
+                          <AccordionSummary
+                            expandIcon={<FaAngleDown />}
+                            aria-controls={`panel${index}d-content`}
+                            id={`panel${index}d-header`}
+                          >
+                            <Typography>{clientData?.categoryName}</Typography>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            {clientData?.clientTestMappings?.map(
+                              (clientTest) => {
+                                return (
+                                  // <Typography>
 
-                            //   <span>{clientTest?.test?.testName}</span>
-                            // </Typography>
-                            <ListItemButton>
-                              <ListItemIcon>
-                                <FaDotCircle />
-                              </ListItemIcon>
-                              <ListItemText
-                                primary={clientTest?.test?.testName}
-                              />
-                            </ListItemButton>
-                          )
-                        })}
-                      </AccordionDetails>
-                    </Accordion>
-                  )
-                })}
+                                  //   <span>{clientTest?.test?.testName}</span>
+                                  // </Typography>
+                                  <ListItemButton>
+                                    <ListItemIcon>
+                                      <FaDotCircle />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                      primary={clientTest?.test?.testName}
+                                    />
+                                  </ListItemButton>
+                                )
+                              }
+                            )}
+                          </AccordionDetails>
+                        </Accordion>
+                      )
+                    })}
               </div>
             </div>
 
