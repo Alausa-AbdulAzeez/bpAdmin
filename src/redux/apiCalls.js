@@ -6,9 +6,15 @@ export const login = async (dispatch, user, navigate) => {
 
   try {
     const res = await publicRequest.post('/Account/login', user)
-    dispatch(loginSuccess(res.data))
-    navigate('/')
+    console.log('aa')
+
+    console.log(res)
+    console.log(res?.data)
+    dispatch(loginSuccess(res?.data))
+    // console.log(res.data)
+    // navigate('/')
   } catch (error) {
-    dispatch(loginFailure(error.response.data))
+    console.log(error)
+    dispatch(loginFailure(error))
   }
 }

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import Sidebar from "../../components/sidebar/Sidebar";
-import Topber from "../../components/topbar/Topber";
-import "./addClient.scss";
-import AlertDialogSlide from "../../components/Dialogue";
-import HorizontalStepper from "../../components/stepper/Stepper";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useEffect, useState } from 'react'
+import Sidebar from '../../components/sidebar/Sidebar'
+import Topber from '../../components/topbar/Topber'
+import './addClient.scss'
+import AlertDialogSlide from '../../components/Dialogue'
+import HorizontalStepper from '../../components/stepper/Stepper'
+import 'react-toastify/dist/ReactToastify.css'
 
 import {
   Autocomplete,
@@ -15,38 +15,38 @@ import {
   ListItemText,
   ListSubheader,
   TextField,
-} from "@mui/material";
-import { MdExpandLess, MdExpandMore, MdStarBorder } from "react-icons/md";
-import { BsCheck, BsListCheck } from "react-icons/bs";
-import { privateRequest, publicRequest } from "../../functions/requestMethods";
-import { ToastContainer, toast } from "react-toastify";
+} from '@mui/material'
+import { MdExpandLess, MdExpandMore, MdStarBorder } from 'react-icons/md'
+import { BsCheck, BsListCheck } from 'react-icons/bs'
+import { privateRequest, publicRequest } from '../../functions/requestMethods'
+import { ToastContainer, toast } from 'react-toastify'
 
 const AddClient = () => {
-  const [open, setOpen] = React.useState(false);
-  const toastId = React.useRef(null);
+  const [open, setOpen] = React.useState(false)
+  const toastId = React.useRef(null)
 
-  const steps = ["Client Details", "Test Details"];
+  const steps = ['Client Details', 'Test Details']
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   const top100Films = [
-    { title: "The Shawshank Redemption", year: 1994 },
-    { title: "The Godfather", year: 1972 },
-    { title: "The Godfather: Part II", year: 1974 },
-    { title: "The Dark Knight", year: 2008 },
-    { title: "12 Angry Men", year: 1957 },
-    { title: "The Shawshank Redemption", year: 1994 },
-    { title: "The Godfather", year: 1972 },
-    { title: "The Godfather: Part II", year: 1974 },
-    { title: "The Dark Knight", year: 2008 },
-    { title: "12 Angry Men", year: 1957 },
-  ];
+    { title: 'The Shawshank Redemption', year: 1994 },
+    { title: 'The Godfather', year: 1972 },
+    { title: 'The Godfather: Part II', year: 1974 },
+    { title: 'The Dark Knight', year: 2008 },
+    { title: '12 Angry Men', year: 1957 },
+    { title: 'The Shawshank Redemption', year: 1994 },
+    { title: 'The Godfather', year: 1972 },
+    { title: 'The Godfather: Part II', year: 1974 },
+    { title: 'The Dark Knight', year: 2008 },
+    { title: '12 Angry Men', year: 1957 },
+  ]
 
   // // STEPPER
   // const [activeStep, setActiveStep] = React.useState(0)
@@ -111,84 +111,100 @@ const AddClient = () => {
   // // END OF STEPPER
 
   // LIST TOGGLE FUNCTIONALITY
-  const [openListItem, setOpenListItem] = React.useState(true);
+  const [openListItem, setOpenListItem] = React.useState(true)
 
   const handleClick = () => {
-    setOpenListItem(!openListItem);
-  };
+    setOpenListItem(!openListItem)
+  }
   // END OF LIST TOGGLE FUNCTIONALITY
 
   // FUNCTIONALITIES FOR CREATING A NEW CLIENT
 
   const [client, setClient] = useState({
-    clientName: "",
-    address: "",
-    phoneNumber: "",
-    email: "",
-    contactPerson: "",
-    contactPersonPhone: "",
-    contactPersonEmail: "",
-  });
+    clientName: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    contactPerson: '',
+    contactPersonPhone: '',
+    contactPersonEmail: '',
+  })
 
   // function for setting client info
   const handleClientData = (e, dataName, data) => {
     setClient((prev) => {
-      return { ...prev, [dataName]: data ? data.name : e.target.value };
-    });
-  };
+      return { ...prev, [dataName]: data ? data.name : e.target.value }
+    })
+  }
   // end of function for setting client info
 
   // create client function
   const addClient = async () => {
     // const id = toast.loading('Please wait...')
-    toastId.current = toast("Please wait...", {
+    toastId.current = toast('Please wait...', {
       autoClose: false,
       isLoading: true,
-    });
+    })
 
     try {
       await privateRequest
-        .post("/Client/profile-client", client)
+        .post('/Client/profile-client', client)
         .then((response) => {
           toast.update(toastId.current, {
-            render: "Client has been added succesfully!",
-            type: "success",
+            render: 'Client has been added succesfully!',
+            type: 'success',
             isLoading: false,
-          });
-        });
+            autoClose: 3000,
+          })
+          setClient({
+            clientName: '',
+            address: '',
+            phoneNumber: '',
+            email: '',
+            contactPerson: '',
+            contactPersonPhone: '',
+            contactPersonEmail: '',
+          })
+        })
     } catch (error) {
-      console.log(error.response);
+      console.log(error.response)
       toast.update(toastId.current, {
-        type: "error",
+        type: 'error',
         autoClose: 3000,
         isLoading: false,
         render: `${
           error.response.data.title ||
           error.response.data.description ||
-          "Something went wrong, please try again"
+          'Something went wrong, please try again'
         }`,
-      });
+      })
     }
-  };
+  }
   // end of create client function
+  // useEffect to reset input to default
+  useEffect(() => {
+    console.log(client)
+  }, [client])
+  // end of useEffect to reset input to default
   // END OF FUNCTIONALITIES FOR CREATING A NEW CLIENT
   return (
     <>
       <ToastContainer />
-      <div className="addClientWrapper">
+      <div className='addClientWrapper'>
         <AlertDialogSlide
           open={open}
           handleClose={handleClose}
-          title="Cancel"
-          link="/manageClients"
-          message="Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost."
+          title='Cancel'
+          link='/manageClients'
+          message='Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost.'
         />
         <Sidebar />
-        <div className="addClientRight">
+        <div className='addClientRight'>
           <Topber />
-          <div className="addClientMainWrapper">
+          <div className='addClientMainWrapper'>
+            <h2> Add New Client</h2>
             {/* <HorizontalStepper properties={properties} /> */}
-            <div className="formWrapper">
+            <div className='formWrapper'>
               {/* <div className='testCategoryWrapper'>
                   <div className='testCategoryTop'>
                     <List
@@ -274,88 +290,95 @@ const AddClient = () => {
                   </div>
                 </div> */}
 
-              <div className="inputsWrapper">
-                <div className="singleInput">
+              <div className='inputsWrapper'>
+                <div className='singleInput'>
                   <p>Client Name</p>
-                  <div className="inputWrapper">
+                  <div className='inputWrapper'>
                     <input
-                      type="text"
-                      className="input"
-                      onChange={(e) => handleClientData(e, "clientName")}
+                      type='text'
+                      className='input'
+                      onChange={(e) => handleClientData(e, 'clientName')}
+                      value={client.clientName}
                     />
                   </div>
                 </div>
-                <div className="singleInput">
+                <div className='singleInput'>
                   <p>Address</p>
-                  <div className="inputWrapper">
+                  <div className='inputWrapper'>
                     <input
-                      type="text"
-                      className="input"
-                      onChange={(e) => handleClientData(e, "address")}
+                      type='text'
+                      className='input'
+                      onChange={(e) => handleClientData(e, 'address')}
+                      value={client.address}
                     />
                   </div>
                 </div>
-                <div className="singleInput">
+                <div className='singleInput'>
                   <p>Email</p>
-                  <div className="inputWrapper">
+                  <div className='inputWrapper'>
                     <input
-                      type="email"
-                      className="input"
-                      onChange={(e) => handleClientData(e, "email")}
+                      type='email'
+                      className='input'
+                      onChange={(e) => handleClientData(e, 'email')}
+                      value={client.email}
                     />
                   </div>
                 </div>
-                <div className="singleInput">
+                <div className='singleInput'>
                   <p>Phone Number</p>
-                  <div className="inputWrapper">
+                  <div className='inputWrapper'>
                     <input
-                      type="number"
-                      className="input"
-                      onChange={(e) => handleClientData(e, "phoneNumber")}
+                      type='number'
+                      className='input'
+                      onChange={(e) => handleClientData(e, 'phoneNumber')}
+                      value={client.phoneNumber}
                     />
                   </div>
                 </div>
-                <div className="singleInput">
+                <div className='singleInput'>
                   <p>Contact Person</p>
-                  <div className="inputWrapper">
+                  <div className='inputWrapper'>
                     <input
-                      type="string"
-                      className="input"
-                      onChange={(e) => handleClientData(e, "contactPerson")}
+                      type='string'
+                      className='input'
+                      onChange={(e) => handleClientData(e, 'contactPerson')}
+                      value={client.contactPerson}
                     />
                   </div>
                 </div>
-                <div className="singleInput">
+                <div className='singleInput'>
                   <p>Email (Contact Person)</p>
-                  <div className="inputWrapper">
+                  <div className='inputWrapper'>
                     <input
-                      type="string"
-                      className="input"
+                      type='string'
+                      className='input'
                       onChange={(e) =>
-                        handleClientData(e, "contactPersonEmail")
+                        handleClientData(e, 'contactPersonEmail')
                       }
+                      value={client.contactPersonEmail}
                     />
                   </div>
                 </div>
-                <div className="singleInput">
+                <div className='singleInput'>
                   <p>Phone Number (Contact Person)</p>
-                  <div className="inputWrapper">
+                  <div className='inputWrapper'>
                     <input
-                      type="string"
-                      className="input"
+                      type='string'
+                      className='input'
                       onChange={(e) =>
-                        handleClientData(e, "contactPersonPhone")
+                        handleClientData(e, 'contactPersonPhone')
                       }
+                      value={client.contactPersonPhone}
                     />
                   </div>
                 </div>
               </div>
 
-              <button className="cancelClientEditBtn" onClick={handleClickOpen}>
+              <button className='cancelClientEditBtn' onClick={handleClickOpen}>
                 Cancel
               </button>
 
-              <button className="addClientEditBtn" onClick={addClient}>
+              <button className='addClientEditBtn' onClick={addClient}>
                 Finish
               </button>
             </div>
@@ -363,10 +386,10 @@ const AddClient = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default AddClient;
+export default AddClient
 
 // import React, { useState } from 'react'
 // import Sidebar from '../../components/sidebar/Sidebar'

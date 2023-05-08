@@ -21,7 +21,7 @@ export const globalSlice = createSlice({
     loginFailure: (state, action) => {
       state.isError = true
       state.isFetching = false
-      state.currentUser = action.payload
+      // state.currentUser = action.payload
     },
   },
 })

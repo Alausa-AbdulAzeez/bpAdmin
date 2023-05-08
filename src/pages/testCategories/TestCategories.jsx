@@ -1,198 +1,199 @@
-import React, { useEffect, useState } from "react";
-import Sidebar from "../../components/sidebar/Sidebar";
-import Topber from "../../components/topbar/Topber";
-import "./testCategories.scss";
-import AlertDialogSlide from "../../components/Dialogue";
-import { Autocomplete, TextField } from "@mui/material";
-import { privateRequest, publicRequest } from "../../functions/requestMethods";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useEffect, useState } from 'react'
+import Sidebar from '../../components/sidebar/Sidebar'
+import Topber from '../../components/topbar/Topber'
+import './testCategories.scss'
+import AlertDialogSlide from '../../components/Dialogue'
+import { Autocomplete, TextField } from '@mui/material'
+import { privateRequest, publicRequest } from '../../functions/requestMethods'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const TestCategories = () => {
-  const [open, setOpen] = React.useState(false);
-  const toastId = React.useRef(null);
+  const [open, setOpen] = React.useState(false)
+  const toastId = React.useRef(null)
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   // TEST DATA FUNCTIONALITIES
-  const [tests, setTests] = useState([]);
+  const [tests, setTests] = useState([])
   const getAllTests = async () => {
     try {
-      const res = await publicRequest.get("/Test");
+      const res = await publicRequest.get('/Test')
 
       if (res.data) {
-        console.log(res.data);
-        setTests(res.data);
+        console.log(res.data)
+        setTests(res.data)
       } else {
-        console.log(res.data);
+        console.log(res.data)
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   // use effect to call the getAllTest function as the page loads
   useEffect(() => {
-    getAllTests();
-  }, []);
+    getAllTests()
+  }, [])
   // end of use effect to call the getAllTest function as the page loads
   // END OF TEST DATA FUNCTIONALITIES
 
   //  FUNCTIONALITIES FOR FETCHING AND CLIENTS
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState([])
   const getAllClients = async () => {
     try {
-      const res = await publicRequest.get("Client/Client-list");
+      const res = await publicRequest.get('Client/Client-list')
 
       if (res.data) {
-        setClients(res.data.data);
-        console.log(res.data);
+        setClients(res.data.data)
+        console.log(res.data)
       } else {
-        console.log(res.data);
+        console.log(res.data)
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   // use effect to call the getAllClients function as the page loads
   useEffect(() => {
-    getAllClients();
-  }, []);
+    getAllClients()
+  }, [])
   // end of use effect to call the getAllClients function as the page loads
   //  END OF FUNCTIONALITIES FOR FETCHING AND CLIENTS
 
   // FUNCTIONALITIES FOR CREATING A NEW TEST CATEGORY
-  const [staff, setStaff] = useState({
-    clientId: "",
-    categoryName: "",
-    categoryDescription: "",
+  const [testCategory, setTestCategory] = useState({
+    clientId: '',
+    categoryName: '',
+    categoryDescription: '',
     tests: [],
-  });
+  })
 
-  // function for setting staff info
-  const handleStaffData = (e, dataName, data) => {
-    console.log(data);
-    if (dataName === "tests") {
+  // function for setting testCategory info
+  const handleTestCategoryInfo = (e, dataName, data) => {
+    if (dataName === 'tests') {
       const tests = data.map((singleTest) => {
         return {
           testId: singleTest.testId,
-        };
-      });
-      setStaff((prev) => {
+        }
+      })
+      setTestCategory((prev) => {
         return {
           ...prev,
           tests: [...tests],
-        };
-      });
+        }
+      })
     } else {
-      setStaff((prev) => {
-        return { ...prev, [dataName]: data ? data.clientId : e.target.value };
-      });
+      setTestCategory((prev) => {
+        return { ...prev, [dataName]: data ? data.clientId : e.target.value }
+      })
     }
-  };
+  }
   // end of function for setting staff info
 
-  const createStaff = async () => {
+  const createTestCategory = async () => {
     // const id = toast.loading('Please wait...')
-    // toastId.current = toast("Please wait...", {
-    //   autoClose: false,
-    //   isLoading: true,
-    // });
+    toastId.current = toast('Please wait...', {
+      autoClose: false,
+      isLoading: true,
+    })
 
-    // try {
-    //   await privateRequest
-    //     .post("/Account/profile-application-user", staff)
-    //     .then((response) => {
-    //       toast.update(toastId.current, {
-    //         render: "Staff has been added succesfully!",
-    //         type: "success",
-    //         isLoading: false,
-    //       });
-    //     });
-    // } catch (error) {
-    //   console.log(error.response);
-    //   toast.update(toastId.current, {
-    //     type: "error",
-    //     autoClose: 3000,
-    //     isLoading: false,
-    //     render: `${
-    //       error.response.data.title ||
-    //       error.response.data.description ||
-    //       "Something went wrong, please try again"
-    //     }`,
-    //   });
-    // }
-    console.log(staff);
-  };
+    try {
+      await privateRequest
+        .post('/Test/test-category', testCategory)
+        .then((response) => {
+          toast.update(toastId.current, {
+            render: 'Test category created succesfully!',
+            type: 'success',
+            isLoading: false,
+            autoClose: 3000,
+          })
+        })
+    } catch (error) {
+      console.log(error.response)
+      toast.update(toastId.current, {
+        type: 'error',
+        autoClose: 3000,
+        isLoading: false,
+        render: `${
+          error.response.data.title ||
+          error.response.data.description ||
+          'Something went wrong, please try again'
+        }`,
+      })
+    }
+  }
 
   //END OF FUNCTIONALITIES FOR CREATING A NEW TEST CATEGORY
   return (
     <>
       <ToastContainer />
-      <div className="testCategoryWrapper">
+      <div className='testCategoryWrapper'>
         <AlertDialogSlide
           open={open}
           handleClose={handleClose}
-          title="Cancel"
-          link="/manageStaff"
-          message="Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost."
+          title='Cancel'
+          link='/testCategories'
+          message='Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost.'
         />
         <Sidebar />
-        <div className="testCategoryRight">
+        <div className='testCategoryRight'>
           <Topber />
-          <div className="testCategoryMainWrapper">
+          <div className='testCategoryMainWrapper'>
             <h2> Add Test Category</h2>
-            <div className="testCategoryFormWrapper">
-              <div className="inputsWrapper">
-                <div className="singleInput">
+            <div className='testCategoryFormWrapper'>
+              <div className='inputsWrapper'>
+                <div className='singleInput'>
                   <Autocomplete
                     disablePortal
-                    id="combo-box-demo"
+                    id='combo-box-demo'
                     options={clients}
                     getOptionLabel={(option) => option.clientName}
                     onChange={(e, option) =>
-                      handleStaffData(e, "clientId", option)
+                      handleTestCategoryInfo(e, 'clientId', option)
                     }
                     sx={{ width: 400 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Client Name" />
+                      <TextField {...params} label='Client Name' />
                     )}
                   />
                 </div>
-                <div className="singleInput">
+                <div className='singleInput'>
                   <p>Test Category Name</p>
-                  <div className="inputWrapper">
+                  <div className='inputWrapper'>
                     <input
-                      type="text"
-                      className="input"
-                      onChange={(e) => handleStaffData(e, "categoryName")}
+                      type='text'
+                      className='input'
+                      onChange={(e) =>
+                        handleTestCategoryInfo(e, 'categoryName')
+                      }
                     />
                   </div>
                 </div>
-                <div className="multipleSelectWrapper">
+                <div className='multipleSelectWrapper'>
                   {/* <div className="multipleSelectContainer"> */}
-                  <div className="multipleSelect">
+                  <div className='multipleSelect'>
                     <Autocomplete
                       multiple
-                      id="tags-outlined"
+                      id='tags-outlined'
                       options={tests}
                       getOptionLabel={(option) => option.testName}
                       onChange={(e, option) =>
-                        handleStaffData(e, "tests", option)
+                        handleTestCategoryInfo(e, 'tests', option)
                       }
                       filterSelectedOptions
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label="SelectedTests"
-                          placeholder="Test"
+                          label='SelectedTests'
+                          placeholder='Test'
                         />
                       )}
                     />
@@ -200,31 +201,34 @@ const TestCategories = () => {
                   {/* </div> */}
                 </div>
 
-                <div className="textAreaInput">
+                <div className='textAreaInput'>
                   <p>Description</p>
-                  <div className="textAreaWrapper">
+                  <div className='textAreaWrapper'>
                     <textarea
-                      type="text"
-                      className="textArea"
+                      type='text'
+                      className='textArea'
                       cols={50}
                       rows={5}
                       onChange={(e) =>
-                        handleStaffData(e, "categoryDescription")
+                        handleTestCategoryInfo(e, 'categoryDescription')
                       }
-                      style={{ padding: "10px", outline: "none" }}
+                      style={{ padding: '10px', outline: 'none' }}
                     />
                   </div>
                 </div>
               </div>
-              <div className="bottomButtons">
+              <div className='bottomButtons'>
                 <button
-                  className="cancelClientEditBtn"
+                  className='cancelClientEditBtn'
                   onClick={handleClickOpen}
                 >
                   Cancel
                 </button>
-                <button className="testCategoryEditBtn" onClick={createStaff}>
-                  Save
+                <button
+                  className='testCategoryEditBtn'
+                  onClick={createTestCategory}
+                >
+                  Done
                 </button>
               </div>
             </div>
@@ -232,7 +236,7 @@ const TestCategories = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default TestCategories;
+export default TestCategories
