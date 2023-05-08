@@ -12,7 +12,7 @@ export const login = async (dispatch, user, navigate) => {
     console.log(res?.data)
     dispatch(loginSuccess(res?.data))
     // console.log(res.data)
-    // navigate('/')
+    navigate('/')
   } catch (error) {
     console.log(error)
     dispatch(loginFailure(error))

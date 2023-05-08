@@ -1,16 +1,29 @@
-import { Box } from '@mui/material'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Collapse,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  Typography,
+} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import React, { useEffect, useState } from 'react'
-import { BsTrashFill } from 'react-icons/bs'
-import { MdEdit } from 'react-icons/md'
+import { BsArrowDown, BsTrashFill } from 'react-icons/bs'
+import { MdCancel, MdEdit } from 'react-icons/md'
 import { RiAddLine } from 'react-icons/ri'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Topber from '../../components/topbar/Topber'
 import './manageClients.scss'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { publicRequest } from '../../functions/requestMethods'
+import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
+import { FaAirbnb, FaAngleDown, FaDotCircle } from 'react-icons/fa'
 
 const ManageClients = () => {
   const [pageSize, setPageSize] = useState(5)
@@ -86,12 +99,54 @@ const ManageClients = () => {
 
   const rows = tableData
 
-  // useEffect(() => {
-  //   const clients = axios
-  //     .get('http://15.237.160.238:60/api/Client/Client-list')
-  //     .then((response) => console.log(response))
-  //   console.log(clients)
-  // }, [])
+  // ACCOURDION FUNCTIONALITIES
+  const [expanded, setExpanded] = React.useState('panel1')
+
+  const handleChange = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false)
+  }
+  // END OF ACCOURDION FUNCTIONALITIES
+
+  // SLIDE FUNCTIONALITIES
+  const [position, setPosition] = useState('-100%')
+  const [client, setClient] = useState(null)
+  const [clientInfo, setClientInfo] = useState(null)
+
+  // functionalities for getting and updating client State
+  //get client function
+  const getClient = async (id) => {
+    console.log(id)
+    try {
+      const res = await privateRequest.get(`Test/test-category/${id}`)
+      setClient(res.data)
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  //end of get client function
+
+  // end of functionalities for getting and updating client State
+
+  // handlerowclick function
+  const handleRowClick = (row, e) => {
+    getClient(row?.row?.clientId)
+    setClientInfo(row)
+    if (position !== '0') {
+      setPosition('0')
+    }
+  }
+  // end of  handlerowclick function
+
+  // hide slide function
+  const handleHideSlide = () => {
+    setPosition('-100%')
+  }
+  // end of hide slide function
+
+  // END OF SLIDE FUNCTIONALITIES
+  console.log(clientInfo)
+
   return (
     <div className='manageClientsWrapper'>
       <Sidebar />
@@ -113,6 +168,64 @@ const ManageClients = () => {
                 </button>
               </Link>
             </div>
+            <div className='slide' style={{ right: position }}>
+              <div className='slideTop'>
+                <div className='cancelconWrapper' onClick={handleHideSlide}>
+                  <MdCancel className='cancelIcon' />
+                </div>
+                <div className='initials'>'client?'</div>
+                <div className='slideFullname'>Alausa Abdulazeez</div>
+              </div>
+              <div className='slideMiddle'>
+                <div className='companyName h3'>
+                  <h3>Company Name</h3>
+                  <p>Chicken Republic</p>
+                </div>
+
+                <div className='phoneNo h3'>
+                  <h3>Candidate Phone Number</h3>
+                  <p>+23456789010</p>
+                </div>
+              </div>
+
+              <div className='testCategoriesWrapper'>
+                {client?.data?.map((clientData, index) => {
+                  return (
+                    <Accordion
+                      expanded={expanded === `panel${index}`}
+                      onChange={handleChange(`panel${index}`)}
+                    >
+                      <AccordionSummary
+                        expandIcon={<FaAngleDown />}
+                        aria-controls={`panel${index}d-content`}
+                        id={`panel${index}d-header`}
+                      >
+                        <Typography>{clientData?.categoryName}</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        {clientData?.clientTestMappings?.map((clientTest) => {
+                          return (
+                            // <Typography>
+
+                            //   <span>{clientTest?.test?.testName}</span>
+                            // </Typography>
+                            <ListItemButton>
+                              <ListItemIcon>
+                                <FaDotCircle />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={clientTest?.test?.testName}
+                              />
+                            </ListItemButton>
+                          )
+                        })}
+                      </AccordionDetails>
+                    </Accordion>
+                  )
+                })}
+              </div>
+            </div>
+
             <div className='partnerLabsMainBottom'>
               <Box sx={{ height: 400, width: '100%' }}>
                 <DataGrid
@@ -126,6 +239,7 @@ const ManageClients = () => {
                   rowsPerPageOptions={[5, 10, 20]}
                   pagination
                   getRowId={(row) => row.clientName}
+                  onRowClick={(row, e) => handleRowClick(row, e)}
                 />
               </Box>
             </div>
