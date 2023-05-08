@@ -5,10 +5,10 @@ import { CircularProgress } from '@mui/material'
 
 const Loading = () => {
   return (
-    <div className='errorWrapper'>
+    <div className='loadingWrapper'>
       <div className='mainLoadingWrapper'>
-        App encountered an error
-        <div className='reloadBtn'>Reload</div>
+        <CircularProgress color='inherit' />
+        <div>Loading...</div>
       </div>
     </div>
   )

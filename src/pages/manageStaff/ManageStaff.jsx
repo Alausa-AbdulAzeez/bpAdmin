@@ -60,6 +60,7 @@ const ManageStaff = () => {
 
   // SET LOADING AND ERROR FUNCTIONALITY
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   // END OF SET LOADING AND ERROR FUNCTIONALITY
 
@@ -75,6 +76,9 @@ const ManageStaff = () => {
       setLoading(false)
       console.log(res?.data?.data)
     } catch (error) {
+      setLoading(false)
+      setError(true)
+
       console.log(error)
     }
   }
@@ -91,8 +95,12 @@ const ManageStaff = () => {
       <Sidebar />
       <div className='manageStaffRight'>
         <Topber />
-        {loading ? (
-          <Loading />
+        {loading || error ? (
+          loading ? (
+            <Loading />
+          ) : (
+            'Error'
+          )
         ) : (
           <div className='manageStaffMainWrapper'>
             <div className='manageStaffMainTop'>
