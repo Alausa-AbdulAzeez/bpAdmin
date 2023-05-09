@@ -25,6 +25,7 @@ import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
 import { FaAirbnb, FaAngleDown, FaDotCircle } from 'react-icons/fa'
 import Error from '../../components/error/Error'
+import useRedirectLoggedOutUser from '../../customHooks/useRedirectLoggedOutUser'
 
 const ManageClients = () => {
   const [pageSize, setPageSize] = useState(5)
@@ -171,6 +172,7 @@ const ManageClients = () => {
   useEffect(() => {}, [errorMessage])
   // end of update errorMessage state
   // END OF MISCELLANEOUS USEEFFECTS
+  useRedirectLoggedOutUser()
   return (
     <div className='manageClientsWrapper'>
       <Sidebar />

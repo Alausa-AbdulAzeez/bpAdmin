@@ -16,21 +16,23 @@ import AddLaboratory from './pages/addLaboratory/AddLaboratory'
 import AddTest from './pages/addTest/AddTest'
 import { useSelector } from 'react-redux'
 import { persistor } from './redux/store'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { privateRequest } from './functions/requestMethods'
 
 function App() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn");
   // persistor.purge()
   const { currentUser: user } = useSelector((state) => state.user)
 
-  console.log(user, 'user')
+  // console.log(user, 'user')
   useEffect(() => {
     user === null && persistor.purge()
   }, [user])
+
   return (
     <div className='appWrapper'>
       <BrowserRouter>
-        {user !== null ? (
+        {user === null ? (
           <Routes>
             <Route path='login' element={<Login />} />
             <Route exact path='/' element={<Home />} />

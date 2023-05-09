@@ -88,67 +88,69 @@ const Register = () => {
   }, [user])
 
   return (
-    <div className='loginWrapper'>
-      <div className='loginWrapperLeft'>
-        <img
-          // src='blob:https://web.whatsapp.com/6cdf605b-5634-4bc1-9711-a671a348523c'
-          src={require('../../utils/images/IMG_6229.PNG')}
-          // src={require('../../utils/images/BiopathLogo2.jpeg')}
-          // src={require('../../utils/images/medicalimg.jpg')}
-          alt=''
-          // className='loginWrapperLeftImg'
-          className='biopathImg'
-        />
-      </div>
-      <div className='loginWrapperRight'>
-        <form className='loginFormWrapper'>
-          {/* <div className='loginTest'>Trying to test, click</div> */}
-          <div className='loginHeading'>Log in</div>
-          <div className='loginInputs'>
-            <label htmlFor=''>Email</label>
-            <input
-              type='email'
-              className='loginEmailInput loginInput'
-              placeholder='example@****.com'
-              data-testid='emailTestId'
-              onChange={(e) => handleSetUser(e, 'email')}
-            />
-            <label htmlFor=''>Password</label>
-            <div className='passwordWrapper'>
+    <>
+      <div className='loginWrapper'>
+        <div className='loginWrapperLeft'>
+          <img
+            // src='blob:https://web.whatsapp.com/6cdf605b-5634-4bc1-9711-a671a348523c'
+            src={require('../../utils/images/IMG_6229.PNG')}
+            // src={require('../../utils/images/BiopathLogo2.jpeg')}
+            // src={require('../../utils/images/medicalimg.jpg')}
+            alt=''
+            // className='loginWrapperLeftImg'
+            className='biopathImg'
+          />
+        </div>
+        <div className='loginWrapperRight'>
+          <form className='loginFormWrapper'>
+            {/* <div className='loginTest'>Trying to test, click</div> */}
+            <div className='loginHeading'>Log in</div>
+            <div className='loginInputs'>
+              <label htmlFor=''>Email</label>
               <input
-                type={showPassword ? 'text' : 'password'}
-                className='loginPasswordInput loginInput'
-                placeholder='Password'
-                onChange={(e) => handleSetUser(e, 'password')}
-                data-testid='passwordTestId'
+                type='email'
+                className='loginEmailInput loginInput'
+                placeholder='example@****.com'
+                data-testid='emailTestId'
+                onChange={(e) => handleSetUser(e, 'email')}
               />
-              <span onClick={handlePasswordToggle}>
-                {showPassword ? <BsEye /> : <BsFillEyeSlashFill />}
-              </span>
+              <label htmlFor=''>Password</label>
+              <div className='passwordWrapper'>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  className='loginPasswordInput loginInput'
+                  placeholder='Password'
+                  onChange={(e) => handleSetUser(e, 'password')}
+                  data-testid='passwordTestId'
+                />
+                <span onClick={handlePasswordToggle}>
+                  {showPassword ? <BsEye /> : <BsFillEyeSlashFill />}
+                </span>
+              </div>
             </div>
-          </div>
 
-          <button
-            className='loginBtn'
-            type={'submit'}
-            // disabled={isError}
-            // disabled={btnDisabled}
-            disabled={isFetching ? isFetching : btnDisabled}
-            data-testid='loginBtn'
-            onClick={handleLogin}
-          >
-            Login
-          </button>
-          {isError && (
-            <div className='errorMsg'>
-              {currentUser
-                ? currentUser?.description + 's!'
-                : 'Error logging in.. Please try again!!'}
-            </div>
-          )}
-        </form>
+            <button
+              className='loginBtn'
+              type={'submit'}
+              // disabled={isError}
+              // disabled={btnDisabled}
+              disabled={isFetching ? isFetching : btnDisabled}
+              data-testid='loginBtn'
+              onClick={handleLogin}
+            >
+              Login
+            </button>
+            {isError && (
+              <div className='errorMsg'>
+                {currentUser
+                  ? currentUser?.description + 's!'
+                  : 'Error logging in.. Please try again!!'}
+              </div>
+            )}
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

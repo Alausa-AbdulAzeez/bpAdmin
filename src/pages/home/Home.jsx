@@ -7,6 +7,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import './home.scss'
 import { MdEdit } from 'react-icons/md'
 import { BsTrashFill } from 'react-icons/bs'
+import useRedirectLoggedOutUser from '../../customHooks/useRedirectLoggedOutUser'
 
 const Home = () => {
   const [pageSize, setPageSize] = useState(5)
@@ -113,39 +114,43 @@ const Home = () => {
       role: 'Lab Scientist',
     },
   ]
+
+  useRedirectLoggedOutUser()
   return (
-    <div className='homeWrapper'>
-      <Sidebar />
-      <div className='homepageRight'>
-        <Topber />
+    <>
+      <div className='homeWrapper'>
+        <Sidebar />
+        <div className='homepageRight'>
+          <Topber />
 
-        <div className='homeMainWrapper'>
-          <div className='homeMainTop'>
-            <DashboardCard type='partnerLabs' />
-            <DashboardCard type='manageClients' />
-            <DashboardCard type='manageStaff' />
-            <DashboardCard type='profile' />
-          </div>
+          <div className='homeMainWrapper'>
+            <div className='homeMainTop'>
+              <DashboardCard type='partnerLabs' />
+              <DashboardCard type='manageClients' />
+              <DashboardCard type='manageStaff' />
+              <DashboardCard type='profile' />
+            </div>
 
-          <div className='homeMainBottom'>
-            <h3>All Staff</h3>
-            <Box sx={{ height: 350, width: '100%' }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={pageSize}
-                checkboxSelection
-                disableSelectionOnClick
-                experimentalFeatures={{ newEditingApi: true }}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                rowsPerPageOptions={[5, 10, 20]}
-                pagination
-              />
-            </Box>
+            <div className='homeMainBottom'>
+              <h3>All Staff</h3>
+              <Box sx={{ height: 350, width: '100%' }}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  pageSize={pageSize}
+                  checkboxSelection
+                  disableSelectionOnClick
+                  experimentalFeatures={{ newEditingApi: true }}
+                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                  rowsPerPageOptions={[5, 10, 20]}
+                  pagination
+                />
+              </Box>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
