@@ -62,6 +62,7 @@ const ManageStaff = () => {
   // SET LOADING AND ERROR FUNCTIONALITY
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   // useEffect to update error and loading state
   useEffect(() => {
@@ -85,6 +86,7 @@ const ManageStaff = () => {
     } catch (error) {
       setLoading(false)
       setError(true)
+      setErrorMessage(error)
 
       console.log(error)
     }
@@ -96,7 +98,7 @@ const ManageStaff = () => {
   }, [])
   // end of useeffect to call the fetchSyaff function
   // END OF FUNCTIONALITIES TO GET ALL STAFF
-
+  useEffect(() => {}, [errorMessage])
   return (
     <div className='manageStaffWrapper'>
       <Sidebar />
@@ -106,7 +108,7 @@ const ManageStaff = () => {
           loading ? (
             <Loading />
           ) : (
-            <Error />
+            <Error errorMessage={errorMessage && errorMessage} />
           )
         ) : (
           <div className='manageStaffMainWrapper'>

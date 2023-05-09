@@ -33,6 +33,7 @@ const ManageClients = () => {
   // SET LOADING AND ERROR FUNCTIONALITY
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   // useEffect to update error and loading state
   useEffect(() => {
@@ -57,6 +58,7 @@ const ManageClients = () => {
     } catch (error) {
       setLoading(false)
       setError(true)
+      setErrorMessage(error)
       console.log(error)
     }
   }
@@ -163,7 +165,10 @@ const ManageClients = () => {
   // end of hide slide function
 
   // END OF SLIDE FUNCTIONALITIES
-  console.log(clientInfo)
+
+  useEffect(() => {
+    console.log(errorMessage, 'em')
+  }, [errorMessage])
 
   return (
     <div className='manageClientsWrapper'>
@@ -175,7 +180,7 @@ const ManageClients = () => {
           loading ? (
             <Loading />
           ) : (
-            <Error />
+            <Error errorMessage={errorMessage && errorMessage} />
           )
         ) : (
           <div className='manageClientsMainWrapper'>
