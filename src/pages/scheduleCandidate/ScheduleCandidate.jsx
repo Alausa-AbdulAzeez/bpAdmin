@@ -7,7 +7,9 @@ import { Autocomplete, TextField } from '@mui/material'
 import { publicRequest } from '../../functions/requestMethods'
 
 const ScheduleCandidate = () => {
+  // MISCELLANEOUS
   const [open, setOpen] = React.useState(false)
+  const date = new Date().toISOString()
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -16,6 +18,7 @@ const ScheduleCandidate = () => {
   const handleClose = () => {
     setOpen(false)
   }
+  // END OF MISCELLANEOUS
 
   //  FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
   const [clients, setClients] = useState([])
@@ -42,32 +45,31 @@ const ScheduleCandidate = () => {
   //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
 
   //  FUNCTIONALITIES FOR FETCHING AND SETTING CANDIDATES
-  const [candidates, setCandidates] = useState([])
-  const getAllCandidates = async () => {
-    try {
-      const res = await publicRequest.get('Candidate')
+  // const [candidates, setCandidates] = useState([])
+  // const getAllCandidates = async () => {
+  //   try {
+  //     const res = await publicRequest.get('Candidate')
 
-      if (res.data) {
-        setCandidates(res.data)
-        console.log(res.data)
-      } else {
-        console.log(res.data)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  //     if (res.data) {
+  //       setCandidates(res.data)
+  //       console.log(res.data)
+  //     } else {
+  //       console.log(res.data)
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   // use effect to call the getAllCandidates function as the page loads
-  useEffect(() => {
-    getAllCandidates()
-  }, [])
+  // useEffect(() => {
+  //   getAllCandidates()
+  // }, [])
   // end of use effect to call the getAllCandidates function as the page loads
   //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING CANDIDATES
 
   // FUNCTIONALITY FOR SETTING SCHEDULE INFO
   const [scheduleInfo, setScheduleInfo] = useState({
-    canditateId: '',
     candidateName: '',
     phoneNumber: '',
     createdDate: '',
@@ -84,7 +86,6 @@ const ScheduleCandidate = () => {
     console.log(data)
     const date = new Date().toISOString()
     setScheduleInfo({
-      canditateId: data?.canditateId,
       candidateName: data?.candidateName,
       phoneNumber: data?.phoneNumber,
       createdDate: date,
@@ -113,9 +114,9 @@ const ScheduleCandidate = () => {
         <Topber />
         {/* <h3>Schedule Candidate</h3> */}
         <div className='scheduleCandidateMainWrapper'>
-          <div className='scheduleCandidateFormWrapper'>
+          <form className='scheduleCandidateFormWrapper'>
             <div className='inputsWrapper'>
-              <div className='singleInput'>
+              <div className='singleInput autoComplete'>
                 <Autocomplete
                   disablePortal
                   id='combo-box-demo'
@@ -128,49 +129,33 @@ const ScheduleCandidate = () => {
                   // }
                   sx={{ width: 400 }}
                   renderInput={(params) => (
-                    <TextField {...params} label='Client Name' />
+                    <TextField {...params} label='Client Name' required />
                   )}
                 />
               </div>
               <div className='singleInput'>
-                <Autocomplete
-                  disablePortal
-                  id='combo-box-demo'
-                  options={candidates}
-                  getOptionLabel={(option) =>
-                    `${option.candidateName}       ${option.email}`
-                  }
-                  onChange={(e, option) =>
-                    getSelectedCandidate(e, 'clientId', option)
-                  }
-                  sx={{ width: 400 }}
-                  renderInput={(params) => (
-                    <TextField {...params} label='Candidate Name' />
-                  )}
-                />
-              </div>
-              <div className='singleInput'>
-                <p>Client Name</p>
+                <p>Candidate Name</p>
                 <div className='inputWrapper'>
-                  <input type='text' className='input' />
+                  <input type='text' className='input' required />
                 </div>
               </div>
+
               <div className='singleInput'>
                 <p>Address</p>
                 <div className='inputWrapper'>
-                  <input type='text' className='input' />
+                  <input type='text' className='input' required />
                 </div>
               </div>
               <div className='singleInput'>
                 <p>Email</p>
                 <div className='inputWrapper'>
-                  <input type='email' className='input' />
+                  <input type='email' className='input' required />
                 </div>
               </div>
               <div className='singleInput'>
                 <p>Phone Number</p>
                 <div className='inputWrapper'>
-                  <input type='number' className='input' />
+                  <input type='number' className='input' required />
                 </div>
               </div>
               <div className='singleInput'>
@@ -184,9 +169,11 @@ const ScheduleCandidate = () => {
               <button className='cancelClientEditBtn' onClick={handleClickOpen}>
                 Cancel
               </button>
-              <button className='scheduleCandidateEditBtn'>Done</button>
+              <button className='scheduleCandidateEditBtn' type='submit'>
+                Done
+              </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

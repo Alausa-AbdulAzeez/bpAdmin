@@ -14,7 +14,6 @@ import Loading from '../../components/loading/Loading'
 
 const ManageTests = () => {
   const [pageSize, setPageSize] = useState(5)
-  const [loading, setLoading] = useState(false)
   const [tableData, setTableData] = useState([])
   // const [error, setError] = useState(false)
 
@@ -32,6 +31,8 @@ const ManageTests = () => {
         console.log(res.data)
       }
     } catch (error) {
+      setLoading(false)
+      setError(true)
       console.log(error)
     }
   }
@@ -81,6 +82,18 @@ const ManageTests = () => {
   ]
 
   const rows = tableData
+
+  // SET LOADING AND ERROR FUNCTIONALITY
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+
+  // useEffect to update error and loading state
+  useEffect(() => {
+    console.log(error, loading)
+  }, [error, loading])
+  // end of useEffect to update error and loading state
+
+  // END OF SET LOADING AND ERROR FUNCTIONALITY
 
   return (
     <div className='manageTestsWrapper'>

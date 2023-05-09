@@ -41,6 +41,10 @@
               }
             }
           }
+          .autoComplete {
+            display: flex;
+            align-items: flex-end;
+          }
         }
         .testCategoryWrapper {
           display: flex;

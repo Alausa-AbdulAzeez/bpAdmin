@@ -24,11 +24,23 @@ import axios from 'axios'
 import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
 import { FaAirbnb, FaAngleDown, FaDotCircle } from 'react-icons/fa'
+import Error from '../../components/error/Error'
 
 const ManageClients = () => {
   const [pageSize, setPageSize] = useState(5)
-  const [loading, setLoading] = useState(false)
   const [tableData, setTableData] = useState([])
+
+  // SET LOADING AND ERROR FUNCTIONALITY
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+
+  // useEffect to update error and loading state
+  useEffect(() => {
+    console.log(error, loading)
+  }, [error, loading])
+  // end of useEffect to update error and loading state
+
+  // END OF SET LOADING AND ERROR FUNCTIONALITY
 
   // CLIENTS DATA FUNCTIONALITIES
   const getAllClients = async () => {
@@ -43,6 +55,8 @@ const ManageClients = () => {
         console.log(res.data)
       }
     } catch (error) {
+      setLoading(false)
+      setError(true)
       console.log(error)
     }
   }
@@ -157,8 +171,12 @@ const ManageClients = () => {
       <div className='manageClientsRight'>
         <Topber />
 
-        {loading ? (
-          <Loading />
+        {loading || error ? (
+          loading ? (
+            <Loading />
+          ) : (
+            <Error />
+          )
         ) : (
           <div className='manageClientsMainWrapper'>
             <div className='manageClientsMainTop'>
@@ -260,7 +278,7 @@ const ManageClients = () => {
                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                   rowsPerPageOptions={[5, 10, 20]}
                   pagination
-                  getRowId={(row) => row.clientName}
+                  getRowId={(row) => row.clientId}
                   onRowClick={(row, e) => handleRowClick(row, e)}
                 />
               </Box>

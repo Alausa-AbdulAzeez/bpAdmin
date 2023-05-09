@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import { useEffect } from 'react'
 import Loading from '../../components/loading/Loading'
+import Error from '../../components/error/Error'
 
 const ManageStaff = () => {
   const [pageSize, setPageSize] = useState(5)
@@ -62,6 +63,12 @@ const ManageStaff = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
 
+  // useEffect to update error and loading state
+  useEffect(() => {
+    console.log(error, loading)
+  }, [error, loading])
+  // end of useEffect to update error and loading state
+
   // END OF SET LOADING AND ERROR FUNCTIONALITY
 
   // FUNCTIONALITIES TO GET ALL STAFF
@@ -99,7 +106,7 @@ const ManageStaff = () => {
           loading ? (
             <Loading />
           ) : (
-            'Error'
+            <Error />
           )
         ) : (
           <div className='manageStaffMainWrapper'>

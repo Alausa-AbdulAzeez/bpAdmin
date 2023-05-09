@@ -1,17 +1,17 @@
 import React from 'react'
-import './loading.scss'
+import './error.scss'
 import bcgImg from '../../utils/images/LoadingImg.png'
 import { CircularProgress } from '@mui/material'
 
-const Loading = () => {
+const Error = () => {
   return (
-    <div className='loadingWrapper'>
+    <div className='errorWrapper'>
       <div className='mainLoadingWrapper'>
-        <CircularProgress color='inherit' />
-        <div>Loading...</div>
+        App encountered an error
+        <div className='reloadBtn'>Reload</div>
       </div>
     </div>
   )
 }
 
-export default Loading
+export default Error
