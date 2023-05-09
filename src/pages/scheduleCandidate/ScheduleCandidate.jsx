@@ -4,12 +4,17 @@ import Topber from '../../components/topbar/Topber'
 import './scheduleCandidate.scss'
 import AlertDialogSlide from '../../components/Dialogue'
 import { Autocomplete, TextField } from '@mui/material'
-import { publicRequest } from '../../functions/requestMethods'
+import { privateRequest, publicRequest } from '../../functions/requestMethods'
+import DatePicker from 'react-datepicker'
 
+import 'react-datepicker/dist/react-datepicker.css'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 const ScheduleCandidate = () => {
   // MISCELLANEOUS
   const [open, setOpen] = React.useState(false)
   const date = new Date().toISOString()
+  const toastId = React.useRef(null)
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -20,8 +25,20 @@ const ScheduleCandidate = () => {
   }
   // END OF MISCELLANEOUS
 
+  // DATE SELECTION AND CHANGE FUNCTIONALITIES
+  const [startDate, setStartDate] = useState(new Date())
+  // function for handling date chande
+  const handleDateChange = (selectedDate) => {
+    const isoSelectedDate = selectedDate.toISOString()
+    console.log(isoSelectedDate)
+    setStartDate(selectedDate)
+    // end of function for handling date chande
+  }
+  // END OF DATE SELECTION AND CHANGE FUNCTIONALITIES
+
   //  FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
   const [clients, setClients] = useState([])
+  // function to get all clients
   const getAllClients = async () => {
     try {
       const res = await publicRequest.get('Client/Client-list')
@@ -36,6 +53,7 @@ const ScheduleCandidate = () => {
       console.log(error)
     }
   }
+  // end of function to get all clients
 
   // use effect to call the getAllClients function as the page loads
   useEffect(() => {
@@ -44,139 +62,224 @@ const ScheduleCandidate = () => {
   // end of use effect to call the getAllClients function as the page loads
   //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
 
-  //  FUNCTIONALITIES FOR FETCHING AND SETTING CANDIDATES
-  // const [candidates, setCandidates] = useState([])
-  // const getAllCandidates = async () => {
-  //   try {
-  //     const res = await publicRequest.get('Candidate')
+  //  FUNCTIONALITIES FOR FETCHING AND SETTING TEST CATEGORIES
+  const [testCategory, setTestCategory] = useState([])
 
-  //     if (res.data) {
-  //       setCandidates(res.data)
-  //       console.log(res.data)
-  //     } else {
-  //       console.log(res.data)
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
+  // function to get all TestCategories
+  const getAllTestCategories = async () => {
+    try {
+      const res = await publicRequest.get(`Test/test-category/${clientId}`)
 
-  // use effect to call the getAllCandidates function as the page loads
-  // useEffect(() => {
-  //   getAllCandidates()
-  // }, [])
-  // end of use effect to call the getAllCandidates function as the page loads
-  //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING CANDIDATES
+      if (res.data) {
+        setClients(res.data.data)
+        console.log(res.data)
+      } else {
+        console.log(res.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // end of function to get all TestCategories
+
+  // use effect to call the getAllTestCategories function as the page loads
+  useEffect(() => {
+    getAllClients()
+  }, [])
+  // end of use effect to call the getAllTestCategories function as the page loads
+  //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
 
   // FUNCTIONALITY FOR SETTING SCHEDULE INFO
   const [scheduleInfo, setScheduleInfo] = useState({
     candidateName: '',
     phoneNumber: '',
-    createdDate: '',
+    createdDate: date,
     email: '',
     address: '',
-    appointmentdate: '',
+    appointmentdate: startDate,
     clientid: '',
     testcategory: '',
   })
 
-  // functionaliies for setting and updating candidate
-  // function for updating candidate info after selecting candidate
-  const getSelectedCandidate = (e, title, data) => {
-    console.log(data)
-    const date = new Date().toISOString()
-    setScheduleInfo({
-      candidateName: data?.candidateName,
-      phoneNumber: data?.phoneNumber,
-      createdDate: date,
-      email: data?.email,
-      address: data?.address,
-      appointmentdate: '',
-      clientid: '',
-      testcategory: '',
-    })
+  // function for seting candidate info
+  const [clientId, setClientId] = useState(null)
+  const handlescheduleCandidateInfo = (e, dataName, data) => {
+    if (dataName === 'tests') {
+      const tests = data.map((singleTest) => {
+        return {
+          testId: singleTest.testId,
+        }
+      })
+      setScheduleInfo((prev) => {
+        return {
+          ...prev,
+          tests: [...tests],
+        }
+      })
+    } else if (dataName === 'clientId') {
+      setScheduleInfo((prev) => {
+        return { ...prev, [dataName]: data?.clientId }
+      })
+      setClientId(data?.clientId)
+    } else {
+      setScheduleInfo((prev) => {
+        return { ...prev, [dataName]: e.target.value }
+      })
+    }
   }
+  // end of function for seting candidate info
+  // useeffect for updating client id
+  useEffect(() => {}, [clientId])
+  // end of useeffect for updating client id
 
-  // end of functionaliies for setting and updating candidate
+  // function for scheduling a candidate
+  const handleScheduleCandidate = async () => {
+    toastId.current = toast('Please wait...', {
+      autoClose: 3000,
+      isLoading: true,
+    })
+
+    try {
+      await privateRequest
+        .post('/api/Candidate', scheduleInfo)
+        .then((response) => {
+          toast.update(toastId.current, {
+            render: 'Test category created succesfully!',
+            type: 'success',
+            isLoading: false,
+            autoClose: 3000,
+          })
+        })
+    } catch (error) {
+      console.log(error.response)
+      toast.update(toastId.current, {
+        type: 'error',
+        autoClose: 3000,
+        isLoading: false,
+        render: `${
+          error?.response?.data?.title ||
+          error?.response?.data?.description ||
+          error?.message ||
+          'Something went wrong, please try again'
+        }`,
+      })
+    }
+  }
+  // end of function for creating a test category
 
   // END OF FUNCTIONALITY FOR SETTING SCHEDULE INFO
   return (
-    <div className='scheduleCandidateWrapper'>
-      <AlertDialogSlide
-        open={open}
-        handleClose={handleClose}
-        title='Cancel'
-        link='/manageClients'
-        message='Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost.'
-      />
-      <Sidebar />
-      <div className='scheduleCandidateRight'>
-        <Topber />
-        {/* <h3>Schedule Candidate</h3> */}
-        <div className='scheduleCandidateMainWrapper'>
-          <form className='scheduleCandidateFormWrapper'>
-            <div className='inputsWrapper'>
-              <div className='singleInput autoComplete'>
-                <Autocomplete
-                  disablePortal
-                  id='combo-box-demo'
-                  options={clients}
-                  getOptionLabel={(option) =>
-                    `${option.clientName} ${option.email}`
-                  }
-                  // onChange={(e, option) =>
-                  //   handleTestCategoryInfo(e, 'clientId', option)
-                  // }
-                  sx={{ width: 400 }}
-                  renderInput={(params) => (
-                    <TextField {...params} label='Client Name' required />
-                  )}
-                />
-              </div>
-              <div className='singleInput'>
-                <p>Candidate Name</p>
-                <div className='inputWrapper'>
-                  <input type='text' className='input' required />
+    <>
+      <ToastContainer />
+      <div className='scheduleCandidateWrapper'>
+        <AlertDialogSlide
+          open={open}
+          handleClose={handleClose}
+          title='Cancel'
+          link='/scheduleCandidate'
+          message='Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost.'
+        />
+        <Sidebar />
+        <div className='scheduleCandidateRight'>
+          <Topber />
+          {/* <h3>Schedule Candidate</h3> */}
+          <div className='scheduleCandidateMainWrapper'>
+            <form className='scheduleCandidateFormWrapper'>
+              <div className='inputsWrapper'>
+                <div className='singleInput autoComplete'>
+                  <Autocomplete
+                    disablePortal
+                    id='combo-box-demo'
+                    options={clients}
+                    getOptionLabel={(option) =>
+                      `${option.clientName} ${option.email}`
+                    }
+                    onChange={(e, option) =>
+                      handlescheduleCandidateInfo(e, 'clientId', option)
+                    }
+                    sx={{ width: 400 }}
+                    renderInput={(params) => (
+                      <TextField {...params} label='Client Name' />
+                    )}
+                  />
                 </div>
-              </div>
+                <div className='singleInput autoComplete'>
+                  <Autocomplete
+                    disablePortal
+                    id='combo-box-demo'
+                    options={clients}
+                    getOptionLabel={(option) => `${option.categoryName}}`}
+                    onChange={(e, option) =>
+                      handlescheduleCandidateInfo(e, 'test', option)
+                    }
+                    sx={{ width: 400 }}
+                    renderInput={(params) => (
+                      <TextField {...params} label='Test Category' />
+                    )}
+                  />
+                </div>
+                <div className='singleInput'>
+                  <p>Candidate Name</p>
+                  <div className='inputWrapper'>
+                    <input type='text' className='input' required />
+                  </div>
+                </div>
 
-              <div className='singleInput'>
-                <p>Address</p>
-                <div className='inputWrapper'>
-                  <input type='text' className='input' required />
+                <div className='singleInput'>
+                  <p>Address</p>
+                  <div className='inputWrapper'>
+                    <input type='text' className='input' required />
+                  </div>
+                </div>
+                <div className='singleInput'>
+                  <p>Email</p>
+                  <div className='inputWrapper'>
+                    <input type='email' className='input' required />
+                  </div>
+                </div>
+                <div className='singleInput'>
+                  <p>Phone Number</p>
+                  <div className='inputWrapper'>
+                    <input type='number' className='input' required />
+                  </div>
+                </div>
+                <div className='singleInput'>
+                  <p>Date</p>
+                  <div className='inputWrapper'>
+                    {/* <input type='text' className='input' /> */}
+                    <DatePicker
+                      selected={startDate}
+                      onChange={(selectedDate) =>
+                        handleDateChange(selectedDate)
+                      }
+                      dateFormat='MMMM d, yyyy'
+                      className='datePicker'
+                      showMonthDropdown
+                      showYearDropdown
+                    />
+                  </div>
                 </div>
               </div>
-              <div className='singleInput'>
-                <p>Email</p>
-                <div className='inputWrapper'>
-                  <input type='email' className='input' required />
-                </div>
+              <div className='bottomButtons'>
+                <button
+                  className='cancelClientEditBtn'
+                  onClick={handleClickOpen}
+                >
+                  Cancel
+                </button>
+                <button
+                  className='scheduleCandidateEditBtn'
+                  type='submit'
+                  onClick={handleScheduleCandidate}
+                >
+                  Done
+                </button>
               </div>
-              <div className='singleInput'>
-                <p>Phone Number</p>
-                <div className='inputWrapper'>
-                  <input type='number' className='input' required />
-                </div>
-              </div>
-              <div className='singleInput'>
-                <p>Date</p>
-                <div className='inputWrapper'>
-                  <input type='text' className='input' />
-                </div>
-              </div>
-            </div>
-            <div className='bottomButtons'>
-              <button className='cancelClientEditBtn' onClick={handleClickOpen}>
-                Cancel
-              </button>
-              <button className='scheduleCandidateEditBtn' type='submit'>
-                Done
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

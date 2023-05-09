@@ -96,12 +96,13 @@ const TestCategories = () => {
       })
     }
   }
-  // end of function for setting staff info
+  // end of function for testCategory info
 
+  // function for creating a test category
   const createTestCategory = async () => {
     // const id = toast.loading('Please wait...')
     toastId.current = toast('Please wait...', {
-      autoClose: false,
+      autoClose: 3000,
       isLoading: true,
     })
 
@@ -123,13 +124,15 @@ const TestCategories = () => {
         autoClose: 3000,
         isLoading: false,
         render: `${
-          error.response.data.title ||
-          error.response.data.description ||
+          error?.response?.data?.title ||
+          error?.response?.data?.description ||
+          error?.message ||
           'Something went wrong, please try again'
         }`,
       })
     }
   }
+  // end of function for creating a test category
 
   //END OF FUNCTIONALITIES FOR CREATING A NEW TEST CATEGORY
   return (
