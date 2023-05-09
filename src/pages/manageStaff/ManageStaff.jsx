@@ -92,13 +92,18 @@ const ManageStaff = () => {
     }
   }
 
-  // useeffect to call the fetchSyaff function
+  // useeffect to call the fetchStaff function
   useEffect(() => {
     fetchStaff()
   }, [])
   // end of useeffect to call the fetchSyaff function
   // END OF FUNCTIONALITIES TO GET ALL STAFF
+
+  // MISCELLANEOUS USEEFFECTS
+  // update errorMessage state
   useEffect(() => {}, [errorMessage])
+  // end of update errorMessage state
+  // END OF MISCELLANEOUS USEEFFECTS
   return (
     <div className='manageStaffWrapper'>
       <Sidebar />

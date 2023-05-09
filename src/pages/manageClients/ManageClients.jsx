@@ -166,10 +166,11 @@ const ManageClients = () => {
 
   // END OF SLIDE FUNCTIONALITIES
 
-  useEffect(() => {
-    console.log(errorMessage, 'em')
-  }, [errorMessage])
-
+  // MISCELLANEOUS USEEFFECTS
+  // update errorMessage state
+  useEffect(() => {}, [errorMessage])
+  // end of update errorMessage state
+  // END OF MISCELLANEOUS USEEFFECTS
   return (
     <div className='manageClientsWrapper'>
       <Sidebar />

@@ -31,7 +31,7 @@ const ScheduleCandidate = () => {
   const handleDateChange = (selectedDate) => {
     const isoSelectedDate = selectedDate.toISOString()
     console.log(isoSelectedDate)
-    setStartDate(selectedDate)
+    setStartDate(isoSelectedDate)
     // end of function for handling date chande
   }
   // END OF DATE SELECTION AND CHANGE FUNCTIONALITIES
@@ -246,7 +246,6 @@ const ScheduleCandidate = () => {
                 <div className='singleInput'>
                   <p>Date</p>
                   <div className='inputWrapper'>
-                    {/* <input type='text' className='input' /> */}
                     <DatePicker
                       selected={startDate}
                       onChange={(selectedDate) =>
