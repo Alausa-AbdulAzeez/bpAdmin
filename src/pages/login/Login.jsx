@@ -140,13 +140,13 @@ const Register = () => {
             >
               Login
             </button>
-            {isError && (
+            {/* {isError && (
               <div className='errorMsg'>
                 {currentUser
                   ? currentUser?.description + 's!'
                   : 'Error logging in.. Please try again!!'}
               </div>
-            )}
+            )} */}
           </form>
         </div>
       </div>

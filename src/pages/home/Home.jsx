@@ -115,7 +115,7 @@ const Home = () => {
     },
   ]
 
-  useRedirectLoggedOutUser()
+  // useRedirectLoggedOutUser()
   return (
     <>
       <div className='homeWrapper'>

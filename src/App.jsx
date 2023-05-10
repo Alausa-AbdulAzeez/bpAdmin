@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux'
 import { persistor } from './redux/store'
 import { useEffect, useState } from 'react'
 import { privateRequest } from './functions/requestMethods'
+import PrivateRoutes from './components/PrivateRoutes'
 
 function App() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -32,7 +33,7 @@ function App() {
   return (
     <div className='appWrapper'>
       <BrowserRouter>
-        {user === null ? (
+        {/* {user === null ? (
           <Routes>
             <Route path='login' element={<Login />} />
             <Route exact path='/' element={<Home />} />
@@ -57,15 +58,13 @@ function App() {
           <Routes>
             <Route path='/*' element={<Login />} />
           </Routes>
-        )}
-        {/* <Routes>
-        <Route path='login' element={<Login />} />
-        <Route exact path='/' element={<Home />} />
-        <Route path='/partnerLabs' element={<PartnerLabs />} />
-        <Route path='/manageStaff' element={<ManageStaff />} />
-        <Route path='/manageClients' element={<ManageClients />} />
-        <Route path='/profile' element={<Profile />} />
-      </Routes> */}
+        )} */}
+        <Routes>
+          <Route element={<PrivateRoutes />}>
+            <Route exact path='/' element={<Home />} />
+          </Route>
+          <Route path='/login' element={<Login />} />
+        </Routes>
       </BrowserRouter>
     </div>
   )

@@ -10,8 +10,11 @@ import { FaFileInvoice } from 'react-icons/fa'
 import { FiLogOut } from 'react-icons/fi'
 import { NavLink } from 'react-router-dom'
 import AlertDialogSlide from '../Dialogue'
+import { useDispatch } from 'react-redux'
+import { loggedOut } from '../../redux/globalSlice'
 
 const Sidebar = () => {
+  const dispatch = useDispatch()
   const [open, setOpen] = React.useState(false)
 
   const handleClickOpen = () => {
@@ -20,6 +23,10 @@ const Sidebar = () => {
 
   const handleClose = () => {
     setOpen(false)
+  }
+
+  const logout = () => {
+    dispatch(loggedOut())
   }
 
   return (
@@ -173,10 +180,14 @@ const Sidebar = () => {
                 
               )}
             </NavLink> */}
-            <li className='sidebarListItem' onClick={handleClickOpen}>
+            <li className='sidebarListItem' onClick={logout}>
               <FiLogOut className='sidebarIcon' />
               <span> Logout</span>
             </li>
+            {/* <li className='sidebarListItem' onClick={handleClickOpen}>
+              <FiLogOut className='sidebarIcon' />
+              <span> Logout</span>
+            </li> */}
           </ul>
         </div>
       </div>
