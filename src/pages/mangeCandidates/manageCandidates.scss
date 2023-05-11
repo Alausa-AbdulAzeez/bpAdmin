@@ -1,0 +1,17 @@
+.manageCandidatesWrapper {
+  width: 100%;
+  display: flex;
+
+  .manageCandidatesRight {
+    flex: 5;
+    .manageCandidatesMainWrapper {
+      padding: 30px 64px;
+
+      .manageCandidatesMainTop {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+  }
+}

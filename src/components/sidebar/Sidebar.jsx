@@ -87,6 +87,19 @@ const Sidebar = () => {
                 </li>
               )}
             </NavLink>
+            <NavLink to='/manageCandidates' style={{ textDecoration: 'none' }}>
+              {({ isActive }) => (
+                <li
+                  className={
+                    isActive ? 'activeLink sidebarListItem' : 'sidebarListItem'
+                  }
+                >
+                  <FaFileInvoice className='sidebarIcon' />
+
+                  <span> Manage Candidate</span>
+                </li>
+              )}
+            </NavLink>
             <NavLink to='/manageClients' style={{ textDecoration: 'none' }}>
               {({ isActive }) => (
                 <li

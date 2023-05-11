@@ -19,6 +19,7 @@ import { persistor } from './redux/store'
 import { useEffect, useState } from 'react'
 import { privateRequest } from './functions/requestMethods'
 import PrivateRoutes from './components/PrivateRoutes'
+import ManageCandidates from './pages/mangeCandidates/ManageCandidates'
 
 function App() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -67,6 +68,7 @@ function App() {
             <Route path='/manageStaff' element={<ManageStaff />} />
             <Route path='/manageStaff/addStaff' element={<AddStaff />} />
             <Route path='/manageClients' element={<ManageClients />} />
+            <Route path='/manageCandidates' element={<ManageCandidates />} />
             <Route path='/manageClients/addClient' element={<AddClient />} />
             <Route
               path='/testCategories/editCategory'
