@@ -34,7 +34,7 @@ const ScheduleCandidate = () => {
   const handleDateChange = (selectedDate) => {
     const isoSelectedDate = selectedDate.toISOString()
     console.log(isoSelectedDate)
-    setStartDate(isoSelectedDate)
+    setStartDate(selectedDate)
     // end of function for handling date chande
   }
   // END OF DATE SELECTION AND CHANGE FUNCTIONALITIES
