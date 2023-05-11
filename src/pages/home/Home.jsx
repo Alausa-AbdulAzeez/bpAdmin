@@ -7,7 +7,6 @@ import { DataGrid } from '@mui/x-data-grid'
 import './home.scss'
 import { MdEdit } from 'react-icons/md'
 import { BsTrashFill } from 'react-icons/bs'
-import useRedirectLoggedOutUser from '../../customHooks/useRedirectLoggedOutUser'
 
 const Home = () => {
   const [pageSize, setPageSize] = useState(5)

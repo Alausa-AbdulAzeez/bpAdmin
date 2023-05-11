@@ -115,15 +115,29 @@ const ScheduleCandidate = () => {
     console.log(scheduleInfo)
 
     try {
-      await publicRequest.post('/Candidate', scheduleInfo).then((response) => {
-        console.log(response)
-        toast.update(toastId.current, {
-          render: 'Test category created succesfully!',
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
+      await publicRequest
+        .post('/Candidate', scheduleInfo)
+        .then(() => {
+          toast.update(toastId.current, {
+            render: 'Test category created succesfully!',
+            type: 'success',
+            isLoading: false,
+            autoClose: 3000,
+          })
         })
-      })
+        .then(() => {
+          setScheduleInfo({
+            candidateName: '',
+            phoneNumber: '',
+            createdDate: date,
+            email: '',
+            address: '',
+            appointmentdate: startDate?.toISOString(),
+            clientid: '',
+            testcategory: '',
+            status: 'PENDING',
+          })
+        })
     } catch (error) {
       console.log(error.response)
       toast.update(toastId.current, {
@@ -238,6 +252,7 @@ const ScheduleCandidate = () => {
                       onChange={(e) =>
                         handlescheduleCandidateInfo(e, 'candidateName')
                       }
+                      value={scheduleInfo?.candidateName}
                     />
                   </div>
                 </div>
@@ -252,6 +267,7 @@ const ScheduleCandidate = () => {
                       onChange={(e) =>
                         handlescheduleCandidateInfo(e, 'address')
                       }
+                      value={scheduleInfo?.address}
                     />
                   </div>
                 </div>
@@ -262,6 +278,7 @@ const ScheduleCandidate = () => {
                       type='email'
                       className='input'
                       required
+                      value={scheduleInfo?.email}
                       onChange={(e) => handlescheduleCandidateInfo(e, 'email')}
                     />
                   </div>
@@ -276,6 +293,7 @@ const ScheduleCandidate = () => {
                       onChange={(e) =>
                         handlescheduleCandidateInfo(e, 'phoneNumber')
                       }
+                      value={scheduleInfo?.phoneNumber}
                     />
                   </div>
                 </div>
