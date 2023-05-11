@@ -28,7 +28,7 @@ const TestCategories = () => {
 
       if (res.data) {
         console.log(res.data)
-        setTests(res.data)
+        setTests(res.data?.data)
       } else {
         console.log(res.data)
       }

@@ -11,16 +11,22 @@ const PrivateRoutes = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { isLoggedIn } = useSelector((state) => state?.globalState?.user)
-  console.log(isLoggedIn)
   // const isL
+  const token = useSelector((state) => state?.user?.currentUser?.data?.token)
 
   useEffect(() => {
     const getLoggedInStatus = async () => {
       try {
-        await privateRequest.get('Staff')
+        await privateRequest.get('Staff', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        })
       } catch (error) {
-        if (error?.message === 'Network Error') {
-          //   dispatch(loggedIn())
+        if (error?.response?.statusText === 'Unauthorized') {
+          dispatch(loggedOut())
+
           persistor
             .purge()
             // .then(() => navigate('/login'))

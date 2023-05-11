@@ -10,12 +10,20 @@ import './manageTests.scss'
 import { Link } from 'react-router-dom'
 import { publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
+import AlertDialogSlide from '../../components/Dialogue'
+import { toast } from 'react-toastify'
 // import axios from 'axios'
 
 const ManageTests = () => {
   const [pageSize, setPageSize] = useState(5)
   const [tableData, setTableData] = useState([])
   // const [error, setError] = useState(false)
+
+  // DATA FOR TOGGLE ALERT
+  const [open, setOpen] = React.useState(false)
+
+  // SELECTED TEST TO BE DELETED OR EDIT ID
+  const [selectedTest, setSelectedTest] = React.useState(false)
 
   // TEST DATA FUNCTIONALITIES
   const getAllTests = async () => {
@@ -25,7 +33,7 @@ const ManageTests = () => {
 
       if (res.data) {
         console.log(res.data)
-        setTableData(res.data)
+        setTableData(res.data?.data)
         setLoading(false)
       } else {
         console.log(res.data)
@@ -43,6 +51,44 @@ const ManageTests = () => {
   }, [])
   // end of use effect to call the getAllTest function as the page loads
   // END OF TEST DATA FUNCTIONALITIES
+
+  // FUNCTION TO DELETE SINGLE TEST
+  const handleDeleteTest = async () => {
+    console.log(selectedTest)
+    try {
+      await publicRequest
+        .delete(`Test/DeleteByID?Testid=${selectedTest?.id}`)
+        .then((res) => {
+          toast.success('Test deleted successfully', {
+            position: 'top-right',
+            // autoClose: 10000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          })
+        })
+        .then(() => {
+          return window.location.reload()
+        })
+    } catch (error) {
+      console.log(error)
+      toast.error('Could not delete test. Try again', {
+        position: 'top-right',
+        // autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+      setOpen(false)
+    }
+  }
+  // END OF FUNCTION TO DELETE SINGLE TEST
 
   const columns = [
     { field: 'testId', headerName: 'Test ID', width: 190 },
@@ -64,7 +110,7 @@ const ManageTests = () => {
       description: 'This column has a value getter and is not sortable.',
       sortable: false,
       width: 260,
-      renderCell: () => {
+      renderCell: (props) => {
         return (
           <div className='buttons'>
             <div className='editWrapper'>
@@ -72,7 +118,9 @@ const ManageTests = () => {
               <MdEdit className='editIcon' />
             </div>
             <div className='deleteWrapper'>
-              <div className='delete'>Delete</div>
+              <div className='delete' onClick={() => handleClickOpen(props)}>
+                Delete
+              </div>
               <BsTrashFill className='deleteIcon' />
             </div>
           </div>
@@ -95,8 +143,28 @@ const ManageTests = () => {
 
   // END OF SET LOADING AND ERROR FUNCTIONALITY
 
+  // FUNCTIONS TO TOGGLE ALERT SLIDE
+  const handleClickOpen = (props) => {
+    setOpen(true)
+    setSelectedTest(props)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+    handleDeleteTest()
+  }
+  // END OF FUNCTIONS TO TOGGLE ALERT SLIDE
+
   return (
     <div className='manageTestsWrapper'>
+      <AlertDialogSlide
+        open={open}
+        handleClose={handleClose}
+        title='Delete'
+        link='/scheduleCandidate'
+        message='Warning!! Are you sure you want to delete this test? Action cannot be undone'
+        action={handleDeleteTest}
+      />
       <Sidebar />
       <div className='manageTestsRight'>
         <Topber />

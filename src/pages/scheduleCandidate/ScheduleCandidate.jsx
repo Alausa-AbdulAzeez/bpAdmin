@@ -16,6 +16,9 @@ const ScheduleCandidate = () => {
   const date = new Date().toISOString()
   const toastId = React.useRef(null)
 
+  // TO SET THE STATE OF TEST CATEGORY INPUT
+  const [loadingTestCategory, setLoadingTestCategory] = useState(true)
+
   const handleClickOpen = () => {
     setOpen(true)
   }
@@ -62,33 +65,6 @@ const ScheduleCandidate = () => {
   // end of use effect to call the getAllClients function as the page loads
   //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
 
-  //  FUNCTIONALITIES FOR FETCHING AND SETTING TEST CATEGORIES
-  const [testCategory, setTestCategory] = useState([])
-
-  // function to get all TestCategories
-  const getAllTestCategories = async () => {
-    try {
-      const res = await publicRequest.get(`Test/test-category/${clientId}`)
-
-      if (res.data) {
-        setClients(res.data.data)
-        console.log(res.data)
-      } else {
-        console.log(res.data)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  // end of function to get all TestCategories
-
-  // use effect to call the getAllTestCategories function as the page loads
-  useEffect(() => {
-    getAllClients()
-  }, [])
-  // end of use effect to call the getAllTestCategories function as the page loads
-  //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
-
   // FUNCTIONALITY FOR SETTING SCHEDULE INFO
   const [scheduleInfo, setScheduleInfo] = useState({
     candidateName: '',
@@ -121,6 +97,7 @@ const ScheduleCandidate = () => {
         return { ...prev, [dataName]: data?.clientId }
       })
       setClientId(data?.clientId)
+      setLoadingTestCategory(true)
     } else {
       setScheduleInfo((prev) => {
         return { ...prev, [dataName]: e.target.value }
@@ -168,6 +145,34 @@ const ScheduleCandidate = () => {
   // end of function for creating a test category
 
   // END OF FUNCTIONALITY FOR SETTING SCHEDULE INFO
+  //  FUNCTIONALITIES FOR FETCHING AND SETTING TEST CATEGORIES
+  const [testCategory, setTestCategory] = useState([])
+
+  // function to get all TestCategories
+  const getAllTestCategories = async () => {
+    try {
+      const res = await publicRequest.get(`Test/test-category/${clientId}`)
+
+      if (res.data) {
+        setTestCategory(res.data.data)
+        console.log(res.data)
+        setLoadingTestCategory(false)
+      } else {
+        console.log(res.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // end of function to get all TestCategories
+
+  // use effect to call the getAllTestCategories function as the page loads
+  useEffect(() => {
+    getAllTestCategories()
+  }, [clientId])
+  // end of use effect to call the getAllTestCategories function as the page loads
+  //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING TEST CATEGORIES
+
   return (
     <>
       <ToastContainer />
@@ -207,7 +212,7 @@ const ScheduleCandidate = () => {
                   <Autocomplete
                     disablePortal
                     id='combo-box-demo'
-                    options={clients}
+                    options={testCategory}
                     getOptionLabel={(option) => `${option.categoryName}}`}
                     onChange={(e, option) =>
                       handlescheduleCandidateInfo(e, 'test', option)
@@ -216,6 +221,14 @@ const ScheduleCandidate = () => {
                     renderInput={(params) => (
                       <TextField {...params} label='Test Category' />
                     )}
+                    disabled={loadingTestCategory}
+                    renderOption={(props, option) => {
+                      return (
+                        <li {...props} key={option.id}>
+                          {option.categoryName}
+                        </li>
+                      )
+                    }}
                   />
                 </div>
                 <div className='singleInput'>

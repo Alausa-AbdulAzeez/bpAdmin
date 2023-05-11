@@ -16,6 +16,11 @@ export const login = async (dispatch, user, navigate) => {
   } catch (error) {
     console.log(error)
     dispatch(loginFailure())
-    toast.error(error?.message)
+    toast.error(
+      error.response.data.title ||
+        error.response.data.description ||
+        error?.message ||
+        'Something went wrong, please try again'
+    )
   }
 }

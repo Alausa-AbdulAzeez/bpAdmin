@@ -48,7 +48,7 @@ const ManageClients = () => {
   const getAllClients = async () => {
     try {
       setLoading(true)
-      const res = await publicRequest.get('Client/Client-list')
+      const res = await privateRequest.get('Client/Client-list')
 
       if (res.data) {
         setTableData(res.data.data)
@@ -136,7 +136,7 @@ const ManageClients = () => {
     console.log(id)
     try {
       setFetchingTestInfo(true)
-      const res = await privateRequest.get(`Test/test-category/${id}`)
+      const res = await publicRequest.get(`Test/test-category/${id}`)
       setClient(res.data)
       setFetchingTestInfo(false)
       console.log(res.data)
@@ -172,7 +172,7 @@ const ManageClients = () => {
   useEffect(() => {}, [errorMessage])
   // end of update errorMessage state
   // END OF MISCELLANEOUS USEEFFECTS
-  useRedirectLoggedOutUser()
+  // useRedirectLoggedOutUser()
   return (
     <div className='manageClientsWrapper'>
       <Sidebar />

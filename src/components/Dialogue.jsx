@@ -14,7 +14,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 })
 
 export default function AlertDialogSlide(props) {
-  const { open, handleClose, message, title, link } = props
+  const { open, handleClose, message, title, link, action } = props
   const isLoggedIn = localStorage.getItem('isLoggedIn')
   const navigate = useNavigate()
   //   const [open, setOpen] = React.useState(false)
@@ -35,16 +35,21 @@ export default function AlertDialogSlide(props) {
     // navigate('/login')
     // }
 
-    let pathName =
-      window.location.pathname.split('/')[
-        window.location.pathname.split('/').length - 1
-      ]
-
-    if (`${link}` === `/${pathName}`) {
-      handleClose()
+    if (title === 'Delete') {
+      action()
     } else {
-      navigate(link)
+      let pathName =
+        window.location.pathname.split('/')[
+          window.location.pathname.split('/').length - 1
+        ]
+
+      if (`${link}` === `/${pathName}`) {
+        handleClose()
+      } else {
+        navigate(link)
+      }
     }
+
     // navigate(link)
   }
   // END OF HANDLE CANCEL CLICK

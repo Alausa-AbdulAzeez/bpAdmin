@@ -62,6 +62,22 @@ function App() {
         <Routes>
           <Route element={<PrivateRoutes />}>
             <Route exact path='/' element={<Home />} />
+            <Route path='/partnerLabs' element={<PartnerLabs />} />
+            <Route path='/partnerLabs/addLab' element={<AddLaboratory />} />
+            <Route path='/manageStaff' element={<ManageStaff />} />
+            <Route path='/manageStaff/addStaff' element={<AddStaff />} />
+            <Route path='/manageClients' element={<ManageClients />} />
+            <Route path='/manageClients/addClient' element={<AddClient />} />
+            <Route
+              path='/testCategories/editCategory'
+              element={<EditCategory />}
+            />
+            <Route path='/manageTests' element={<ManageTests />} />
+            <Route path='/manageTests/addTest' element={<AddTest />} />
+            <Route path='/testCategories' element={<TestCategories />} />
+            <Route path='/scheduleCandidate' element={<ScheduleCandidate />} />
+
+            <Route path='/profile' element={<Profile />} />
           </Route>
           <Route path='/login' element={<Login />} />
         </Routes>

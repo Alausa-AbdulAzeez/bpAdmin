@@ -12,9 +12,12 @@ import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import { useEffect } from 'react'
 import Loading from '../../components/loading/Loading'
 import Error from '../../components/error/Error'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const ManageStaff = () => {
   const [pageSize, setPageSize] = useState(5)
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
   const columns = [
     {
       field: 'fullName',
@@ -79,7 +82,15 @@ const ManageStaff = () => {
   const fetchStaff = async () => {
     try {
       setLoading(true)
-      const res = await privateRequest.get('Staff')
+
+      const res = await privateRequest.get('/Staff', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      // const res = await privateRequest.get('Staff')
+      console.log('seccessS')
       setStaff(res?.data?.data)
       setLoading(false)
       console.log(res?.data?.data)
