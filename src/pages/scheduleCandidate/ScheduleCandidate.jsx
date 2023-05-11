@@ -32,8 +32,6 @@ const ScheduleCandidate = () => {
   const [startDate, setStartDate] = useState(new Date())
   // function for handling date chande
   const handleDateChange = (selectedDate) => {
-    const isoSelectedDate = selectedDate.toISOString()
-    console.log(isoSelectedDate)
     setStartDate(selectedDate)
     // end of function for handling date chande
   }
@@ -72,29 +70,27 @@ const ScheduleCandidate = () => {
     createdDate: date,
     email: '',
     address: '',
-    appointmentdate: startDate,
+    appointmentdate: startDate?.toISOString(),
     clientid: '',
     testcategory: '',
+    status: 'PENDING',
   })
 
   // function for seting candidate info
   const [clientId, setClientId] = useState(null)
   const handlescheduleCandidateInfo = (e, dataName, data) => {
-    if (dataName === 'tests') {
-      const tests = data.map((singleTest) => {
-        return {
-          testId: singleTest.testId,
-        }
-      })
+    if (dataName === 'test') {
+      console.log(data)
+
       setScheduleInfo((prev) => {
         return {
           ...prev,
-          tests: [...tests],
+          testcategory: data?.categoryName,
         }
       })
-    } else if (dataName === 'clientId') {
+    } else if (dataName === 'clientid') {
       setScheduleInfo((prev) => {
-        return { ...prev, [dataName]: data?.clientId }
+        return { ...prev, [dataName]: data?.clientId?.toString() }
       })
       setClientId(data?.clientId)
       setLoadingTestCategory(true)
@@ -110,23 +106,24 @@ const ScheduleCandidate = () => {
   // end of useeffect for updating client id
 
   // function for scheduling a candidate
-  const handleScheduleCandidate = async () => {
+  const handleScheduleCandidate = async (e) => {
+    e.preventDefault()
     toastId.current = toast('Please wait...', {
       autoClose: 3000,
       isLoading: true,
     })
+    console.log(scheduleInfo)
 
     try {
-      await privateRequest
-        .post('/api/Candidate', scheduleInfo)
-        .then((response) => {
-          toast.update(toastId.current, {
-            render: 'Test category created succesfully!',
-            type: 'success',
-            isLoading: false,
-            autoClose: 3000,
-          })
+      await publicRequest.post('/Candidate', scheduleInfo).then((response) => {
+        console.log(response)
+        toast.update(toastId.current, {
+          render: 'Test category created succesfully!',
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
         })
+      })
     } catch (error) {
       console.log(error.response)
       toast.update(toastId.current, {
@@ -200,7 +197,7 @@ const ScheduleCandidate = () => {
                       `${option.clientName} ${option.email}`
                     }
                     onChange={(e, option) =>
-                      handlescheduleCandidateInfo(e, 'clientId', option)
+                      handlescheduleCandidateInfo(e, 'clientid', option)
                     }
                     sx={{ width: 400 }}
                     renderInput={(params) => (
@@ -213,7 +210,7 @@ const ScheduleCandidate = () => {
                     disablePortal
                     id='combo-box-demo'
                     options={testCategory}
-                    getOptionLabel={(option) => `${option.categoryName}}`}
+                    getOptionLabel={(option) => `${option.categoryName}`}
                     onChange={(e, option) =>
                       handlescheduleCandidateInfo(e, 'test', option)
                     }
@@ -234,26 +231,52 @@ const ScheduleCandidate = () => {
                 <div className='singleInput'>
                   <p>Candidate Name</p>
                   <div className='inputWrapper'>
-                    <input type='text' className='input' required />
+                    <input
+                      type='text'
+                      className='input'
+                      required
+                      onChange={(e) =>
+                        handlescheduleCandidateInfo(e, 'candidateName')
+                      }
+                    />
                   </div>
                 </div>
 
                 <div className='singleInput'>
                   <p>Address</p>
                   <div className='inputWrapper'>
-                    <input type='text' className='input' required />
+                    <input
+                      type='text'
+                      className='input'
+                      required
+                      onChange={(e) =>
+                        handlescheduleCandidateInfo(e, 'address')
+                      }
+                    />
                   </div>
                 </div>
                 <div className='singleInput'>
                   <p>Email</p>
                   <div className='inputWrapper'>
-                    <input type='email' className='input' required />
+                    <input
+                      type='email'
+                      className='input'
+                      required
+                      onChange={(e) => handlescheduleCandidateInfo(e, 'email')}
+                    />
                   </div>
                 </div>
                 <div className='singleInput'>
                   <p>Phone Number</p>
                   <div className='inputWrapper'>
-                    <input type='number' className='input' required />
+                    <input
+                      type='number'
+                      className='input'
+                      required
+                      onChange={(e) =>
+                        handlescheduleCandidateInfo(e, 'phoneNumber')
+                      }
+                    />
                   </div>
                 </div>
                 <div className='singleInput'>
@@ -268,6 +291,7 @@ const ScheduleCandidate = () => {
                       className='datePicker'
                       showMonthDropdown
                       showYearDropdown
+                      minDate={startDate}
                     />
                   </div>
                 </div>
