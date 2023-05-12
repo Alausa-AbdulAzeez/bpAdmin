@@ -1,12 +1,99 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './manageCandidates.scss'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Topber from '../../components/topbar/Topber'
-import { TextField } from '@mui/material'
+import { Box, TextField } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { RiAddLine } from 'react-icons/ri'
+import { DataGrid } from '@mui/x-data-grid'
+import { MdEdit } from 'react-icons/md'
+import { BsTrashFill } from 'react-icons/bs'
 
 const ManageCandidates = () => {
+  // PAGE SIZE OF TABLE
+  const [pageSize, setPageSize] = useState(5)
+
+  // TABLE COLUMN DATA
+  const columns = [
+    {
+      field: 'candidateName',
+      headerName: 'Name',
+      width: 200,
+      editable: false,
+    },
+    {
+      field: 'phoneNumber',
+      headerName: 'Phone Number',
+      width: 120,
+      editable: false,
+    },
+    {
+      field: 'appointmentdate',
+      headerName: 'Appointment Date',
+      width: 100,
+      editable: false,
+      description: 'The candidate shoul be present by this date',
+    },
+    {
+      field: 'testcategory',
+      headerName: 'Test Category',
+      width: 100,
+      editable: false,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 100,
+      editable: false,
+    },
+
+    {
+      field: 'createdDate',
+      headerName: 'Date Created',
+      width: 100,
+      editable: false,
+    },
+    {
+      field: 'fullName',
+      headerName: 'Action',
+
+      sortable: false,
+      width: 260,
+      renderCell: (props) => {
+        return (
+          <div className='buttons'>
+            <div className='editWrapper'>
+              <div className='edit'>Edit</div>
+              <MdEdit className='editIcon' />
+            </div>
+            <div className='deleteWrapper'>
+              <div className='delete'>Delete</div>
+              <BsTrashFill className='deleteIcon' />
+            </div>
+          </div>
+        )
+      },
+    },
+  ]
+
+  // TABLE ROW DATA
+  const rows = [
+    {
+      candidateName: 'Alausa Abdulazeez',
+      phoneNumber: 12345678,
+      appointmentdate: '1 Jann 2023',
+      testcategory: 'Pre employment',
+      status: 'PENDING',
+      createdDate: '1 Jann 2023',
+      id: 1,
+    },
+  ]
+  // FUNCTION TO GET AND SET ALL CANDIDATES
+  // END OF FUNCTION TO GET AND SET ALL CANDIDATES
+
+  // USE EFFECT TO GET ALL CANDIDATES AS THE PAGE LOADS
+  useEffect(() => {}, [])
+
   return (
     <div className='manageCandidatesWrapper'>
       <Sidebar />
@@ -35,6 +122,22 @@ const ManageCandidates = () => {
                 </button>
               </Link>
             </div>
+          </div>
+          <div className='partnerLabsMainBottom'>
+            <Box sx={{ height: 400, width: '100%' }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={pageSize}
+                checkboxSelection
+                disableSelectionOnClick
+                experimentalFeatures={{ newEditingApi: true }}
+                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                rowsPerPageOptions={[5, 10, 20]}
+                pagination
+                getRowId={(row) => row.id}
+              />
+            </Box>
           </div>
         </div>
       </div>
