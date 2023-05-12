@@ -8,6 +8,7 @@ import { RiAddLine } from 'react-icons/ri'
 import { DataGrid } from '@mui/x-data-grid'
 import { MdEdit } from 'react-icons/md'
 import { BsTrashFill } from 'react-icons/bs'
+import { publicRequest } from '../../functions/requestMethods'
 
 const ManageCandidates = () => {
   // PAGE SIZE OF TABLE
@@ -77,22 +78,46 @@ const ManageCandidates = () => {
   ]
 
   // TABLE ROW DATA
-  const rows = [
-    {
-      candidateName: 'Alausa Abdulazeez',
-      phoneNumber: 12345678,
-      appointmentdate: '1 Jann 2023',
-      testcategory: 'Pre employment',
-      status: 'PENDING',
-      createdDate: '1 Jann 2023',
-      id: 1,
-    },
-  ]
+  const [rows, setRows] = useState([
+    // {
+    //   candidateName: 'Alausa Abdulazeez',
+    //   phoneNumber: 12345678,
+    //   appointmentdate: '1 Jann 2023',
+    //   testcategory: 'Pre employment',
+    //   status: 'PENDING',
+    //   createdDate: '1 Jann 2023',
+    //   id: 1,
+    // },
+  ])
+  // LOADING DATA
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+
   // FUNCTION TO GET AND SET ALL CANDIDATES
+  const getAllCandidates = async () => {
+    try {
+      setLoading(true)
+      const res = await publicRequest.get('/Candidate')
+
+      if (res.data) {
+        console.log(res.data)
+        setRows(res.data?.data)
+        setLoading(false)
+      } else {
+        console.log(res.data)
+      }
+    } catch (error) {
+      setLoading(false)
+      setError(true)
+      console.log(error)
+    }
+  }
   // END OF FUNCTION TO GET AND SET ALL CANDIDATES
 
   // USE EFFECT TO GET ALL CANDIDATES AS THE PAGE LOADS
-  useEffect(() => {}, [])
+  useEffect(() => {
+    getAllCandidates()
+  }, [])
 
   return (
     <div className='manageCandidatesWrapper'>
@@ -135,7 +160,7 @@ const ManageCandidates = () => {
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 rowsPerPageOptions={[5, 10, 20]}
                 pagination
-                getRowId={(row) => row.id}
+                getRowId={(row) => row?.canditateId}
               />
             </Box>
           </div>
