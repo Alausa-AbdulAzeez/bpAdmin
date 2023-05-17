@@ -13,6 +13,7 @@ import Loading from '../../components/loading/Loading'
 import ErrorComponent from '../../components/error/Error'
 import { format } from 'date-fns'
 import { toast } from 'react-toastify'
+import { RxReload } from 'react-icons/rx'
 
 const ManageCandidates = () => {
   // MISCELLANEOUS
@@ -280,6 +281,12 @@ const ManageCandidates = () => {
                       Search
                     </div>
                   </div>
+                  <button className='reloadBtn' onClick={getAllCandidates}>
+                    Show All
+                    <span>
+                      <RxReload className='reloadIcon' />
+                    </span>
+                  </button>
                 </div>
               </div>
               <div className='partnerLabsMainBottom'>
