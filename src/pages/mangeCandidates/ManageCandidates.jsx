@@ -333,12 +333,22 @@ const ManageCandidates = () => {
         )
         .then(() => {
           toast.update(toastId.current, {
-            render: "Candidate scheduled succesfully!",
+            render: "Candidate updated succesfully!",
             type: "success",
             isLoading: false,
             autoClose: 3000,
           });
+        })
+        .then(() => {
+          getAllCandidates().then(() => {
+            setPosition("-100%");
+          });
+          // setPosition("-100%");
         });
+      // .then(() => {
+
+      //   window.location.reload();
+      // });
     } catch (error) {
       console.log(error);
       toast.update(toastId.current, {
