@@ -10,16 +10,23 @@ import { MdEdit } from 'react-icons/md'
 import { BsTrashFill } from 'react-icons/bs'
 import { publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
-import Error from '../../components/error/Error'
+import ErrorComponent from '../../components/error/Error'
 import { format } from 'date-fns'
+import { toast } from 'react-toastify'
 
 const ManageCandidates = () => {
+  // MISCELLANEOUS
+  const toastId = React.useRef(null)
+
   // PAGE SIZE OF TABLE
   const [pageSize, setPageSize] = useState(5)
 
   // CLIENTS DATA
   const [clients, setClients] = useState([])
   const [clientId, setClientId] = useState(null)
+
+  // CANDIDATE'S PHONE NUMBER
+  const [phoneNumber, setPhoneNumber] = useState('')
 
   // TABLE COLUMN DATA
   const columns = [
@@ -169,6 +176,52 @@ const ManageCandidates = () => {
   }, [])
   // end of use effect to call the getAllClients function as the page loads
 
+  // FUNCTION TO HANDLE PHONE NUMBER CHANGE
+  const handlePhoneNumberChange = (e) => {
+    // console.log(e.target?.value)
+    setPhoneNumber(e.target?.value)
+  }
+  // END OF FUNCTION TO HANDLE PHONE NUMBER CHANGE
+
+  // FUNCTION TO HANDLE CANDIDATE SEARCH
+  const handleCandidateSearch = async () => {
+    toastId.current = toast('Please wait...', {
+      autoClose: 3000,
+      isLoading: true,
+    })
+    try {
+      const res = await publicRequest.get(
+        `Candidate/SearchByPhoneNumber?Clientid=${clientId}&phone=${phoneNumber}`
+      )
+      console.log(clientId, phoneNumber)
+      console.log(res)
+      if (res?.data?.data?.length === 0) {
+        throw new Error('Candidate not found')
+      } else {
+        toast.update(toastId.current, {
+          render: 'Candidate found!',
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        setRows(res?.data?.data)
+      }
+    } catch (error) {
+      console.log(error.message)
+      toast.update(toastId.current, {
+        type: 'error',
+        autoClose: 3000,
+        isLoading: false,
+        render: `${
+          error?.response?.data?.title ||
+          error?.response?.data?.description ||
+          error?.message ||
+          'Something went wrong, please try again'
+        }`,
+      })
+    }
+  }
+  // END FUNCTION TO HANDLE CANDIDATE SEARCH
   {
     /* <Link to="/scheduleCandidate">
     <button className="scheduleCandidateBtn">
@@ -189,7 +242,7 @@ const ManageCandidates = () => {
           loading ? (
             <Loading />
           ) : (
-            <Error errorMessage={errorMessage && errorMessage} />
+            <ErrorComponent errorMessage={errorMessage && errorMessage} />
           )
         ) : (
           <>
@@ -215,11 +268,17 @@ const ManageCandidates = () => {
                     />
                     <TextField
                       id='outlined-search'
-                      label='Candidate name'
+                      label="Candidate's PhoneNo"
                       type='search'
                       className='candidateName'
+                      onChange={(e) => handlePhoneNumberChange(e)}
                     />
-                    <div className='manageCandidatesBtn'>Search</div>
+                    <div
+                      className='manageCandidatesBtn'
+                      onClick={handleCandidateSearch}
+                    >
+                      Search
+                    </div>
                   </div>
                 </div>
               </div>

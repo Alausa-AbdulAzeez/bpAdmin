@@ -113,7 +113,6 @@ const ScheduleCandidate = () => {
       autoClose: 3000,
       isLoading: true,
     })
-    console.log(scheduleInfo)
 
     try {
       await publicRequest
