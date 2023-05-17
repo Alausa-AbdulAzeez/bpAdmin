@@ -9,6 +9,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import { MdEdit } from 'react-icons/md'
 import { BsTrashFill } from 'react-icons/bs'
 import { publicRequest } from '../../functions/requestMethods'
+import { format } from 'date-fns'
 
 const ManageCandidates = () => {
   // PAGE SIZE OF TABLE
@@ -34,6 +35,11 @@ const ManageCandidates = () => {
       width: 100,
       editable: false,
       description: 'The candidate shoul be present by this date',
+      renderCell: (props) => {
+        const refinedDate = new Date(props?.value)
+        const dateWithRightFormat = format(refinedDate, 'dd-MMM-yyyy')
+        return <div>{dateWithRightFormat}</div>
+      },
     },
     {
       field: 'testcategory',
@@ -53,6 +59,11 @@ const ManageCandidates = () => {
       headerName: 'Date Created',
       width: 100,
       editable: false,
+      renderCell: (props) => {
+        const refinedDate = new Date(props?.value)
+        const dateWithRightFormat = format(refinedDate, 'dd-MMM-yyyy')
+        return <div>{dateWithRightFormat}</div>
+      },
     },
     {
       field: 'fullName',
@@ -160,7 +171,7 @@ const ManageCandidates = () => {
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 rowsPerPageOptions={[5, 10, 20]}
                 pagination
-                getRowId={(row) => row?.canditateId}
+                getRowId={(row) => row?.candidateId}
               />
             </Box>
           </div>

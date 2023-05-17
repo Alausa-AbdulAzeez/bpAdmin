@@ -35,6 +35,7 @@ const ScheduleCandidate = () => {
     setStartDate(selectedDate)
     // end of function for handling date chande
   }
+  console.log(startDate)
   // END OF DATE SELECTION AND CHANGE FUNCTIONALITIES
 
   //  FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
@@ -119,7 +120,7 @@ const ScheduleCandidate = () => {
         .post('/Candidate', scheduleInfo)
         .then(() => {
           toast.update(toastId.current, {
-            render: 'Test category created succesfully!',
+            render: 'Candidate scheduled succesfully!',
             type: 'success',
             isLoading: false,
             autoClose: 3000,
@@ -309,7 +310,7 @@ const ScheduleCandidate = () => {
                       className='datePicker'
                       showMonthDropdown
                       showYearDropdown
-                      minDate={startDate}
+                      minDate={new Date()}
                     />
                   </div>
                 </div>
