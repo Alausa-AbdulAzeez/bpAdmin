@@ -4,7 +4,7 @@ import Topber from '../../components/topbar/Topber'
 import './scheduleCandidate.scss'
 import AlertDialogSlide from '../../components/Dialogue'
 import { Autocomplete, TextField } from '@mui/material'
-import { privateRequest, publicRequest } from '../../functions/requestMethods'
+import { publicRequest } from '../../functions/requestMethods'
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
@@ -35,7 +35,6 @@ const ScheduleCandidate = () => {
     setStartDate(selectedDate)
     // end of function for handling date chande
   }
-  console.log(startDate)
   // END OF DATE SELECTION AND CHANGE FUNCTIONALITIES
 
   //  FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS

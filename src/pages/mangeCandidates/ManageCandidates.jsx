@@ -3,10 +3,8 @@ import './manageCandidates.scss'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Topber from '../../components/topbar/Topber'
 import { Autocomplete, Box, TextField } from '@mui/material'
-import { Link } from 'react-router-dom'
-import { RiAddLine } from 'react-icons/ri'
 import { DataGrid } from '@mui/x-data-grid'
-import { MdEdit } from 'react-icons/md'
+import { MdCancel, MdEdit } from 'react-icons/md'
 import { BsTrashFill } from 'react-icons/bs'
 import { publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
@@ -14,6 +12,7 @@ import ErrorComponent from '../../components/error/Error'
 import { format } from 'date-fns'
 import { toast } from 'react-toastify'
 import { RxReload } from 'react-icons/rx'
+import DatePicker from 'react-datepicker'
 
 const ManageCandidates = () => {
   // MISCELLANEOUS
@@ -28,6 +27,21 @@ const ManageCandidates = () => {
 
   // CANDIDATE'S PHONE NUMBER
   const [phoneNumber, setPhoneNumber] = useState('')
+
+  // CANDIDATE TO BE EDITED INFO
+  const [candidateToBeEdited, setCandidateToBeEdited] = useState(null)
+
+  // SLIDE POSITION
+  const [position, setPosition] = useState('-100%')
+
+  // DATA TO BE DISPLAYED IN THE INPUTS AND SENT TO THE BACKEND
+  const [updatedCandidateInfo, setUpdatedCandidateInfo] = useState(null)
+
+  // DATE SELECTION
+  const [startDate, setStartDate] = useState()
+
+  // TEST CATEGORY LIST
+  const [testCategory, setTestCategory] = useState([])
 
   // TABLE COLUMN DATA
   const columns = [
@@ -88,11 +102,15 @@ const ManageCandidates = () => {
       renderCell: (props) => {
         return (
           <div className='buttons'>
-            <div className='editWrapper'>
+            <div
+              className='editWrapper'
+              style={{ cursor: 'pointer' }}
+              onClick={() => showSlide(props)}
+            >
               <div className='edit'>Edit</div>
               <MdEdit className='editIcon' />
             </div>
-            <div className='deleteWrapper'>
+            <div className='deleteWrapper' style={{ cursor: 'pointer' }}>
               <div className='delete'>Delete</div>
               <BsTrashFill className='deleteIcon' />
             </div>
@@ -126,7 +144,6 @@ const ManageCandidates = () => {
       const res = await publicRequest.get('/Candidate')
 
       if (res.data) {
-        console.log(res.data)
         setRows(res.data?.data?.reverse())
         setLoading(false)
       } else {
@@ -149,7 +166,6 @@ const ManageCandidates = () => {
 
       if (res.data) {
         setClients(res.data.data)
-        console.log(res.data)
       } else {
         console.log(res.data)
       }
@@ -194,8 +210,7 @@ const ManageCandidates = () => {
       const res = await publicRequest.get(
         `Candidate/SearchByPhoneNumber?Clientid=${clientId}&phone=${phoneNumber}`
       )
-      console.log(clientId, phoneNumber)
-      console.log(res)
+
       if (res?.data?.data?.length === 0) {
         throw new Error('Candidate not found')
       } else {
@@ -223,16 +238,116 @@ const ManageCandidates = () => {
     }
   }
   // END FUNCTION TO HANDLE CANDIDATE SEARCH
-  {
-    /* <Link to="/scheduleCandidate">
-    <button className="scheduleCandidateBtn">
-      Schedule Candidate
-      <span>
-        <RiAddLine className="addIcon" />
-      </span>
-    </button>
-  </Link> */
+
+  // SLIDE FUNCTIONALITIES
+
+  //functionalities to get and set candidate to be updated
+
+  // function to get and set candidate
+  // const getCandidate = async (candidate) => {
+  //   const {
+  //     clientid: candidateToBeEditedId,
+  //     phoneNumber: candidateToBeEditedhoneNumber,
+  //   } = candidate
+  //   try {
+  //     const res = await publicRequest.get(
+  //       `Candidate/SearchByPhoneNumber?Clientid=${candidateToBeEditedId}&phone=${candidateToBeEditedhoneNumber}`
+  //     )
+  //     setCandidateToBeEdited(res?.data?.data)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  // function to get and set candidate
+
+  //end of functionality to get and set candidate to be updated
+
+  // handlerowclick function
+  const showSlide = (props) => {
+    // getCandidate(props?.row)
+    setCandidateToBeEdited(props?.row)
+    setUpdatedCandidateInfo(props?.row)
+    console.log(props)
+    if (position !== '0') {
+      setPosition('0')
+    }
   }
+  // end of  handlerowclick function
+
+  // hide slide function
+  const handleHideSlide = () => {
+    setPosition('-100%')
+  }
+  // end of hide slide function
+
+  // END OF SLIDE FUNCTIONALITIES
+
+  // DATE SELECTION AND CHANGE FUNCTIONALITIES
+  // function for handling date chande
+  const handleDateChange = (selectedDate) => {
+    setStartDate(selectedDate)
+    setUpdatedCandidateInfo((prev) => {
+      return {
+        ...prev,
+        appointmentdate: selectedDate,
+      }
+    })
+
+    // end of function for handling date chande
+  }
+  // END OF DATE SELECTION AND CHANGE FUNCTIONALITIES
+
+  // function for seting candidate info
+  const handleUpdateCandidateInfo = (e, dataName, data) => {
+    setUpdatedCandidateInfo((prev) => {
+      return {
+        ...prev,
+        [dataName]: e.target.value,
+      }
+    })
+  }
+  // end of function for seting candidate info
+
+  // UPDATE USER FUNCTION
+  const handleUpdateUser = async () => {
+    console.log(updatedCandidateInfo)
+    // try {
+    // await publicRequest.put(
+    //   'Candidate/EditbyID?Candidateid=2',
+    //   updatedCandidateInfo
+    // )
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  }
+  // END OF UPDATE USER FUNCTION
+
+  //  FUNCTIONALITIES FOR FETCHING AND SETTING TEST CATEGORIES
+
+  // function to get all TestCategories
+  const getAllTestCategories = async () => {
+    try {
+      const res = await publicRequest.get(
+        `Test/test-category/${updatedCandidateInfo.clientid}`
+      )
+
+      if (res.data) {
+        setTestCategory(res.data.data)
+        console.log(res.data)
+      } else {
+        console.log(res.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // end of function to get all TestCategories
+
+  useEffect(() => {
+    getAllTestCategories()
+  }, [updatedCandidateInfo])
+
+  //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING TEST CATEGORIES
 
   return (
     <div className='manageCandidatesWrapper'>
@@ -287,6 +402,145 @@ const ManageCandidates = () => {
                       <RxReload className='reloadIcon' />
                     </span>
                   </button>
+                </div>
+              </div>
+              <div
+                className='manageCandidatesSlide'
+                style={{
+                  right: position,
+                  visibility: position === '0' && 'visible',
+                }}
+              >
+                <div className='slideTop'>
+                  <div className='cancelconWrapper' onClick={handleHideSlide}>
+                    <MdCancel className='cancelIcon' />
+                  </div>
+                  <div className='initials'>
+                    {console.log(candidateToBeEdited)}
+                    {candidateToBeEdited?.candidateName[0]}
+                  </div>
+                  <div className='slideFullname'>
+                    {candidateToBeEdited?.candidateName}
+                  </div>
+                </div>
+                <div className='slideMiddle'>
+                  <div className='companyName h3 companyDetail'>
+                    <h3>Email</h3>
+                    <p>{candidateToBeEdited?.email}</p>
+                  </div>
+
+                  <div className='phoneNo h3 companyDetail'>
+                    <h3>Phone Number</h3>
+                    <p>{candidateToBeEdited?.phoneNumber}</p>
+                  </div>
+                  <div className='companyName h3 companyDetail'>
+                    <h3>Date Created</h3>
+                    <p>{candidateToBeEdited?.createdDate}</p>
+                  </div>
+
+                  <div className='phoneNo h3 companyDetail'>
+                    <h3>Appointment Date</h3>
+                    <p>{candidateToBeEdited?.appointmentdate}</p>
+                  </div>
+                  <div className=' h3 companyDetail'>
+                    <h3>Address</h3>
+                    <p>{candidateToBeEdited?.address}</p>
+                  </div>
+                  <div className=' h3 companyDetail'>
+                    <h3>Test Category</h3>
+                    <p>{candidateToBeEdited?.testcategory}</p>
+                  </div>
+                </div>
+                <div className='updateUserSlideBottom'>
+                  <div className='updateUserInputWrapper'>
+                    <label htmlFor='email'>Email</label>
+                    <input
+                      type='text'
+                      id='email'
+                      className='updateUserInput'
+                      value={updatedCandidateInfo?.email}
+                      onChange={(e) => handleUpdateCandidateInfo(e, 'email')}
+                    />
+                  </div>
+                  <div className='updateUserInputWrapper'>
+                    <label htmlFor='phoneNo'>Phone Number</label>
+                    <input
+                      type='text'
+                      id='phoneNo'
+                      className='updateUserInput'
+                      value={updatedCandidateInfo?.phoneNumber}
+                      onChange={(e) =>
+                        handleUpdateCandidateInfo(e, 'phoneNumber')
+                      }
+                    />
+                  </div>
+                  <div className='updateUserInputWrapper'>
+                    <label htmlFor='address'>Address</label>
+                    <input
+                      type='text'
+                      id='address'
+                      className='updateUserInput'
+                      value={updatedCandidateInfo?.address}
+                      onChange={(e) => handleUpdateCandidateInfo(e, 'address')}
+                    />
+                  </div>
+                  <div className='updateUserInputWrapper'>
+                    <label
+                      htmlFor='testCategory'
+                      style={{ visibility: 'hidden' }}
+                    >
+                      Test Category
+                    </label>
+                    {/* <input
+                      type='text'
+                      id='testCategory'
+                      className='updateUserInput'
+                      value={updatedCandidateInfo?.testcategory}
+                      onChange={(e) =>
+                        handleUpdateCandidateInfo(e, 'testcategory')
+                      }
+                    /> */}
+
+                    <Autocomplete
+                      disablePortal
+                      id='combo-box-demo'
+                      options={testCategory}
+                      getOptionLabel={(option) => `${option.categoryName}`}
+                      onChange={(e, option) =>
+                        handlescheduleCandidateInfo(e, 'test', option)
+                      }
+                      value={candidateToBeEdited?.testcategory}
+                      sx={{ width: 300, alignSelf: 'flex-end' }}
+                      renderInput={(params) => (
+                        <TextField {...params} label='Test Category' />
+                      )}
+                      renderOption={(props, option) => {
+                        return (
+                          <li {...props} key={option.id}>
+                            {option.categoryName}
+                          </li>
+                        )
+                      }}
+                    />
+                  </div>
+                  <div className='updateUserInputWrapper'>
+                    <label htmlFor='email'>Appointment Date</label>
+                    <DatePicker
+                      selected={startDate}
+                      onChange={(selectedDate) =>
+                        handleDateChange(selectedDate)
+                      }
+                      dateFormat='MMMM d, yyyy'
+                      className='updateUserDatePicker'
+                      showMonthDropdown
+                      showYearDropdown
+                      minDate={new Date()}
+                    />
+                    {/* <input type='text' id='email' className='updateUserInput' /> */}
+                  </div>
+                </div>
+                <div className='updateUserBtn' onClick={handleUpdateUser}>
+                  Update
                 </div>
               </div>
               <div className='partnerLabsMainBottom'>

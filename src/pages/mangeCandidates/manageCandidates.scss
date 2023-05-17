@@ -7,6 +7,136 @@
     .manageCandidatesMainWrapper {
       padding: 30px 64px;
 
+      .manageCandidatesSlide {
+        position: absolute;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        width: 55%;
+        height: 100%;
+        top: 0;
+        background-color: white;
+        z-index: 2;
+        box-shadow: 1px 1px 40px 4px #6b6a6a6b;
+        transition: all ease-in-out 0.65s;
+        padding: 32px;
+        visibility: hidden;
+
+        .slideMiddle {
+          display: flex;
+          flex-wrap: wrap;
+          .companyDetail {
+            width: 30%;
+          }
+          & > .h3 > h3 {
+            margin-bottom: 0;
+            // margin-top: 0;
+          }
+          & > .h3 > p {
+            margin-bottom: 0;
+            margin-top: 0;
+            color: darkgray;
+            font-weight: bold;
+            font-size: 15px;
+          }
+        }
+
+        .slideTop {
+          height: 100px;
+          display: flex;
+          align-items: center;
+
+          .cancelconWrapper {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+
+            .cancelIcon {
+              color: rgb(138, 17, 17);
+              font-size: xx-large;
+              cursor: pointer;
+            }
+          }
+          .initials {
+            height: 90px;
+            width: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--main-purple);
+            font-size: 42px;
+            color: white;
+            letter-spacing: 2px;
+            margin-right: 30px;
+            text-transform: uppercase;
+          }
+          .slideFullname {
+            font-size: 24px;
+            font-weight: bold;
+          }
+        }
+        .updateUserSlideBottom {
+          // border-top: 0.1px solid silver;
+          // border-bottom: 0.1px solid silver;
+          // margin-top: 30px;
+          height: 50%;
+          gap: 0px;
+          overflow-y: auto;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: flex-start;
+
+          padding-top: 30px;
+          justify-content: flex-start;
+          column-gap: 30px;
+
+          .updateUserInputWrapper {
+            min-width: 300px;
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px !important;
+            margin: 0;
+            // flex: ;
+
+            .updateUserDatePicker {
+              height: 40px;
+              padding: 5px;
+
+              &:focus {
+                outline: 1px solid silver;
+              }
+            }
+            .updateUserInput {
+              padding: 10px;
+              margin-bottom: 100px !important;
+              // color: darkgray;
+              // font-weight: 700;
+
+              &:focus {
+                outline: 1px solid silver;
+              }
+            }
+          }
+        }
+        .updateUserBtn {
+          background-color: #000;
+          color: white;
+          border-radius: 10px;
+          padding: 10px;
+          position: absolute;
+          bottom: 50px;
+          right: 80px;
+          cursor: pointer;
+
+          &:hover {
+            box-shadow: 1px 1px 40px 4px #6b6a6a6b;
+          }
+        }
+      }
+
       .manageCandidatesMainTop {
         // display: flex;
         // justify-content: space-between;
