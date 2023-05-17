@@ -2,18 +2,24 @@ import React, { useEffect, useState } from 'react'
 import './manageCandidates.scss'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Topber from '../../components/topbar/Topber'
-import { Box, TextField } from '@mui/material'
+import { Autocomplete, Box, TextField } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { RiAddLine } from 'react-icons/ri'
 import { DataGrid } from '@mui/x-data-grid'
 import { MdEdit } from 'react-icons/md'
 import { BsTrashFill } from 'react-icons/bs'
 import { publicRequest } from '../../functions/requestMethods'
+import Loading from '../../components/loading/Loading'
+import Error from '../../components/error/Error'
 import { format } from 'date-fns'
 
 const ManageCandidates = () => {
   // PAGE SIZE OF TABLE
   const [pageSize, setPageSize] = useState(5)
+
+  // CLIENTS DATA
+  const [clients, setClients] = useState([])
+  const [clientId, setClientId] = useState(null)
 
   // TABLE COLUMN DATA
   const columns = [
@@ -100,9 +106,10 @@ const ManageCandidates = () => {
     //   id: 1,
     // },
   ])
-  // LOADING DATA
+  // LOADING AND ERROR DATA
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   // FUNCTION TO GET AND SET ALL CANDIDATES
   const getAllCandidates = async () => {
@@ -112,7 +119,7 @@ const ManageCandidates = () => {
 
       if (res.data) {
         console.log(res.data)
-        setRows(res.data?.data)
+        setRows(res.data?.data?.reverse())
         setLoading(false)
       } else {
         console.log(res.data)
@@ -120,62 +127,121 @@ const ManageCandidates = () => {
     } catch (error) {
       setLoading(false)
       setError(true)
+      setErrorMessage(error)
+
       console.log(error)
     }
   }
   // END OF FUNCTION TO GET AND SET ALL CANDIDATES
+  //  FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
+
+  const getAllClients = async () => {
+    try {
+      const res = await publicRequest.get('Client/Client-list')
+
+      if (res.data) {
+        setClients(res.data.data)
+        console.log(res.data)
+      } else {
+        console.log(res.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING CLIENTS
+
+  // FUNCTION FOR SETTING CLIENT ID
+  const handlescheduleCandidateInfo = (e, dataName, data) => {
+    setClientId(data?.clientId)
+  }
+  //END OF FUNCTION FOR SETTING CLIENT ID
 
   // USE EFFECT TO GET ALL CANDIDATES AS THE PAGE LOADS
   useEffect(() => {
     getAllCandidates()
   }, [])
 
+  // use effect to call the getAllClients function as the page loads
+  useEffect(() => {
+    getAllClients()
+  }, [])
+  // end of use effect to call the getAllClients function as the page loads
+
+  {
+    /* <Link to="/scheduleCandidate">
+    <button className="scheduleCandidateBtn">
+      Schedule Candidate
+      <span>
+        <RiAddLine className="addIcon" />
+      </span>
+    </button>
+  </Link> */
+  }
+
   return (
     <div className='manageCandidatesWrapper'>
       <Sidebar />
       <div className='manageCandidatesRight'>
         <Topber />
-        <div className='manageCandidatesMainWrapper'>
-          <div className='manageCandidatesMainTop'>
-            <h3>All Tests</h3>
-            <div className='manageCandidatesMainTopForm'>
-              <div className='formAndSearchWrapperMc'>
-                <TextField
-                  id='outlined-search'
-                  label='Candidate name'
-                  type='search'
-                  className='candidateName'
-                />
-
-                <div className='manageCandidatesBtn'>Search</div>
+        {loading || error ? (
+          loading ? (
+            <Loading />
+          ) : (
+            <Error errorMessage={errorMessage && errorMessage} />
+          )
+        ) : (
+          <>
+            <div className='manageCandidatesMainWrapper'>
+              <div className='manageCandidatesMainTop'>
+                <h3>All Tests</h3>
+                <div className='manageCandidatesMainTopForm'>
+                  <div className='formAndSearchWrapperMc'>
+                    <Autocomplete
+                      disablePortal
+                      id='combo-box-demo'
+                      options={clients}
+                      getOptionLabel={(option) =>
+                        `${option.clientName} ${option.email}`
+                      }
+                      onChange={(e, option) =>
+                        handlescheduleCandidateInfo(e, 'clientid', option)
+                      }
+                      sx={{ width: 300 }}
+                      renderInput={(params) => (
+                        <TextField {...params} label='Client Name' />
+                      )}
+                    />
+                    <TextField
+                      id='outlined-search'
+                      label='Candidate name'
+                      type='search'
+                      className='candidateName'
+                    />
+                    <div className='manageCandidatesBtn'>Search</div>
+                  </div>
+                </div>
               </div>
-              <Link to='/scheduleCandidate'>
-                <button className='scheduleCandidateBtn'>
-                  Schedule Candidate
-                  <span>
-                    <RiAddLine className='addIcon' />
-                  </span>
-                </button>
-              </Link>
+              <div className='partnerLabsMainBottom'>
+                <Box sx={{ height: 400, width: '100%' }}>
+                  <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    pageSize={pageSize}
+                    checkboxSelection
+                    disableSelectionOnClick
+                    experimentalFeatures={{ newEditingApi: true }}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                    rowsPerPageOptions={[5, 10, 20]}
+                    pagination
+                    getRowId={(row) => row?.candidateId}
+                  />
+                </Box>
+              </div>
             </div>
-          </div>
-          <div className='partnerLabsMainBottom'>
-            <Box sx={{ height: 400, width: '100%' }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={pageSize}
-                checkboxSelection
-                disableSelectionOnClick
-                experimentalFeatures={{ newEditingApi: true }}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                rowsPerPageOptions={[5, 10, 20]}
-                pagination
-                getRowId={(row) => row?.candidateId}
-              />
-            </Box>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </div>
   )
