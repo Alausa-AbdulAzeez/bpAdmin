@@ -118,7 +118,11 @@ const ManageTests = () => {
               <MdEdit className='editIcon' />
             </div>
             <div className='deleteWrapper'>
-              <div className='delete' onClick={() => handleClickOpen(props)}>
+              <div
+                className='delete'
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleClickOpen(props)}
+              >
                 Delete
               </div>
               <BsTrashFill className='deleteIcon' />
@@ -151,7 +155,7 @@ const ManageTests = () => {
 
   const handleClose = () => {
     setOpen(false)
-    handleDeleteTest()
+    // handleDeleteTest()
   }
   // END OF FUNCTIONS TO TOGGLE ALERT SLIDE
 

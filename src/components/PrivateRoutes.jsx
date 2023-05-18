@@ -46,7 +46,7 @@ const PrivateRoutes = () => {
       }
     }
     getLoggedInStatus()
-  }, [dispatch, navigate])
+  }, [dispatch, navigate, token])
 
   useEffect(() => {
     console.log(isLoggedIn)
