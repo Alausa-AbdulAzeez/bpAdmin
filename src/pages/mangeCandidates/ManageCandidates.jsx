@@ -413,7 +413,6 @@ const ManageCandidates = () => {
 
   const handleClose = () => {
     setOpen(false)
-    // handleDeleteTest()
   }
   // END OF FUNCTIONS TO TOGGLE ALERT SLIDE
 
@@ -430,7 +429,7 @@ const ManageCandidates = () => {
         .then((res) => {
           toast.success('Candidate deleted successfully', {
             position: 'top-right',
-            // autoClose: 10000,
+            autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -438,9 +437,10 @@ const ManageCandidates = () => {
             progress: undefined,
             theme: 'light',
           })
+          setOpen(false)
         })
         .then(() => {
-          return toast.isActive === false && getAllCandidates()
+          return getAllCandidates()
         })
     } catch (error) {
       console.log(error)
