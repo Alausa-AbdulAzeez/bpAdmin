@@ -41,6 +41,28 @@
               }
             }
           }
+          .bulkUploadWrapper {
+            // background-color: red;
+            position: relative;
+
+            .bulkUploadButton {
+              position: absolute;
+              cursor: pointer;
+              background-color: black;
+              color: white;
+              padding: 10px 15px;
+              right: 30%;
+              top: 30%;
+
+              &:hover {
+                box-shadow: 1px 1px 40px 4px #6b6a6a6b;
+              }
+            }
+          }
+          .downloadSample {
+            // text-align: center;
+            margin-top: 10px;
+          }
           .autoComplete {
             display: flex;
             align-items: flex-end;
