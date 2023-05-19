@@ -37,6 +37,12 @@ const ScheduleCandidate = () => {
   // function for handling date chande
   const handleDateChange = (selectedDate) => {
     setStartDate(selectedDate)
+    setScheduleInfo((prev) => {
+      return {
+        ...prev,
+        appointmentdate: selectedDate?.toISOString(),
+      }
+    })
     // end of function for handling date chande
   }
   // END OF DATE SELECTION AND CHANGE FUNCTIONALITIES
@@ -74,7 +80,7 @@ const ScheduleCandidate = () => {
     createdDate: date,
     email: '',
     address: '',
-    appointmentdate: startDate?.toISOString(),
+    appointmentdate: null,
     clientid: '',
     testcategory: '',
     status: 'PENDING',
@@ -156,6 +162,7 @@ const ScheduleCandidate = () => {
       })
     }
   }
+  console.log(startDate.toISOString())
   // end of function for creating a test category
 
   // END OF FUNCTIONALITY FOR SETTING SCHEDULE INFO

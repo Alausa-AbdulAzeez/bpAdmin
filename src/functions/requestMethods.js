@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://15.237.160.238:60/api/'
+const BASE_URL = 'https://app.biopathonline.com/api/'
+// https://app.biopathonline.com/swagger/index.html
 console.log('aaa')
 const user =
   localStorage.getItem('persist:root') !== undefined
