@@ -7,12 +7,17 @@ export const login = async (dispatch, user, navigate) => {
   dispatch(loginStart())
 
   try {
-    const res = await publicRequest.post('/Account/login', user)
-
-    dispatch(loginSuccess(res?.data))
-    // console.log(res.data)
-    dispatch(loggedIn())
-    navigate('/')
+    const res = await publicRequest.post('/Account/login', user).then()
+    console.log(res)
+    console.log(res.data)
+    if (res?.data?.isDefaultPassword === false) {
+      dispatch(loginSuccess(res?.data))
+      dispatch(loggedIn())
+      navigate('/')
+    } else {
+      navigate('/changePassword')
+      console.log('def')
+    }
   } catch (error) {
     console.log(error)
     dispatch(loginFailure())

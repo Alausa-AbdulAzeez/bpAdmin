@@ -134,7 +134,7 @@ const Register = () => {
               type={'submit'}
               // disabled={isError}
               // disabled={btnDisabled}
-              disabled={isFetching ? isFetching : btnDisabled}
+              // disabled={isFetching ? isFetching : btnDisabled}
               data-testid='loginBtn'
               onClick={handleLogin}
             >

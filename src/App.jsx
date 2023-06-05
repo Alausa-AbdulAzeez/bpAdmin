@@ -21,6 +21,7 @@ import { privateRequest } from './functions/requestMethods'
 import PrivateRoutes from './components/PrivateRoutes'
 import ManageCandidates from './pages/mangeCandidates/ManageCandidates'
 import EditCandidate from './pages/editCandidate/EditCandidate'
+import ChangePassword from './pages/changePassword/ChangePassword'
 
 function App() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -88,6 +89,7 @@ function App() {
             <Route path='/profile' element={<Profile />} />
           </Route>
           <Route path='/login' element={<Login />} />
+          <Route path='/changePassword' element={<ChangePassword />} />
         </Routes>
       </BrowserRouter>
     </div>
