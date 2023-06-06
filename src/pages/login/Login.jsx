@@ -127,7 +127,7 @@ const Register = () => {
                   {showPassword ? <BsEye /> : <BsFillEyeSlashFill />}
                 </span>
               </div>
-              <Link to={'/forgotPassword'}>
+              <Link to={'/getToken'}>
                 <div className='forgotPassword'>Forgotten your password?</div>
               </Link>
             </div>

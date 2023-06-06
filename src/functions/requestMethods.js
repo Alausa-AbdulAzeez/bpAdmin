@@ -18,6 +18,10 @@ const TOKEN = currentUser?.data?.token
 
 export const publicRequest = axios.create({
   baseURL: BASE_URL,
+  headers: {
+    Accept: '*',
+    'Content-Type': 'application/json',
+  },
 })
 
 export const privateRequest = axios.create({
@@ -27,4 +31,3 @@ export const privateRequest = axios.create({
     Authorization: `Bearer ${TOKEN}`,
   },
 })
-console.log(TOKEN)

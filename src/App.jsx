@@ -23,6 +23,7 @@ import ManageCandidates from './pages/mangeCandidates/ManageCandidates'
 import EditCandidate from './pages/editCandidate/EditCandidate'
 import ChangePassword from './pages/changePassword/ChangePassword'
 import ForgotPassword from './pages/forgotPassword/ForgotPassword'
+import ResetPassword from './pages/resetPassword/ResetPassword'
 
 function App() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -91,8 +92,8 @@ function App() {
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/changePassword' element={<ChangePassword />} />
-          <Route path='/forgotPassword' element={<ForgotPassword />} />
-          <Route path='/forgotPassword/:code' element={<ForgotPassword />} />
+          <Route path='/getToken' element={<ForgotPassword />} />
+          <Route path='/forgotPassword' element={<ResetPassword />} />
         </Routes>
       </BrowserRouter>
     </div>

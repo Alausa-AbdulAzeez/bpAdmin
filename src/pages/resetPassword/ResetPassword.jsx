@@ -1,37 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './changePassword.scss'
-import {
-  BsEye,
-  BsEyeSlash,
-  BsFillEyeSlashFill,
-  BsList,
-  BsListCheck,
-} from 'react-icons/bs'
+import { useNavigate, useParams } from 'react-router-dom'
+import './resetPassword.scss'
+import { BsEye, BsFillEyeSlashFill } from 'react-icons/bs'
 import { publicRequest } from '../../functions/requestMethods'
 import { login } from '../../redux/apiCalls'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
-const ChangePassword = () => {
+const ResetPassword = () => {
   // MISCELLANEOUS
   const [btnDisabled, setBtnDisabled] = useState(true)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isFetching, isError, currentUser } = useSelector(
-    (state) => state.user
-  )
-  // console.log(a)
-  console.log(currentUser)
+  const token = window.location?.search?.split('=')[1]
 
   // END OF MISCELLANEOUS
 
   // USER LOGIN DETAILS
   const [user, setUser] = useState({
     username: '',
-    oldPassword: '',
-    newPassword: '',
+    password: '',
     confirmPassword: '',
+    code: token,
   })
   // END OF USER LOGIN DETAILS
 
@@ -62,12 +52,12 @@ const ChangePassword = () => {
   // END OF PASSWORD TOGGLE FUNCTIONALITY
 
   // FUNCTION FOR ONCLICK LOGIN BUTTON
-  const handleChangePassword = async (e) => {
-    e.preventDefault()
+  const handleResetPassword = async (e) => {
     console.log(user)
+    e.preventDefault()
     try {
-      if (user?.newPassword.trim() === user?.confirmPassword.trim()) {
-        const res = await publicRequest.post('/Account/change-password')
+      if (user?.password === user?.confirmPassword) {
+        const res = await publicRequest.post('/Account/reset-password', user)
         console.log(res)
       } else {
         toast.error("Passwords don't match!", {
@@ -96,52 +86,31 @@ const ChangePassword = () => {
 
   return (
     <>
-      <div className='changePasswordWrapper'>
-        {/* <div className='changePasswordWrapperLeft'>
-          <img
-            src={require('../../utils/images/IMG_6229.PNG')}
-       
-            alt=''
-            className='biopathImg'
-          />
-        </div> */}
-        <div className='changePasswordWrapperRight'>
+      <div className='resetPasswordWrapper'>
+        <div className='resetPasswordWrapperRight'>
           <form
-            className='changePasswordFormWrapper'
-            onSubmit={handleChangePassword}
+            className='resetPasswordFormWrapper'
+            onSubmit={handleResetPassword}
           >
-            <div className='changePasswordHeading'>Change Password</div>
-            <div className='changePasswordInputs'>
+            <div className='resetPasswordHeading'>Reset Password</div>
+            <div className='resetPasswordInputs'>
               <label htmlFor=''>Email</label>
               <input
                 type='email'
-                className='changePasswordEmailInput changePasswordInput'
+                className='resetPasswordEmailInput resetPasswordInput'
                 placeholder='example@****.com'
                 data-testid='emailTestId'
                 onChange={(e) => handleSetUser(e, 'username')}
                 required
               />
-              <label htmlFor=''>Old Password</label>
-              <div className='passwordWrapper'>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  className='changePasswordPasswordInput changePasswordInput'
-                  placeholder='Password'
-                  onChange={(e) => handleSetUser(e, 'oldPassword')}
-                  data-testid='passwordTestId'
-                  required
-                />
-                <span onClick={handlePasswordToggle}>
-                  {showPassword ? <BsEye /> : <BsFillEyeSlashFill />}
-                </span>
-              </div>
+
               <label htmlFor=''>New Password</label>
               <div className='passwordWrapper'>
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  className='changePasswordPasswordInput changePasswordInput'
+                  className='resetPasswordPasswordInput resetPasswordInput'
                   placeholder='Password'
-                  onChange={(e) => handleSetUser(e, 'newPassword')}
+                  onChange={(e) => handleSetUser(e, 'password')}
                   data-testid='passwordTestId'
                   required
                 />
@@ -153,7 +122,7 @@ const ChangePassword = () => {
               <div className='passwordWrapper'>
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  className='changePasswordPasswordInput changePasswordInput'
+                  className='resetPasswordPasswordInput resetPasswordInput'
                   placeholder='Password'
                   onChange={(e) => handleSetUser(e, 'confirmPassword')}
                   data-testid='passwordTestId'
@@ -174,23 +143,12 @@ const ChangePassword = () => {
             </div>
 
             <button
-              className='changePasswordBtn'
+              className='resetPasswordBtn'
               type={'submit'}
-              // disabled={isError}
-              // disabled={btnDisabled}
-              // disabled={isFetching ? isFetching : btnDisabled}
-              data-testid='changePasswordBtn'
-              // onClick={handleChangePassword}
+              data-testid='resetPasswordBtn'
             >
-              Submit
+              Confirm
             </button>
-            {/* {isError && (
-              <div className='errorMsg'>
-                {currentUser
-                  ? currentUser?.description + 's!'
-                  : 'Error logging in.. Please try again!!'}
-              </div>
-            )} */}
           </form>
         </div>
       </div>
@@ -198,4 +156,4 @@ const ChangePassword = () => {
   )
 }
 
-export default ChangePassword
+export default ResetPassword
