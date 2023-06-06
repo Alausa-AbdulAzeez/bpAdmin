@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './login.scss'
 import {
   BsEye,
@@ -127,6 +127,9 @@ const Register = () => {
                   {showPassword ? <BsEye /> : <BsFillEyeSlashFill />}
                 </span>
               </div>
+              <Link to={'/forgotPassword'}>
+                <div className='forgotPassword'>Forgotten your password?</div>
+              </Link>
             </div>
 
             <button

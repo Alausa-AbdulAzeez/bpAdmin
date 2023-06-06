@@ -1,6 +1,8 @@
 import axios from 'axios'
 
 const BASE_URL = 'https://app.biopathonline.com/api/'
+export const BASE_FRONTEND_URL = 'http://localhost:3000/'
+
 // https://app.biopathonline.com/swagger/index.html
 console.log('aaa')
 const user =

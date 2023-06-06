@@ -22,6 +22,7 @@ import PrivateRoutes from './components/PrivateRoutes'
 import ManageCandidates from './pages/mangeCandidates/ManageCandidates'
 import EditCandidate from './pages/editCandidate/EditCandidate'
 import ChangePassword from './pages/changePassword/ChangePassword'
+import ForgotPassword from './pages/forgotPassword/ForgotPassword'
 
 function App() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -90,6 +91,8 @@ function App() {
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/changePassword' element={<ChangePassword />} />
+          <Route path='/forgotPassword' element={<ForgotPassword />} />
+          <Route path='/forgotPassword/:code' element={<ForgotPassword />} />
         </Routes>
       </BrowserRouter>
     </div>
