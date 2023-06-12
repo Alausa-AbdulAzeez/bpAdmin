@@ -48,7 +48,7 @@ const ManageClients = () => {
   const getAllClients = async () => {
     try {
       setLoading(true);
-      const res = await privateRequest.get("Client/Client-list");
+      const res = await publicRequest.get("Client/Client-list");
 
       if (res.data) {
         setTableData(res.data.data);
