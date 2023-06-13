@@ -7,9 +7,13 @@ import { Autocomplete, TextField } from '@mui/material'
 import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useSelector } from 'react-redux'
 
 const AddStaff = () => {
+  // MISCELLANEOUS
   const [open, setOpen] = React.useState(false)
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
+
   const toastId = React.useRef(null)
 
   const handleClickOpen = () => {
@@ -65,7 +69,8 @@ const AddStaff = () => {
   }
   // end of function for setting staff info
 
-  const createStaff = async () => {
+  const createStaff = async (e) => {
+    e.preventDefault()
     // const id = toast.loading('Please wait...')
     toastId.current = toast('Please wait...', {
       autoClose: false,
@@ -73,8 +78,13 @@ const AddStaff = () => {
     })
     console.log(staff)
     try {
-      await privateRequest
-        .post('/Account/profile-application-user', staff)
+      await publicRequest
+        .post('/Account/profile-application-user', staff, {
+          headers: {
+            Accept: '*',
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((response) => {
           toast.update(toastId.current, {
             render: 'Staff has been added succesfully!',
@@ -115,7 +125,10 @@ const AddStaff = () => {
           <Topber />
           <div className='addStaffMainWrapper'>
             <h2> Add New Staff</h2>
-            <div className='addStaffFormWrapper'>
+            <form
+              className='addStaffFormWrapper'
+              onSubmit={(e) => createStaff(e)}
+            >
               <div className='inputsWrapper'>
                 <div className='singleInput'>
                   <p>Staff Name</p>
@@ -124,6 +137,7 @@ const AddStaff = () => {
                       type='text'
                       className='input'
                       onChange={(e) => handleStaffData(e, 'name')}
+                      required
                     />
                   </div>
                 </div>
@@ -133,6 +147,7 @@ const AddStaff = () => {
                   <div className='inputWrapper'>
                     <input
                       type='email'
+                      required
                       className='input'
                       onChange={(e) => handleStaffData(e, 'email')}
                     />
@@ -148,7 +163,7 @@ const AddStaff = () => {
                     onChange={(e, option) => handleStaffData(e, 'role', option)}
                     sx={{ width: 400 }}
                     renderInput={(params) => (
-                      <TextField {...params} label='Role' />
+                      <TextField {...params} label='Role' required />
                     )}
                   />
                 </div>
@@ -159,6 +174,7 @@ const AddStaff = () => {
                     <input
                       type='string'
                       className='input'
+                      required
                       onChange={(e) => handleStaffData(e, 'phoneNumber')}
                     />
                   </div>
@@ -171,11 +187,11 @@ const AddStaff = () => {
                 >
                   Cancel
                 </button>
-                <button className='addStaffEditBtn' onClick={createStaff}>
+                <button className='addStaffEditBtn' type='submit'>
                   Save
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
