@@ -24,7 +24,10 @@ const PrivateRoutes = () => {
           },
         })
       } catch (error) {
-        if (error?.response?.statusText === 'Unauthorized') {
+        if (
+          error?.response?.statusText === 'Unauthorized' ||
+          error?.response?.status === 401
+        ) {
           dispatch(loggedOut())
 
           persistor

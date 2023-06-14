@@ -12,11 +12,16 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 const ScheduleCandidate = () => {
   // MISCELLANEOUS
   const [open, setOpen] = React.useState(false)
   const date = new Date().toISOString()
   const toastId = React.useRef(null)
+
+  // LOGGED IN USER TOKEN
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
+  console.log(token)
 
   // TO SET THE STATE OF TEST CATEGORY INPUT
   const [loadingTestCategory, setLoadingTestCategory] = useState(true)
@@ -125,7 +130,12 @@ const ScheduleCandidate = () => {
 
     try {
       await publicRequest
-        .post('/Candidate', scheduleInfo)
+        .post('/Candidate', scheduleInfo, {
+          headers: {
+            Accept: '*',
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then(() => {
           toast.update(toastId.current, {
             render: 'Candidate scheduled succesfully!',
