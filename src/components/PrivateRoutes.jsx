@@ -8,10 +8,15 @@ import { loggedIn, loggedOut } from '../redux/globalSlice'
 
 const PrivateRoutes = () => {
   //   const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  // MISCELLANEOUS
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  // GET LOGGED IN STATE OF THE USER
   const { isLoggedIn } = useSelector((state) => state?.globalState?.user)
-  // const isL
+
+  // GET CURRENT USER TOKEN
   const token = useSelector((state) => state?.user?.currentUser?.data?.token)
 
   useEffect(() => {
