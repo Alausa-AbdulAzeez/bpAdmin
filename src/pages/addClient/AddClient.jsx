@@ -5,12 +5,17 @@ import './addClient.scss'
 import AlertDialogSlide from '../../components/Dialogue'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { privateRequest } from '../../functions/requestMethods'
+import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import { ToastContainer, toast } from 'react-toastify'
+import { useSelector } from 'react-redux'
 
 const AddClient = () => {
+  // TOAST
   const [open, setOpen] = React.useState(false)
   const toastId = React.useRef(null)
+
+  // LOGGED IN USER TOKEN
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -57,8 +62,13 @@ const AddClient = () => {
     })
 
     try {
-      await privateRequest
-        .post('/Client/profile-client', client)
+      await publicRequest
+        .post('/Client/profile-client', client, {
+          headers: {
+            Accept: '*',
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((response) => {
           toast.update(toastId.current, {
             render: 'Client has been added succesfully!',
