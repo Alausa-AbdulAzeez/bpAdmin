@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useState } from 'react'
 import './resetPassword.scss'
 import { BsEye, BsFillEyeSlashFill } from 'react-icons/bs'
 import { publicRequest } from '../../functions/requestMethods'
-import { login } from '../../redux/apiCalls'
-import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
 const ResetPassword = () => {
   // MISCELLANEOUS
-  const [btnDisabled, setBtnDisabled] = useState(true)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+
   const token = window.location?.search?.split('=')[1]
 
   // END OF MISCELLANEOUS
@@ -30,13 +25,7 @@ const ResetPassword = () => {
   const handleSetUser = (event, inputType) => {
     setUser({ ...user, [inputType]: event.target.value })
   }
-  const setBtnState = () => {
-    if (user.email && user.password) {
-      setBtnDisabled(false)
-    } else {
-      setBtnDisabled(true)
-    }
-  }
+
   //   END OF FUNCTIONs FOR SETTING BUTTON STATE
 
   // PASSWORD TOGGLE FUNCTIONALITY
@@ -53,12 +42,10 @@ const ResetPassword = () => {
 
   // FUNCTION FOR ONCLICK LOGIN BUTTON
   const handleResetPassword = async (e) => {
-    console.log(user)
     e.preventDefault()
     try {
       if (user?.password === user?.confirmPassword) {
-        const res = await publicRequest.post('/Account/reset-password', user)
-        console.log(res)
+        await publicRequest.post('/Account/reset-password', user)
       } else {
         toast.error("Passwords don't match!", {
           autoClose: 2000,
@@ -77,12 +64,6 @@ const ResetPassword = () => {
     // login(dispatch, user, navigate)
   }
   // END OF FUNCTION FOR ONCLICK LOGIN BUTTON
-
-  //   USE EFFECT FOR SETTING BUTTON STATE
-  useEffect(() => {
-    setBtnState(user, setBtnDisabled)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
 
   return (
     <>

@@ -206,6 +206,7 @@ const ManageCandidates = () => {
   // USE EFFECT TO GET ALL CANDIDATES AS THE PAGE LOADS
   useEffect(() => {
     getAllCandidates()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // use effect to call the getAllClients function as the page loads
@@ -237,8 +238,6 @@ const ManageCandidates = () => {
           },
         }
       )
-      console.log(clientId)
-      console.log(phoneNumber)
 
       if (res?.data?.data?.length === 0) {
         throw new Error('Candidate not found')
@@ -296,7 +295,6 @@ const ManageCandidates = () => {
     // getCandidate(props?.row)
     setCandidateToBeEdited(props?.row)
     setUpdatedCandidateInfo(props?.row)
-    console.log(props)
     if (position !== '0') {
       setPosition('0')
     }
@@ -348,7 +346,6 @@ const ManageCandidates = () => {
 
   // UPDATE USER FUNCTION
   const handleUpdateUser = async () => {
-    console.log(updatedCandidateInfo)
     toastId.current = toast('Please wait...', {
       autoClose: 3000,
       isLoading: true,
@@ -405,8 +402,7 @@ const ManageCandidates = () => {
       )
 
       if (res.data) {
-        setTestCategory(res.data.data)
-        console.log(res.data)
+        setTestCategory(res.data?.data)
       } else {
         console.log(res.data)
       }
@@ -418,6 +414,7 @@ const ManageCandidates = () => {
 
   useEffect(() => {
     getAllTestCategories()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updatedCandidateInfo])
 
   //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING TEST CATEGORIES
@@ -435,7 +432,6 @@ const ManageCandidates = () => {
 
   // FUNCTION TO DELETE SINGLE CANDIDTE
   const handleDeleteCandidate = async () => {
-    console.log(candidateToBeDeleted)
     try {
       await publicRequest
         .delete(
@@ -552,7 +548,6 @@ const ManageCandidates = () => {
                       <MdCancel className='cancelIcon' />
                     </div>
                     <div className='initials'>
-                      {console.log(candidateToBeEdited)}
                       {candidateToBeEdited?.candidateName[0]}
                     </div>
                     <div className='slideFullname'>

@@ -8,8 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Slide from '@mui/material/Slide'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loggedOut } from '../redux/globalSlice'
-import { useDispatch } from 'react-redux'
 import { persistor } from '../redux/store'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -19,7 +17,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function AlertDialogSlide(props) {
   const { open, handleClose, message, title, link, action } = props
   const isLoggedIn = localStorage.getItem('isLoggedIn')
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   //   const [open, setOpen] = React.useState(false)
 
@@ -62,9 +59,7 @@ export default function AlertDialogSlide(props) {
   }
   // END OF HANDLE CANCEL CLICK
 
-  useEffect(() => {
-    console.log(isLoggedIn)
-  }, [isLoggedIn])
+  useEffect(() => {}, [isLoggedIn])
 
   return (
     <div>

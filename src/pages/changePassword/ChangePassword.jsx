@@ -1,28 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
 import './changePassword.scss'
-import {
-  BsEye,
-  BsEyeSlash,
-  BsFillEyeSlashFill,
-  BsList,
-  BsListCheck,
-} from 'react-icons/bs'
+import { BsEye, BsFillEyeSlashFill } from 'react-icons/bs'
 import { publicRequest } from '../../functions/requestMethods'
-import { login } from '../../redux/apiCalls'
-import { useDispatch, useSelector } from 'react-redux'
+
 import { toast } from 'react-toastify'
 
 const ChangePassword = () => {
   // MISCELLANEOUS
-  const [btnDisabled, setBtnDisabled] = useState(true)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const { isFetching, isError, currentUser } = useSelector(
-    (state) => state.user
-  )
-  // console.log(a)
-  console.log(currentUser)
 
   // END OF MISCELLANEOUS
 
@@ -40,13 +24,7 @@ const ChangePassword = () => {
   const handleSetUser = (event, inputType) => {
     setUser({ ...user, [inputType]: event.target.value })
   }
-  const setBtnState = () => {
-    if (user.email && user.password) {
-      setBtnDisabled(false)
-    } else {
-      setBtnDisabled(true)
-    }
-  }
+
   //   END OF FUNCTIONs FOR SETTING BUTTON STATE
 
   // PASSWORD TOGGLE FUNCTIONALITY
@@ -64,7 +42,6 @@ const ChangePassword = () => {
   // FUNCTION FOR ONCLICK LOGIN BUTTON
   const handleChangePassword = async (e) => {
     e.preventDefault()
-    console.log(user)
     try {
       if (user?.newPassword.trim() === user?.confirmPassword.trim()) {
         const res = await publicRequest.post('/Account/change-password')
@@ -87,12 +64,6 @@ const ChangePassword = () => {
     // login(dispatch, user, navigate)
   }
   // END OF FUNCTION FOR ONCLICK LOGIN BUTTON
-
-  //   USE EFFECT FOR SETTING BUTTON STATE
-  useEffect(() => {
-    setBtnState(user, setBtnDisabled)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
 
   return (
     <>

@@ -60,7 +60,6 @@ const ScheduleCandidate = () => {
 
       if (res.data) {
         setClients(res.data.data)
-        console.log(res.data)
       } else {
         console.log(res.data)
       }
@@ -94,8 +93,6 @@ const ScheduleCandidate = () => {
   const [clientId, setClientId] = useState(null)
   const handlescheduleCandidateInfo = (e, dataName, data) => {
     if (dataName === 'test') {
-      console.log(data)
-
       setScheduleInfo((prev) => {
         return {
           ...prev,
@@ -171,7 +168,6 @@ const ScheduleCandidate = () => {
       })
     }
   }
-  console.log(startDate.toISOString())
   // end of function for creating a test category
 
   // END OF FUNCTIONALITY FOR SETTING SCHEDULE INFO
@@ -185,7 +181,6 @@ const ScheduleCandidate = () => {
 
       if (res.data) {
         setTestCategory(res.data.data)
-        console.log(res.data)
         setLoadingTestCategory(false)
       } else {
         console.log(res.data)
@@ -199,6 +194,7 @@ const ScheduleCandidate = () => {
   // use effect to call the getAllTestCategories function as the page loads
   useEffect(() => {
     getAllTestCategories()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clientId])
   // end of use effect to call the getAllTestCategories function as the page loads
   //  END OF FUNCTIONALITIES FOR FETCHING AND SETTING TEST CATEGORIES
@@ -218,9 +214,7 @@ const ScheduleCandidate = () => {
   // end of function to set filestate to default
 
   // useeffect to update file state after upload
-  useEffect(() => {
-    console.log(file)
-  }, [file])
+  useEffect(() => {}, [file])
   // useeffect to update file state after upload
 
   //END OF FUNCTION TO HANDLE FILE CHANGE

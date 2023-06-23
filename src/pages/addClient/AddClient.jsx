@@ -5,7 +5,7 @@ import './addClient.scss'
 import AlertDialogSlide from '../../components/Dialogue'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { privateRequest, publicRequest } from '../../functions/requestMethods'
+import { publicRequest } from '../../functions/requestMethods'
 import { ToastContainer, toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 
@@ -24,14 +24,6 @@ const AddClient = () => {
   const handleClose = () => {
     setOpen(false)
   }
-
-  // LIST TOGGLE FUNCTIONALITY
-  const [openListItem, setOpenListItem] = React.useState(true)
-
-  const handleClick = () => {
-    setOpenListItem(!openListItem)
-  }
-  // END OF LIST TOGGLE FUNCTIONALITY
 
   // FUNCTIONALITIES FOR CREATING A NEW CLIENT
 
@@ -102,9 +94,7 @@ const AddClient = () => {
   }
   // end of create client function
   // useEffect to reset input to default
-  useEffect(() => {
-    console.log(client)
-  }, [client])
+  useEffect(() => {}, [client])
   // end of useEffect to reset input to default
   // END OF FUNCTIONALITIES FOR CREATING A NEW CLIENT
   return (

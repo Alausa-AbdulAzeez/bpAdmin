@@ -3,7 +3,6 @@ import Sidebar from '../../components/sidebar/Sidebar'
 import Topber from '../../components/topbar/Topber'
 import './addLaboratory.scss'
 import AlertDialogSlide from '../../components/Dialogue'
-import { Autocomplete, TextField } from '@mui/material'
 import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -30,7 +29,6 @@ const AddLaboratory = () => {
       const res = await publicRequest.get('/Account/roles')
 
       if (res) {
-        console.log(res.data.data)
         setRoles(res.data.data)
       } else {
         console.log(res)

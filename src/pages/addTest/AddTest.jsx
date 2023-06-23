@@ -21,8 +21,6 @@ const AddTest = () => {
 
   // FUNCTIONALITIES PARTAINING TO FETCHING AND SETTING ROLES
 
-  const [roles, setRoles] = useState([])
-
   // fetch roles
   const getRoles = async () => {
     try {
@@ -30,7 +28,6 @@ const AddTest = () => {
 
       if (res) {
         console.log(res.data.data)
-        setRoles(res.data.data)
       } else {
         console.log(res)
       }
@@ -70,7 +67,6 @@ const AddTest = () => {
       autoClose: false,
       isLoading: true,
     })
-    console.log(test)
     try {
       await privateRequest.post('/Test', test).then((response) => {
         toast.update(toastId.current, {
