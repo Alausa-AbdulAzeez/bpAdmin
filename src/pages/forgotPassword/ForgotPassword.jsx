@@ -5,7 +5,8 @@ import {
   BASE_FRONTEND_URL,
   publicRequest,
 } from '../../functions/requestMethods'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const ForgotPassword = () => {
   // MISCELLANEOUS
@@ -34,7 +35,7 @@ const ForgotPassword = () => {
       isLoading: true,
     })
     try {
-      if (user?.password === user?.confirmPassword) {
+      if (user?.username) {
         const res = await publicRequest
           .post('/Account/forgot-password', user)
           .then(() => {
@@ -77,6 +78,7 @@ const ForgotPassword = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className='forgotPasswordWrapper'>
         <div className='forgotPasswordWrapperRight'>
           <form className='forgotPasswordFormWrapper' onSubmit={handleLogin}>

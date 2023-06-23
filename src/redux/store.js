@@ -34,6 +34,12 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, (state) => {
+      // eslint-disable-next-line no-undef
+      customEntityAdapter.removeAll(state)
+    })
+  },
 })
 
 export let persistor = persistStore(store)

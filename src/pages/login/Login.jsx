@@ -1,52 +1,51 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./login.scss";
-import { BsEye, BsFillEyeSlashFill } from "react-icons/bs";
-import { publicRequest } from "../../functions/requestMethods";
-import { login } from "../../redux/apiCalls";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import './login.scss'
+import { BsEye, BsFillEyeSlashFill } from 'react-icons/bs'
+import { publicRequest } from '../../functions/requestMethods'
+import { login } from '../../redux/apiCalls'
+import { useDispatch, useSelector } from 'react-redux'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Register = () => {
   // MISCELLANEOUS
-  const [btnDisabled, setBtnDisabled] = useState(true);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { isFetching, isError, currentUser } = useSelector(
-    (state) => state.user
-  );
-  // console.log(a)
-  console.log(currentUser);
+  const [btnDisabled, setBtnDisabled] = useState(true)
+  const toastId = useRef(null)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { currentUser } = useSelector((state) => state.user)
 
   // END OF MISCELLANEOUS
 
   // USER LOGIN DETAILS
   const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
+    email: '',
+    password: '',
+  })
   // END OF USER LOGIN DETAILS
 
   //   FUNCTIONs FOR SETTING BUTTON STATE
 
   const handleSetUser = (event, inputType) => {
-    setUser({ ...user, [inputType]: event.target.value });
-  };
+    setUser({ ...user, [inputType]: event.target.value })
+  }
   const setBtnState = () => {
     if (user.email && user.password) {
-      setBtnDisabled(false);
+      setBtnDisabled(false)
     } else {
-      setBtnDisabled(true);
+      setBtnDisabled(true)
     }
-  };
+  }
   //   END OF FUNCTIONs FOR SETTING BUTTON STATE
 
   // PASSWORD TOGGLE FUNCTIONALITY
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
 
   // FUNCTION FOR PASSWORD TOGGLE
   const handlePasswordToggle = () => {
-    setShowPassword((prev) => !prev);
-  };
+    setShowPassword((prev) => !prev)
+  }
 
   // END OF FUNCTION FOR PASSWORD TOGGLE
 
@@ -54,8 +53,8 @@ const Register = () => {
 
   // FUNCTION FOR ONCLICK LOGIN BUTTON
   const handleLogin = async (e) => {
-    e.preventDefault();
-    login(dispatch, user, navigate);
+    e.preventDefault()
+    login(dispatch, user, navigate, toastId)
     // try {
     //   e.preventDefault()
     //   await publicRequest.post('/Account/login', user).then((response) => {
@@ -72,67 +71,68 @@ const Register = () => {
     // localStorage.setItem('isLoggedIn', 'true')
 
     // navigate('/')
-  };
+  }
   // END OF FUNCTION FOR ONCLICK LOGIN BUTTON
 
   //   USE EFFECT FOR SETTING BUTTON STATE
   useEffect(() => {
-    setBtnState(user, setBtnDisabled);
+    setBtnState(user, setBtnDisabled)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user])
 
   return (
     <>
-      <div className="loginWrapper">
-        <div className="loginWrapperLeft">
+      <ToastContainer />
+      <div className='loginWrapper'>
+        <div className='loginWrapperLeft'>
           <img
             // src='blob:https://web.whatsapp.com/6cdf605b-5634-4bc1-9711-a671a348523c'
-            src={require("../../utils/images/IMG_6229.PNG")}
+            src={require('../../utils/images/IMG_6229.PNG')}
             // src={require('../../utils/images/BiopathLogo2.jpeg')}
             // src={require('../../utils/images/medicalimg.jpg')}
-            alt=""
+            alt=''
             // className='loginWrapperLeftImg'
-            className="biopathImg"
+            className='biopathImg'
           />
         </div>
-        <div className="loginWrapperRight">
-          <form className="loginFormWrapper">
+        <div className='loginWrapperRight'>
+          <form className='loginFormWrapper'>
             {/* <div className='loginTest'>Trying to test, click</div> */}
-            <div className="loginHeading">Log in</div>
-            <div className="loginInputs">
-              <label htmlFor="">Email</label>
+            <div className='loginHeading'>Log in</div>
+            <div className='loginInputs'>
+              <label htmlFor=''>Email</label>
               <input
-                type="email"
-                className="loginEmailInput loginInput"
-                placeholder="example@****.com"
-                data-testid="emailTestId"
-                onChange={(e) => handleSetUser(e, "email")}
+                type='email'
+                className='loginEmailInput loginInput'
+                placeholder='example@****.com'
+                data-testid='emailTestId'
+                onChange={(e) => handleSetUser(e, 'email')}
               />
-              <label htmlFor="">Password</label>
-              <div className="passwordWrapper">
+              <label htmlFor=''>Password</label>
+              <div className='passwordWrapper'>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  className="loginPasswordInput loginInput"
-                  placeholder="Password"
-                  onChange={(e) => handleSetUser(e, "password")}
-                  data-testid="passwordTestId"
+                  type={showPassword ? 'text' : 'password'}
+                  className='loginPasswordInput loginInput'
+                  placeholder='Password'
+                  onChange={(e) => handleSetUser(e, 'password')}
+                  data-testid='passwordTestId'
                 />
                 <span onClick={handlePasswordToggle}>
                   {showPassword ? <BsEye /> : <BsFillEyeSlashFill />}
                 </span>
               </div>
-              <Link to={"/getToken"}>
-                <div className="forgotPassword">Forgotten your password?</div>
+              <Link to={'/getToken'}>
+                <div className='forgotPassword'>Forgotten your password?</div>
               </Link>
             </div>
 
             <button
-              className="loginBtn"
-              type={"submit"}
+              className='loginBtn'
+              type={'submit'}
               // disabled={isError}
-              // disabled={btnDisabled}
+              disabled={btnDisabled}
               // disabled={isFetching ? isFetching : btnDisabled}
-              data-testid="loginBtn"
+              data-testid='loginBtn'
               onClick={handleLogin}
             >
               Login
@@ -148,7 +148,7 @@ const Register = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

@@ -1,26 +1,26 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { loggedOut } from "../redux/globalSlice";
-import { useDispatch } from "react-redux";
-import { persistor } from "../redux/store";
+import * as React from 'react'
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import Slide from '@mui/material/Slide'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { loggedOut } from '../redux/globalSlice'
+import { useDispatch } from 'react-redux'
+import { persistor } from '../redux/store'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+  return <Slide direction='up' ref={ref} {...props} />
+})
 
 export default function AlertDialogSlide(props) {
-  const { open, handleClose, message, title, link, action } = props;
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { open, handleClose, message, title, link, action } = props
+  const isLoggedIn = localStorage.getItem('isLoggedIn')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   //   const [open, setOpen] = React.useState(false)
 
   //   const handleClickOpen = () => {
@@ -39,31 +39,31 @@ export default function AlertDialogSlide(props) {
     // navigate('/login')
     // }
 
-    if (title === "Delete") {
-      action();
-    } else if (title === "Logout") {
-      persistor.purge();
-      dispatch(loggedOut());
+    if (title === 'Delete') {
+      action()
+    } else if (title === 'Logout') {
+      persistor.purge()
+      dispatch(loggedOut())
     } else {
       let pathName =
-        window.location.pathname.split("/")[
-          window.location.pathname.split("/").length - 1
-        ];
+        window.location.pathname.split('/')[
+          window.location.pathname.split('/').length - 1
+        ]
 
       if (`${link}` === `/${pathName}`) {
-        handleClose();
+        handleClose()
       } else {
-        navigate(link);
+        navigate(link)
       }
     }
 
     // navigate(link)
-  };
+  }
   // END OF HANDLE CANCEL CLICK
 
   useEffect(() => {
-    console.log(isLoggedIn);
-  }, [isLoggedIn]);
+    console.log(isLoggedIn)
+  }, [isLoggedIn])
 
   return (
     <div>
@@ -75,11 +75,11 @@ export default function AlertDialogSlide(props) {
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
+        aria-describedby='alert-dialog-slide-description'
       >
         <DialogTitle>Confirm {title}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+          <DialogContentText id='alert-dialog-slide-description'>
             {message}
           </DialogContentText>
         </DialogContent>
@@ -89,5 +89,5 @@ export default function AlertDialogSlide(props) {
         </DialogActions>
       </Dialog>
     </div>
-  );
+  )
 }
