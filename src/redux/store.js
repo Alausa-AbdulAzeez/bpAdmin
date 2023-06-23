@@ -35,9 +35,9 @@ export const store = configureStore({
       },
     }),
   extraReducers: (builder) => {
-    builder.addCase(PURGE, (state) => {
+    builder.addCase(PURGE, () => {
       // eslint-disable-next-line no-undef
-      customEntityAdapter.removeAll(state)
+      return initialState
     })
   },
 })

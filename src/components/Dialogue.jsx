@@ -43,7 +43,8 @@ export default function AlertDialogSlide(props) {
       action()
     } else if (title === 'Logout') {
       persistor.purge()
-      dispatch(loggedOut())
+      // dispatch(loggedOut())
+      navigate('/login')
     } else {
       let pathName =
         window.location.pathname.split('/')[

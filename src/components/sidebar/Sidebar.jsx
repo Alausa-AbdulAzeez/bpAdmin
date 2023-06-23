@@ -19,7 +19,6 @@ const Sidebar = () => {
   }
 
   const handleClose = () => {
-    // dispatch(loggedOut())
     setOpen(false)
   }
 

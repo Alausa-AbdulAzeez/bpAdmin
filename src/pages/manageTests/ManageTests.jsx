@@ -2,7 +2,6 @@ import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import React, { useEffect, useState } from 'react'
 import { BsTrashFill } from 'react-icons/bs'
-import { MdEdit } from 'react-icons/md'
 import { RiAddLine } from 'react-icons/ri'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Topber from '../../components/topbar/Topber'
@@ -32,7 +31,6 @@ const ManageTests = () => {
       const res = await publicRequest.get('/Test')
 
       if (res.data) {
-        console.log(res.data)
         setTableData(res.data?.data)
         setLoading(false)
       } else {
@@ -54,7 +52,6 @@ const ManageTests = () => {
 
   // FUNCTION TO DELETE SINGLE TEST
   const handleDeleteTest = async () => {
-    console.log(selectedTest)
     try {
       await publicRequest
         .delete(`Test/DeleteByID?Testid=${selectedTest?.id}`)
@@ -140,9 +137,7 @@ const ManageTests = () => {
   const [error, setError] = useState(false)
 
   // useEffect to update error and loading state
-  useEffect(() => {
-    console.log(error, loading)
-  }, [error, loading])
+  useEffect(() => {}, [error, loading])
   // end of useEffect to update error and loading state
 
   // END OF SET LOADING AND ERROR FUNCTIONALITY
