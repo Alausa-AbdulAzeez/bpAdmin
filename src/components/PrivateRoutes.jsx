@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { privateRequest } from '../functions/requestMethods'
 import { persistor } from '../redux/store'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
-import { loggedIn, loggedOut } from '../redux/globalSlice'
+import { loggedOut } from '../redux/globalSlice'
 
 const PrivateRoutes = () => {
   //   const [isLoggedIn, setIsLoggedIn] = useState(false)

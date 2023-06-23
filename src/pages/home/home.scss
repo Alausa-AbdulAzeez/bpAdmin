@@ -2,43 +2,39 @@
   width: 100%;
   display: flex;
 
-
   .homepageRight {
     max-width: calc(100% - 240px);
+    min-width: calc(100% - 240px);
 
-
-
-    .homeMainWrapperContainer{
+    .homeMainWrapperContainer {
       width: 100%;
-      
-          overflow-x: auto;
-              .homeMainWrapper {
-                  padding: 30px 64px;
-                  width: 100%;
-              
-              
-                  .homeMainTop {
-                    width: 100%;
 
-                    display: flex;
-                    overflow-x: auto;
-                    gap: 20px;
-                    height: 160px;
-                  }
-              
-                  // .homeMainTop {
-                  //   display: flex;
-                  //   justify-content: space-between;
-                  // }
-              
-                  .homeMainBottom {
-                    // & > h3 {
-                    //   color: var(--text-silver-color);
-                    //   text-decoration: underline;
-                    // }
-                  }
-                }
+      overflow-x: auto;
+      .homeMainWrapper {
+        padding: 30px 64px;
+        width: 100%;
+
+        .homeMainTop {
+          width: 100%;
+
+          display: flex;
+          overflow-x: auto;
+          gap: 20px;
+          height: 160px;
+        }
+
+        // .homeMainTop {
+        //   display: flex;
+        //   justify-content: space-between;
+        // }
+
+        .homeMainBottom {
+          // & > h3 {
+          //   color: var(--text-silver-color);
+          //   text-decoration: underline;
+          // }
+        }
+      }
     }
- 
   }
 }

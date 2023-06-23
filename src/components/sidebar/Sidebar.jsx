@@ -60,6 +60,18 @@ const Sidebar = () => {
           </ul>
           <ul className='ulTitle'>
             LIST
+            <NavLink to='/scheduleCandidate' style={{ textDecoration: 'none' }}>
+              {({ isActive }) => (
+                <li
+                  className={
+                    isActive ? 'activeLink sidebarListItem' : 'sidebarListItem'
+                  }
+                >
+                  <MdSchedule className='sidebarIcon' />
+                  <span> Scedule Candidate</span>
+                </li>
+              )}
+            </NavLink>
             <NavLink to='/partnerLabs' style={{ textDecoration: 'none' }}>
               {({ isActive }) => (
                 <li
@@ -135,18 +147,6 @@ const Sidebar = () => {
                 >
                   <MdCategory className='sidebarIcon' />
                   <span> Test Categories</span>
-                </li>
-              )}
-            </NavLink>
-            <NavLink to='/scheduleCandidate' style={{ textDecoration: 'none' }}>
-              {({ isActive }) => (
-                <li
-                  className={
-                    isActive ? 'activeLink sidebarListItem' : 'sidebarListItem'
-                  }
-                >
-                  <MdSchedule className='sidebarIcon' />
-                  <span> Scedule Candidate</span>
                 </li>
               )}
             </NavLink>

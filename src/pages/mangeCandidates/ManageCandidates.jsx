@@ -10,7 +10,9 @@ import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
 import ErrorComponent from '../../components/error/Error'
 import { format } from 'date-fns'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 import { RxReload } from 'react-icons/rx'
 import DatePicker from 'react-datepicker'
 import AlertDialogSlide from '../../components/Dialogue'
@@ -474,249 +476,256 @@ const ManageCandidates = () => {
   }
   // END OF FUNCTION TO DELETE SINGLE CANDIDTE
   return (
-    <div className='manageCandidatesWrapper'>
-      <AlertDialogSlide
-        open={open}
-        handleClose={handleClose}
-        title='Delete'
-        link='/scheduleCandidate'
-        message='Warning!! Are you sure you want to delete this candidate? Action cannot be undone'
-        action={handleDeleteCandidate}
-      />
-      <Sidebar />
-      <div className='manageCandidatesRight'>
-        <Topber />
-        {loading || error ? (
-          loading ? (
-            <Loading />
+    <>
+      <ToastContainer />
+      <div className='manageCandidatesWrapper'>
+        <AlertDialogSlide
+          open={open}
+          handleClose={handleClose}
+          title='Delete'
+          link='/scheduleCandidate'
+          message='Warning!! Are you sure you want to delete this candidate? Action cannot be undone'
+          action={handleDeleteCandidate}
+        />
+        <Sidebar />
+        <div className='manageCandidatesRight'>
+          <Topber />
+          {loading || error ? (
+            loading ? (
+              <Loading />
+            ) : (
+              <ErrorComponent errorMessage={errorMessage && errorMessage} />
+            )
           ) : (
-            <ErrorComponent errorMessage={errorMessage && errorMessage} />
-          )
-        ) : (
-          <>
-            <div className='manageCandidatesMainWrapper'>
-              <div className='manageCandidatesMainTop'>
-                <h3>All Tests</h3>
-                <div className='manageCandidatesMainTopForm'>
-                  <div className='formAndSearchWrapperMc'>
-                    <Autocomplete
-                      disablePortal
-                      id='combo-box-demo'
-                      options={clients}
-                      getOptionLabel={(option) =>
-                        `${option.clientName} ${option.email}`
-                      }
-                      onChange={(e, option) =>
-                        handlescheduleCandidateInfo(e, 'clientid', option)
-                      }
-                      sx={{ width: 300 }}
-                      renderInput={(params) => (
-                        <TextField {...params} label='Client Name' />
-                      )}
-                    />
-                    <TextField
-                      id='outlined-search'
-                      label="Candidate's PhoneNo"
-                      type='search'
-                      className='candidateName'
-                      onChange={(e) => handlePhoneNumberChange(e)}
-                    />
-                    <div
-                      className='manageCandidatesBtn'
-                      onClick={handleCandidateSearch}
-                    >
-                      Search
+            <>
+              <div className='manageCandidatesMainWrapper'>
+                <div className='manageCandidatesMainTop'>
+                  <h3>All Tests</h3>
+                  <div className='manageCandidatesMainTopForm'>
+                    <div className='formAndSearchWrapperMc'>
+                      <Autocomplete
+                        disablePortal
+                        id='combo-box-demo'
+                        options={clients}
+                        getOptionLabel={(option) =>
+                          `${option.clientName} ${option.email}`
+                        }
+                        onChange={(e, option) =>
+                          handlescheduleCandidateInfo(e, 'clientid', option)
+                        }
+                        sx={{ width: 300 }}
+                        renderInput={(params) => (
+                          <TextField {...params} label='Client Name' />
+                        )}
+                      />
+                      <TextField
+                        id='outlined-search'
+                        label="Candidate's PhoneNo"
+                        type='search'
+                        className='candidateName'
+                        onChange={(e) => handlePhoneNumberChange(e)}
+                      />
+                      <div
+                        className='manageCandidatesBtn'
+                        onClick={handleCandidateSearch}
+                      >
+                        Search
+                      </div>
+                    </div>
+                    <button className='reloadBtn' onClick={getAllCandidates}>
+                      Show All
+                      <span>
+                        <RxReload className='reloadIcon' />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  className='manageCandidatesSlide'
+                  style={{
+                    right: position,
+                    visibility: position === '0' && 'visible',
+                  }}
+                >
+                  <div className='slideTop'>
+                    <div className='cancelconWrapper' onClick={handleHideSlide}>
+                      <MdCancel className='cancelIcon' />
+                    </div>
+                    <div className='initials'>
+                      {console.log(candidateToBeEdited)}
+                      {candidateToBeEdited?.candidateName[0]}
+                    </div>
+                    <div className='slideFullname'>
+                      {candidateToBeEdited?.candidateName}
                     </div>
                   </div>
-                  <button className='reloadBtn' onClick={getAllCandidates}>
-                    Show All
-                    <span>
-                      <RxReload className='reloadIcon' />
-                    </span>
-                  </button>
-                </div>
-              </div>
-              <div
-                className='manageCandidatesSlide'
-                style={{
-                  right: position,
-                  visibility: position === '0' && 'visible',
-                }}
-              >
-                <div className='slideTop'>
-                  <div className='cancelconWrapper' onClick={handleHideSlide}>
-                    <MdCancel className='cancelIcon' />
-                  </div>
-                  <div className='initials'>
-                    {console.log(candidateToBeEdited)}
-                    {candidateToBeEdited?.candidateName[0]}
-                  </div>
-                  <div className='slideFullname'>
-                    {candidateToBeEdited?.candidateName}
-                  </div>
-                </div>
-                <div className='slideMiddle'>
-                  <div className='companyName h3 companyDetail'>
-                    <h3>Email</h3>
-                    <p>{candidateToBeEdited?.email}</p>
-                  </div>
+                  <div className='slideMiddle'>
+                    <div className='companyName h3 companyDetail'>
+                      <h3>Email</h3>
+                      <p>{candidateToBeEdited?.email}</p>
+                    </div>
 
-                  <div className='phoneNo h3 companyDetail'>
-                    <h3>Phone Number</h3>
-                    <p>{candidateToBeEdited?.phoneNumber}</p>
+                    <div className='phoneNo h3 companyDetail'>
+                      <h3>Phone Number</h3>
+                      <p>{candidateToBeEdited?.phoneNumber}</p>
+                    </div>
+                    <div className='companyName h3 companyDetail'>
+                      <h3>Date Created</h3>
+                      <p>
+                        {candidateToBeEdited &&
+                          format(
+                            new Date(candidateToBeEdited?.createdDate),
+                            'dd-MMM-yyyy'
+                          )}
+                      </p>
+                    </div>
+
+                    <div className='phoneNo h3 companyDetail'>
+                      <h3>Appointment Date</h3>
+                      <p>
+                        {candidateToBeEdited &&
+                          format(
+                            new Date(candidateToBeEdited?.appointmentdate),
+                            'dd-MMM-yyyy'
+                          )}
+                      </p>
+                    </div>
+                    <div className=' h3 companyDetail'>
+                      <h3>Address</h3>
+                      <p>{candidateToBeEdited?.address}</p>
+                    </div>
+                    <div className=' h3 companyDetail'>
+                      <h3>Test Category</h3>
+                      <p>{candidateToBeEdited?.testcategory}</p>
+                    </div>
                   </div>
-                  <div className='companyName h3 companyDetail'>
-                    <h3>Date Created</h3>
-                    <p>
-                      {candidateToBeEdited &&
-                        format(
-                          new Date(candidateToBeEdited?.createdDate),
-                          'dd-MMM-yyyy'
+                  <div className='updateUserSlideBottom'>
+                    <div className='updateUserInputWrapper'>
+                      <label htmlFor='email'>Email</label>
+                      <input
+                        type='text'
+                        id='email'
+                        className='updateUserInput'
+                        value={updatedCandidateInfo?.email}
+                        onChange={(e) => handleUpdateCandidateInfo(e, 'email')}
+                      />
+                    </div>
+                    <div className='updateUserInputWrapper'>
+                      <label htmlFor='phoneNo'>Phone Number</label>
+                      <input
+                        type='text'
+                        id='phoneNo'
+                        className='updateUserInput'
+                        value={updatedCandidateInfo?.phoneNumber}
+                        onChange={(e) =>
+                          handleUpdateCandidateInfo(e, 'phoneNumber')
+                        }
+                      />
+                    </div>
+                    <div className='updateUserInputWrapper'>
+                      <label htmlFor='address'>Address</label>
+                      <input
+                        type='text'
+                        id='address'
+                        className='updateUserInput'
+                        value={updatedCandidateInfo?.address}
+                        onChange={(e) =>
+                          handleUpdateCandidateInfo(e, 'address')
+                        }
+                      />
+                    </div>
+                    <div className='updateUserInputWrapper'>
+                      <label
+                        htmlFor='testCategory'
+                        style={{ visibility: 'hidden' }}
+                      >
+                        Test Category
+                      </label>
+                      {/* <input
+              type='text'
+              id='testCategory'
+              className='updateUserInput'
+              value={updatedCandidateInfo?.testcategory}
+              onChange={(e) =>
+                handleUpdateCandidateInfo(e, 'testcategory')
+              }
+            /> */}
+
+                      <Autocomplete
+                        disablePortal
+                        id='combo-box-demo'
+                        options={testCategory}
+                        getOptionLabel={(option) => `${option.categoryName}`}
+                        onChange={(e, option) =>
+                          handleUpdateCandidateInfo(e, 'testCategory', option)
+                        }
+                        sx={{ width: 300, alignSelf: 'flex-end' }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder={updatedCandidateInfo?.testcategory}
+                          />
                         )}
-                    </p>
+                        renderOption={(props, option) => {
+                          return (
+                            <li {...props} key={option.id}>
+                              {option.categoryName}
+                            </li>
+                          )
+                        }}
+                      />
+                    </div>
+                    <div className='updateUserInputWrapper'>
+                      <label htmlFor='email'>Appointment Date</label>
+                      <DatePicker
+                        selected={startDate}
+                        onChange={(selectedDate) =>
+                          handleDateChange(selectedDate)
+                        }
+                        dateFormat='MMMM d, yyyy'
+                        className='updateUserDatePicker'
+                        showMonthDropdown
+                        showYearDropdown
+                        minDate={new Date()}
+                        placeholderText={
+                          candidateToBeEdited &&
+                          format(
+                            new Date(candidateToBeEdited?.appointmentdate),
+                            'dd-MMM-yyyy'
+                          )
+                        }
+                      />
+                      {/* <input type='text' id='email' className='updateUserInput' /> */}
+                    </div>
                   </div>
-
-                  <div className='phoneNo h3 companyDetail'>
-                    <h3>Appointment Date</h3>
-                    <p>
-                      {candidateToBeEdited &&
-                        format(
-                          new Date(candidateToBeEdited?.appointmentdate),
-                          'dd-MMM-yyyy'
-                        )}
-                    </p>
-                  </div>
-                  <div className=' h3 companyDetail'>
-                    <h3>Address</h3>
-                    <p>{candidateToBeEdited?.address}</p>
-                  </div>
-                  <div className=' h3 companyDetail'>
-                    <h3>Test Category</h3>
-                    <p>{candidateToBeEdited?.testcategory}</p>
-                  </div>
-                </div>
-                <div className='updateUserSlideBottom'>
-                  <div className='updateUserInputWrapper'>
-                    <label htmlFor='email'>Email</label>
-                    <input
-                      type='text'
-                      id='email'
-                      className='updateUserInput'
-                      value={updatedCandidateInfo?.email}
-                      onChange={(e) => handleUpdateCandidateInfo(e, 'email')}
-                    />
-                  </div>
-                  <div className='updateUserInputWrapper'>
-                    <label htmlFor='phoneNo'>Phone Number</label>
-                    <input
-                      type='text'
-                      id='phoneNo'
-                      className='updateUserInput'
-                      value={updatedCandidateInfo?.phoneNumber}
-                      onChange={(e) =>
-                        handleUpdateCandidateInfo(e, 'phoneNumber')
-                      }
-                    />
-                  </div>
-                  <div className='updateUserInputWrapper'>
-                    <label htmlFor='address'>Address</label>
-                    <input
-                      type='text'
-                      id='address'
-                      className='updateUserInput'
-                      value={updatedCandidateInfo?.address}
-                      onChange={(e) => handleUpdateCandidateInfo(e, 'address')}
-                    />
-                  </div>
-                  <div className='updateUserInputWrapper'>
-                    <label
-                      htmlFor='testCategory'
-                      style={{ visibility: 'hidden' }}
-                    >
-                      Test Category
-                    </label>
-                    {/* <input
-                      type='text'
-                      id='testCategory'
-                      className='updateUserInput'
-                      value={updatedCandidateInfo?.testcategory}
-                      onChange={(e) =>
-                        handleUpdateCandidateInfo(e, 'testcategory')
-                      }
-                    /> */}
-
-                    <Autocomplete
-                      disablePortal
-                      id='combo-box-demo'
-                      options={testCategory}
-                      getOptionLabel={(option) => `${option.categoryName}`}
-                      onChange={(e, option) =>
-                        handleUpdateCandidateInfo(e, 'testCategory', option)
-                      }
-                      sx={{ width: 300, alignSelf: 'flex-end' }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          placeholder={updatedCandidateInfo?.testcategory}
-                        />
-                      )}
-                      renderOption={(props, option) => {
-                        return (
-                          <li {...props} key={option.id}>
-                            {option.categoryName}
-                          </li>
-                        )
-                      }}
-                    />
-                  </div>
-                  <div className='updateUserInputWrapper'>
-                    <label htmlFor='email'>Appointment Date</label>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(selectedDate) =>
-                        handleDateChange(selectedDate)
-                      }
-                      dateFormat='MMMM d, yyyy'
-                      className='updateUserDatePicker'
-                      showMonthDropdown
-                      showYearDropdown
-                      minDate={new Date()}
-                      placeholderText={
-                        candidateToBeEdited &&
-                        format(
-                          new Date(candidateToBeEdited?.appointmentdate),
-                          'dd-MMM-yyyy'
-                        )
-                      }
-                    />
-                    {/* <input type='text' id='email' className='updateUserInput' /> */}
+                  <div className='updateUserBtn' onClick={handleUpdateUser}>
+                    Update
                   </div>
                 </div>
-                <div className='updateUserBtn' onClick={handleUpdateUser}>
-                  Update
+                <div className='partnerLabsMainBottom'>
+                  <Box sx={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      pageSize={pageSize}
+                      checkboxSelection
+                      disableSelectionOnClick
+                      experimentalFeatures={{ newEditingApi: true }}
+                      onPageSizeChange={(newPageSize) =>
+                        setPageSize(newPageSize)
+                      }
+                      rowsPerPageOptions={[5, 10, 20]}
+                      pagination
+                      getRowId={(row) => row?.candidateId}
+                    />
+                  </Box>
                 </div>
               </div>
-              <div className='partnerLabsMainBottom'>
-                <Box sx={{ height: 400, width: '100%' }}>
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSize={pageSize}
-                    checkboxSelection
-                    disableSelectionOnClick
-                    experimentalFeatures={{ newEditingApi: true }}
-                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                    rowsPerPageOptions={[5, 10, 20]}
-                    pagination
-                    getRowId={(row) => row?.candidateId}
-                  />
-                </Box>
-              </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

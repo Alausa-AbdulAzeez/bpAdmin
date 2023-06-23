@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './login.scss'
 import { BsEye, BsFillEyeSlashFill } from 'react-icons/bs'
-import { publicRequest } from '../../functions/requestMethods'
 import { login } from '../../redux/apiCalls'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -14,7 +13,6 @@ const Register = () => {
   const toastId = useRef(null)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { currentUser } = useSelector((state) => state.user)
 
   // END OF MISCELLANEOUS
 

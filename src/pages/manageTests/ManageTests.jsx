@@ -91,17 +91,17 @@ const ManageTests = () => {
   // END OF FUNCTION TO DELETE SINGLE TEST
 
   const columns = [
-    { field: 'testId', headerName: 'Test ID', width: 190 },
+    { field: 'testId', headerName: 'Test ID', width: 100 },
     {
       field: 'testName',
       headerName: 'Test name',
-      width: 200,
+      width: 300,
       editable: false,
     },
     {
       field: 'description',
       headerName: 'Description',
-      width: 200,
+      width: 350,
       editable: false,
     },
     {
@@ -113,10 +113,10 @@ const ManageTests = () => {
       renderCell: (props) => {
         return (
           <div className='buttons'>
-            <div className='editWrapper'>
+            {/* <div className='editWrapper'>
               <div className='edit'>Edit</div>
               <MdEdit className='editIcon' />
-            </div>
+            </div> */}
             <div className='deleteWrapper'>
               <div
                 className='delete'
