@@ -37,12 +37,6 @@ const AddTest = () => {
   }
   // end of fetch roles
 
-  // use effect for fetching roles
-  useEffect(() => {
-    getRoles()
-  }, [])
-  // end of use effect for fetching roles
-
   // END FUNCTIONALITIES PARTAINING TO ROLES
 
   // FUNCTIONALITIES FOR CREATING A NEW TEST
@@ -68,14 +62,23 @@ const AddTest = () => {
       isLoading: true,
     })
     try {
-      await privateRequest.post('/Test', test).then((response) => {
-        toast.update(toastId.current, {
-          render: 'Test has been created succesfully!',
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
+      await privateRequest
+        .post('/Test', test)
+        .then((response) => {
+          toast.update(toastId.current, {
+            render: 'Test has been created succesfully!',
+            type: 'success',
+            isLoading: false,
+            autoClose: 3000,
+          })
         })
-      })
+        .then(() => {
+          setTest({
+            testId: '',
+            description: '',
+            testName: '',
+          })
+        })
     } catch (error) {
       console.log(error.response)
       toast.update(toastId.current, {
@@ -92,6 +95,14 @@ const AddTest = () => {
   }
 
   //END OF FUNCTIONALITIES FOR CREATING A NEW TEST
+
+  useEffect(() => {}, [test])
+
+  // use effect for fetching roles
+  useEffect(() => {
+    getRoles()
+  }, [])
+  // end of use effect for fetching roles
 
   return (
     <>
@@ -122,6 +133,7 @@ const AddTest = () => {
                       className='addTestInput'
                       onChange={(e) => handleTestData(e, 'testName')}
                       required
+                      value={test.testName}
                     />
                   </div>
                 </div>
@@ -130,6 +142,7 @@ const AddTest = () => {
                   <p>Description</p>
                   <div className='textAreaWrapper'>
                     <textarea
+                      value={test.description}
                       type='text'
                       className='textArea'
                       cols={5}

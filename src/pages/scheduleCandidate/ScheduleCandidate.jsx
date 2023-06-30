@@ -141,17 +141,18 @@ const ScheduleCandidate = () => {
           })
         })
         .then(() => {
-          setScheduleInfo({
-            candidateName: '',
-            phoneNumber: '',
-            createdDate: date,
-            email: '',
-            address: '',
-            appointmentdate: startDate?.toISOString(),
-            clientid: '',
-            testcategory: '',
-            status: 'PENDING',
-          })
+          window.location.reload()
+          // setScheduleInfo({
+          //   candidateName: '',
+          //   phoneNumber: '',
+          //   createdDate: date,
+          //   email: '',
+          //   address: '',
+          //   appointmentdate: startDate?.toISOString(),
+          //   clientid: '',
+          //   testcategory: '',
+          //   status: 'PENDING',
+          // })
         })
     } catch (error) {
       console.log(error.response)
