@@ -40,8 +40,6 @@ const ScheduleCandidate = () => {
   const [startDate, setStartDate] = useState(new Date());
   // function for handling date chande
   const handleDateChange = (selectedDate) => {
-    console.log(selectedDate);
-    console.log(selectedDate?.toISOString());
     setStartDate(selectedDate);
     setScheduleInfo((prev) => {
       return {

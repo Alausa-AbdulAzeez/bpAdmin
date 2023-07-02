@@ -314,7 +314,6 @@ const ManageCandidates = () => {
 
   // FUNCTION TO HANDLE ROW CLICK
   const handleRowClick = (row) => {
-    console.log(row?.row);
     setSelectedCandidate(row?.row);
     setStartDate(new Date(row?.row?.appointmentdate));
   };
@@ -323,8 +322,6 @@ const ManageCandidates = () => {
   // DATE SELECTION AND CHANGE FUNCTIONALITIES
   // function for handling date chande
   const handleDateChange = (selectedDate) => {
-    console.log(selectedDate);
-    console.log(selectedDate?.toISOString() + 1);
     setStartDate(selectedDate);
     setUpdatedCandidateInfo((prev) => {
       return {
@@ -365,7 +362,6 @@ const ManageCandidates = () => {
     });
 
     try {
-      console.log(updatedCandidateInfo);
       await publicRequest
         .put(
           `Candidate/EditbyCID?Candidateid=${candidateToBeEdited?.candidateId}`,
