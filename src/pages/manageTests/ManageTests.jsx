@@ -11,6 +11,7 @@ import { publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
 import AlertDialogSlide from '../../components/Dialogue'
 import { toast } from 'react-toastify'
+import { useSelector } from 'react-redux'
 // import axios from 'axios'
 
 const ManageTests = () => {
@@ -21,6 +22,9 @@ const ManageTests = () => {
   // DATA FOR TOGGLE ALERT
   const [open, setOpen] = React.useState(false)
 
+  // LOGGED IN USER TOKEN
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
+
   // SELECTED TEST TO BE DELETED OR EDIT ID
   const [selectedTest, setSelectedTest] = React.useState(false)
 
@@ -28,7 +32,12 @@ const ManageTests = () => {
   const getAllTests = async () => {
     try {
       setLoading(true)
-      const res = await publicRequest.get('/Test')
+      const res = await publicRequest.get('/Test', {
+        headers: {
+          Accept: '*',
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
       if (res.data) {
         setTableData(res.data?.data)

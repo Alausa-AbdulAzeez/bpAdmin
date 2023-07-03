@@ -20,6 +20,7 @@ import { publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
 import { FaAngleDown, FaDotCircle } from 'react-icons/fa'
 import Error from '../../components/error/Error'
+import { useSelector } from 'react-redux'
 
 const ManageClients = () => {
   const [pageSize, setPageSize] = useState(5)
@@ -29,6 +30,9 @@ const ManageClients = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
+
+  // LOGGED IN USER TOKEN
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
 
   // useEffect to update error and loading state
   useEffect(() => {
@@ -42,7 +46,12 @@ const ManageClients = () => {
   const getAllClients = async () => {
     try {
       setLoading(true)
-      const res = await publicRequest.get('Client/Client-list')
+      const res = await publicRequest.get('Client/Client-list', {
+        headers: {
+          Accept: '*',
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
       if (res.data) {
         setTableData(res?.data?.data)
