@@ -186,7 +186,12 @@ const ManageCandidates = () => {
 
   const getAllClients = async () => {
     try {
-      const res = await publicRequest.get("Client/Client-list");
+      const res = await publicRequest.get("Client/Client-list", {
+        headers: {
+          Accept: "*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (res.data) {
         setClients(res.data.data);
@@ -365,7 +370,13 @@ const ManageCandidates = () => {
       await publicRequest
         .put(
           `Candidate/EditbyCID?Candidateid=${candidateToBeEdited?.candidateId}`,
-          updatedCandidateInfo
+          updatedCandidateInfo,
+          {
+            headers: {
+              Accept: "*",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         )
         .then(() => {
           toast.update(toastId.current, {
@@ -408,7 +419,13 @@ const ManageCandidates = () => {
   const getAllTestCategories = async () => {
     try {
       const res = await publicRequest.get(
-        `Test/test-category/${updatedCandidateInfo.clientid}`
+        `Test/test-category/${updatedCandidateInfo.clientid}`,
+        {
+          headers: {
+            Accept: "*",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       if (res.data) {
@@ -447,7 +464,13 @@ const ManageCandidates = () => {
         .delete(
           `Candidate/DeleteByID?Candidateid=${Number(
             candidateToBeDeleted?.row?.candidateId
-          )}`
+          )}`,
+          {
+            headers: {
+              Accept: "*",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         )
         .then((res) => {
           toast.success("Candidate deleted successfully", {
