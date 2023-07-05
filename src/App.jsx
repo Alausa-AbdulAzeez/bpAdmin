@@ -67,7 +67,7 @@ function App() {
             <Route path='/manageStaff/addStaff' element={<AddStaff />} />
             <Route path='/manageClients' element={<ManageClients />} />
             <Route path='/manageCandidates' element={<ManageCandidates />} />
-            <Route path='/manageCandidates' element={<ManageCandidates />} />
+            {/* <Route path='/manageCandidates' element={<ManageCandidates />} /> */}
             <Route
               path='/manageCandidates/editCandidate'
               element={<EditCandidate />}

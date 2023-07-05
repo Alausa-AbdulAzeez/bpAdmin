@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux'
 // import axios from 'axios'
 
 const ManageTests = () => {
-  const [pageSize, setPageSize] = useState(5)
+  const [pageSize, setPageSize] = useState(50)
   const [tableData, setTableData] = useState([])
   // const [error, setError] = useState(false)
 
@@ -63,7 +63,12 @@ const ManageTests = () => {
   const handleDeleteTest = async () => {
     try {
       await publicRequest
-        .delete(`Test/DeleteByID?Testid=${selectedTest?.id}`)
+        .delete(`Test/DeleteByID?Testid=${selectedTest?.id}`, {
+          headers: {
+            Accept: '*',
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => {
           toast.success('Test deleted successfully', {
             position: 'top-right',
@@ -193,7 +198,7 @@ const ManageTests = () => {
               </Link>
             </div>
             <div className='partnerLabsMainBottom'>
-              <Box sx={{ height: 400, width: '100%' }}>
+              <Box sx={{ height: 500, width: '100%' }}>
                 <DataGrid
                   rows={rows}
                   columns={columns}
@@ -202,7 +207,8 @@ const ManageTests = () => {
                   disableSelectionOnClick
                   experimentalFeatures={{ newEditingApi: true }}
                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                  rowsPerPageOptions={[5, 10, 20]}
+                  rowsPerPageOptions={[40, 50]}
+                  rowsP
                   pagination
                   getRowId={(row) => row.testId}
                 />
