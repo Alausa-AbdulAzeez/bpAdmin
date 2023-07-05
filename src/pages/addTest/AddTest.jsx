@@ -6,8 +6,11 @@ import AlertDialogSlide from '../../components/Dialogue'
 import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useSelector } from 'react-redux'
 
 const AddTest = () => {
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
+
   const [open, setOpen] = React.useState(false)
   const toastId = React.useRef(null)
 
@@ -24,7 +27,12 @@ const AddTest = () => {
   // fetch roles
   const getRoles = async () => {
     try {
-      const res = await publicRequest.get('/Account/roles')
+      const res = await publicRequest.get('/Account/roles', {
+        headers: {
+          Accept: '*',
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
       if (res) {
         console.log(res.data.data)
@@ -62,8 +70,13 @@ const AddTest = () => {
       isLoading: true,
     })
     try {
-      await privateRequest
-        .post('/Test', test)
+      await publicRequest
+        .post('/Test', test, {
+          headers: {
+            Accept: '*',
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((response) => {
           toast.update(toastId.current, {
             render: 'Test has been created succesfully!',

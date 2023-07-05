@@ -146,7 +146,12 @@ const ManageClients = () => {
     console.log(id)
     try {
       setFetchingTestInfo(true)
-      const res = await publicRequest.get(`Test/test-category/${id}`)
+      const res = await publicRequest.get(`Test/test-category/${id}`, {
+        headers: {
+          Accept: '*',
+          Authorization: `Bearer ${token}`,
+        },
+      })
       setClient(res.data)
       setFetchingTestInfo(false)
       console.log(res.data)

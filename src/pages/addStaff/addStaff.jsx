@@ -31,7 +31,12 @@ const AddStaff = () => {
   // fetch roles
   const getRoles = async () => {
     try {
-      const res = await publicRequest.get('/Account/roles')
+      const res = await publicRequest.get('/Account/roles', {
+        headers: {
+          Accept: '*',
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
       if (res) {
         setRoles(res.data.data)

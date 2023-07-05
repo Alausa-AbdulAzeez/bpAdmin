@@ -7,7 +7,7 @@ import Sidebar from '../../components/sidebar/Sidebar'
 import Topber from '../../components/topbar/Topber'
 import './manageStaff.scss'
 import { Link } from 'react-router-dom'
-import { privateRequest } from '../../functions/requestMethods'
+import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import { useEffect } from 'react'
 import Loading from '../../components/loading/Loading'
 import Error from '../../components/error/Error'
@@ -81,7 +81,7 @@ const ManageStaff = () => {
     try {
       setLoading(true)
 
-      const res = await privateRequest.get('/Staff', {
+      const res = await publicRequest.get('/Staff', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

@@ -6,10 +6,13 @@ import AlertDialogSlide from '../../components/Dialogue'
 import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useSelector } from 'react-redux'
 
 const AddLaboratory = () => {
   const [open, setOpen] = React.useState(false)
   const toastId = React.useRef(null)
+
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -26,7 +29,12 @@ const AddLaboratory = () => {
   // fetch roles
   const getRoles = async () => {
     try {
-      const res = await publicRequest.get('/Account/roles')
+      const res = await publicRequest.get('/Account/roles', {
+        headers: {
+          Accept: '*',
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
       if (res) {
         setRoles(res.data.data)
@@ -71,8 +79,13 @@ const AddLaboratory = () => {
     })
 
     try {
-      await privateRequest
-        .post('/Account/profile-application-user', staff)
+      await publicRequest
+        .post('/Account/profile-application-user', staff, {
+          headers: {
+            Accept: '*',
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((response) => {
           toast.update(toastId.current, {
             render: 'Staff has been added succesfully!',

@@ -7,7 +7,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import './home.scss'
 
 import { useSelector } from 'react-redux'
-import { privateRequest } from '../../functions/requestMethods'
+import { privateRequest, publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
 import Error from '../../components/error/Error'
 
@@ -62,7 +62,7 @@ const Home = () => {
     try {
       setLoading(true)
 
-      const res = await privateRequest.get('/Staff', {
+      const res = await publicRequest.get('/Staff', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
