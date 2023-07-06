@@ -3,23 +3,29 @@ import { publicRequest } from "../functions/requestMethods";
 import { loginSuccess } from "./userSlice";
 import { loggedIn } from "./globalSlice";
 
-export const login = async (dispatch, user, navigate, toastId) => {
+export const login = async (
+  dispatch,
+  user,
+  navigate,
+  toastId,
+  setBtnDisabled
+) => {
   // dispatch(loginStart());
 
   toastId.current = toast("Please wait...", {
     autoClose: false,
     isLoading: true,
   });
+  setBtnDisabled(true);
 
   try {
     await publicRequest.post("/Account/login", user).then((res) => {
       if (
-        res?.data?.data?.role !== "SuperAdmin" &&
-        res?.data?.data?.role !== null
+        res?.data?.data?.role === "SuperAdmin" ||
+        res?.data?.data?.role === null
       ) {
-        throw new Error("Can not access this resource");
-      } else {
         if (res?.data?.data?.isDefaultPassword === false) {
+          setBtnDisabled(false);
           dispatch(loginSuccess(res?.data));
           dispatch(loggedIn());
           toast.update(toastId.current, {
@@ -31,6 +37,7 @@ export const login = async (dispatch, user, navigate, toastId) => {
           navigate("/");
         } else {
           dispatch(loginSuccess(res?.data));
+          setBtnDisabled(false);
           navigate("/changePassword");
           toast.update(toastId.current, {
             render:
@@ -40,11 +47,15 @@ export const login = async (dispatch, user, navigate, toastId) => {
             isLoading: false,
           });
         }
+      } else {
+        setBtnDisabled(false);
+        throw new Error("Can not access this resource");
       }
     });
   } catch (error) {
     console.log(error);
     // dispatch(loginFailure());
+    setBtnDisabled(false);
     toast.update(toastId.current, {
       type: "error",
       autoClose: 3000,
