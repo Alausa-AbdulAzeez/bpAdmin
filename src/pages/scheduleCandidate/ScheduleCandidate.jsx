@@ -22,6 +22,9 @@ const ScheduleCandidate = () => {
   // LOGGED IN USER TOKEN
   const { token } = useSelector((state) => state?.user?.currentUser?.data);
 
+  // TO SET THE STATE OF THE DONE AND CANCEL BUTTONS
+  const [disableDoneAndCancelBtn, setDisableDoneAndCancelBtn] = useState(false);
+
   // TO SET THE STATE OF TEST CATEGORY INPUT
   const [loadingTestCategory, setLoadingTestCategory] = useState(true);
 
@@ -125,9 +128,11 @@ const ScheduleCandidate = () => {
   const handleScheduleCandidate = async (e) => {
     e.preventDefault();
     toastId.current = toast("Please wait...", {
-      autoClose: 3000,
+      autoClose: 2500,
       isLoading: true,
     });
+
+    setDisableDoneAndCancelBtn(true);
 
     try {
       await publicRequest
@@ -142,8 +147,9 @@ const ScheduleCandidate = () => {
             render: "Candidate scheduled succesfully!",
             type: "success",
             isLoading: false,
-            autoClose: 3000,
+            autoClose: 2500,
           });
+          setDisableDoneAndCancelBtn(false);
         })
         .then(() => {
           window.location.reload();
@@ -163,7 +169,7 @@ const ScheduleCandidate = () => {
       console.log(error.response);
       toast.update(toastId.current, {
         type: "error",
-        autoClose: 3000,
+        autoClose: 2500,
         isLoading: false,
         render: `${
           error?.response?.data?.title ||
@@ -172,6 +178,7 @@ const ScheduleCandidate = () => {
           "Something went wrong, please try again"
         }`,
       });
+      setDisableDoneAndCancelBtn(false);
     }
   };
   // end of function for creating a test category
@@ -253,7 +260,7 @@ const ScheduleCandidate = () => {
             render: "File upload successful",
             type: "success",
             isLoading: false,
-            autoClose: 3000,
+            autoClose: 2500,
           });
           setFileToDefault();
         });
@@ -261,7 +268,7 @@ const ScheduleCandidate = () => {
       console.log(error);
       toast.update(toastId.current, {
         type: "error",
-        autoClose: 3000,
+        autoClose: 2500,
         isLoading: false,
         render: `${
           error?.response?.data?.title ||
@@ -424,6 +431,7 @@ const ScheduleCandidate = () => {
                 <button
                   className="cancelClientEditBtn"
                   onClick={handleClickOpen}
+                  disabled={disableDoneAndCancelBtn}
                 >
                   Cancel
                 </button>
@@ -431,6 +439,7 @@ const ScheduleCandidate = () => {
                   className="scheduleCandidateEditBtn"
                   type="submit"
                   onClick={handleScheduleCandidate}
+                  disabled={disableDoneAndCancelBtn}
                 >
                   Done
                 </button>
