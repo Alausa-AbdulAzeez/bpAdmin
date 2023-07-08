@@ -312,7 +312,7 @@ const ScheduleCandidate = () => {
                     }
                     sx={{ width: 400 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Client Name" />
+                      <TextField {...params} label="Client Name" required />
                     )}
                   />
                 </div>
@@ -327,7 +327,7 @@ const ScheduleCandidate = () => {
                     }
                     sx={{ width: 400 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Test Category" />
+                      <TextField {...params} label="Test Category" required />
                     )}
                     disabled={loadingTestCategory}
                     renderOption={(props, option) => {
@@ -340,7 +340,9 @@ const ScheduleCandidate = () => {
                   />
                 </div>
                 <div className="singleInput">
-                  <p>Candidate Name</p>
+                  <p>
+                    Candidate Name <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="text"
@@ -369,7 +371,9 @@ const ScheduleCandidate = () => {
                   </div>
                 </div>
                 <div className="singleInput">
-                  <p>Email</p>
+                  <p>
+                    Email <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="email"
@@ -381,7 +385,9 @@ const ScheduleCandidate = () => {
                   </div>
                 </div>
                 <div className="singleInput">
-                  <p>Phone Number</p>
+                  <p>
+                    Phone Number <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="number"
@@ -395,7 +401,9 @@ const ScheduleCandidate = () => {
                   </div>
                 </div>
                 <div className="singleInput">
-                  <p>Date</p>
+                  <p>
+                    Date <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <DatePicker
                       selected={startDate}
