@@ -1,15 +1,16 @@
 .scheduleCandidateWrapper {
   width: 100%;
   display: flex;
-  height: calc(100% - 0px);
+  height: calc(100vh - 0px);
 
   .scheduleCandidateRight {
     flex: 5;
+    height: 100%;
+    overflow-y: auto;
 
     .scheduleCandidateMainWrapper {
       height: 100%;
       padding: 10px 64px;
-      overflow-y: auto;
 
       .scheduleCandidateFormWrapper {
         height: 95%;

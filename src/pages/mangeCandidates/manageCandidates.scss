@@ -4,8 +4,61 @@
 
   .manageCandidatesRight {
     flex: 5;
+
     .manageCandidatesMainWrapper {
       padding: 30px 64px;
+
+      .filterContainer {
+        height: 80px;
+        width: 800px;
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 50px;
+        border-radius: 50px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+      
+
+
+      .candidateSearchName{
+        margin:0px 12px;
+      }
+
+      .filterDateWrapper{
+     
+
+        .filterDate{
+          padding: 8px;
+          border: 1px solid silver;
+          width: 100px;
+        }
+      }
+            .resetBtn {
+              height: 36px;
+              // border-radius: 16px;
+              background-color: #000;
+              color: #fff;
+              padding: 6px 12px;
+              display: flex;
+              align-items: center;
+              outline: none;
+              border: none;
+              cursor: pointer;
+              margin-left: 36px;
+              
+      
+            
+            }
+
+
+      }
+      .partnerLabsMainBottom{
+        height: 400px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
       .manageCandidatesSlide {
         position: absolute;
@@ -26,14 +79,17 @@
         .slideMiddle {
           display: flex;
           flex-wrap: wrap;
+
           .companyDetail {
             width: 30%;
           }
-          & > .h3 > h3 {
+
+          &>.h3>h3 {
             margin-bottom: 0;
             // margin-top: 0;
           }
-          & > .h3 > p {
+
+          &>.h3>p {
             margin-bottom: 0;
             margin-top: 0;
             color: darkgray;
@@ -58,6 +114,7 @@
               cursor: pointer;
             }
           }
+
           .initials {
             height: 90px;
             width: 90px;
@@ -72,11 +129,13 @@
             margin-right: 30px;
             text-transform: uppercase;
           }
+
           .slideFullname {
             font-size: 24px;
             font-weight: bold;
           }
         }
+
         .updateUserSlideBottom {
           // border-top: 0.1px solid silver;
           // border-bottom: 0.1px solid silver;
@@ -109,6 +168,7 @@
                 outline: 1px solid silver;
               }
             }
+
             .updateUserInput {
               padding: 10px;
               margin-bottom: 100px !important;
@@ -121,6 +181,7 @@
             }
           }
         }
+
         .updateUserBtn {
           background-color: #000;
           color: white;
@@ -144,10 +205,11 @@
         // flex-direction: column;
         margin-bottom: 20px;
 
-        & > h3 {
+        &>h3 {
           color: var(--text-silver-color);
         }
       }
+
       .manageCandidatesMainTopForm {
         display: flex;
         align-items: center;
@@ -156,6 +218,7 @@
         .formAndSearchWrapperMc {
           display: flex;
           align-items: center;
+
           .candidateName {
             width: 300px;
             max-width: 600px;
@@ -190,7 +253,7 @@
           cursor: pointer;
           margin-left: auto;
 
-          & > span {
+          &>span {
             display: flex;
             align-items: center;
             margin-left: 4px;
