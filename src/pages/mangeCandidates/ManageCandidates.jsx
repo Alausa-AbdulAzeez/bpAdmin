@@ -24,7 +24,7 @@ const ManageCandidates = () => {
   const { token } = useSelector((state) => state?.user?.currentUser?.data);
 
   // PAGE SIZE OF TABLE
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(100);
 
   // SELECTED CANDIDATE
   const [selectedCandidate, setSelectedCandidate] = useState(null);
@@ -589,7 +589,7 @@ const ManageCandidates = () => {
               />
               <div className="filterDateWrapper">
                 <DatePicker
-                  selected={filterStartDate}
+                  placeholderText="Select a date"
                   onChange={(date) => setStartDate(date)}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
@@ -600,6 +600,7 @@ const ManageCandidates = () => {
                 Reset
               </button>
             </div>
+            <h3 className="candidateTitle">Candidates</h3>
             <div
               className="manageCandidatesSlide"
               style={{
@@ -763,9 +764,8 @@ const ManageCandidates = () => {
                     pageSize={pageSize}
                     checkboxSelection
                     disableSelectionOnClick
-                    experimentalFeatures={{ newEditingApi: true }}
                     onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                    rowsPerPageOptions={[5, 10, 20]}
+                    rowsPerPageOptions={[100, 150, 200]}
                     pagination
                     getRowId={(row) => row?.candidateId}
                     onRowClick={(row) => handleRowClick(row)}
