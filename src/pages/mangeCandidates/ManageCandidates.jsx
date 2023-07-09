@@ -141,17 +141,15 @@ const ManageCandidates = () => {
   ];
 
   // TABLE ROW DATA
-  const [rows, setRows] = useState([
-    // {
-    //   candidateName: 'Alausa Abdulazeez',
-    //   phoneNumber: 12345678,
-    //   appointmentdate: '1 Jann 2023',
-    //   testcategory: 'Pre employment',
-    //   status: 'PENDING',
-    //   createdDate: '1 Jann 2023',
-    //   id: 1,
-    // },
-  ]);
+  const [rows, setRows] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
+  const [filters, setFilters] = useState({
+    clientId: "",
+    phoneNumberOrName: "",
+    date: "",
+  });
+
   // LOADING AND ERROR DATA
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -159,6 +157,9 @@ const ManageCandidates = () => {
 
   // FUNCTION TO GET AND SET ALL CANDIDATES
   const getAllCandidates = async () => {
+    setStartDate(null);
+    setFilters({ clientId: "", phoneNumberOrName: "", date: "" });
+
     try {
       setLoading(true);
       const res = await publicRequest.get("/Candidate", {
@@ -169,7 +170,11 @@ const ManageCandidates = () => {
       });
 
       if (res.data) {
+        console.log(res.data?.data);
+
         setRows(res.data?.data?.reverse());
+        setFilteredData(res.data?.data?.reverse());
+
         setLoading(false);
       } else {
         console.log(res.data);
@@ -212,17 +217,66 @@ const ManageCandidates = () => {
   };
   //END OF FUNCTION FOR SETTING CLIENT ID
 
-  // USE EFFECT TO GET ALL CANDIDATES AS THE PAGE LOADS
-  useEffect(() => {
-    getAllCandidates();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // FUNCTION TO HANDLE INPUT CHANGES
+  const handleInputChange = (event, name, data) => {
+    if (name === "phoneNumberOrName") {
+      setFilters({ ...filters, [name]: event?.target?.value?.trim() });
+    }
+    if (name === "date") {
+      setStartDate(data);
+      setFilters({ ...filters, [name]: data });
+    }
+    if (name === "clientId") {
+      setFilters({ ...filters, [name]: data?.clientId });
+    }
+    // setFilters({ ...filters, [name]: value.trim() });
+  };
+  // END OF FUNCTION TO HANDLE INPUT CHANGES
 
-  // use effect to call the getAllClients function as the page loads
-  useEffect(() => {
-    getAllClients();
-  }, []);
-  // end of use effect to call the getAllClients function as the page loads
+  // FUNCTION TO FILTER DATA
+  const filterData = () => {
+    console.log(rows);
+    const filteredData = rows.filter((item) => {
+      const { clientId, phoneNumberOrName, date } = filters;
+      console.log(clientId, phoneNumberOrName, date);
+
+      const correctDate = new Date(date);
+
+      console.log(correctDate.toLocaleString());
+      const month = (date?.getMonth() + 1).toString().padStart(2, "0");
+      console.log(month);
+
+      const year = date?.getFullYear();
+      console.log(year);
+
+      const newString = year && month ? year + "-" + month : "";
+      console.log(newString);
+
+      // const newString =
+      //   correctDate.toLocaleString().split(",")[0].split("/")[2] +
+      //   "-" +
+      //   "0" +
+      //   correctDate.toLocaleString().split(",")[0].split("/")[0];
+
+      const itemCompanyId = item?.clientid?.toString().includes(clientId);
+      const itemPhoneNumber = item?.phoneNumber
+        ?.toString()
+        .includes(phoneNumberOrName);
+      const itemName = item?.candidateName
+        ?.toLowerCase()
+        .includes(phoneNumberOrName.toLowerCase());
+      const itemDate = item?.createdDate?.substring(0, 7).includes(newString);
+      console.log(itemDate);
+      return (
+        (clientId === "" || itemCompanyId) &&
+        (phoneNumberOrName === "" || itemPhoneNumber || itemName) &&
+        (date === "" || itemDate)
+      );
+    });
+    console.log(filteredData);
+    setFilteredData(filteredData);
+  };
+  // END OF FUNCTION TO FILTER DATA
 
   // FUNCTION TO HANDLE PHONE NUMBER CHANGE
   const handlePhoneNumberChange = (e) => {
@@ -507,6 +561,25 @@ const ManageCandidates = () => {
   // END OF FUNCTION TO DELETE SINGLE CANDIDTE
 
   useEffect(() => {}, [selectedCandidate]);
+
+  // USE EFFECT TO GET ALL CANDIDATES AS THE PAGE LOADS
+  useEffect(() => {
+    getAllCandidates();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // use effect to call the getAllClients function as the page loads
+  useEffect(() => {
+    getAllClients();
+  }, []);
+  // end of use effect to call the getAllClients function as the page loads
+
+  // use effect to update filtered data
+  // useEffect(()=>{
+
+  // },[filteredData])
+  // end of use effect to update filtered data
+
   return (
     <>
       <ToastContainer />
@@ -572,7 +645,7 @@ const ManageCandidates = () => {
                   `${option.clientName} ${option.email}`
                 }
                 onChange={(e, option) =>
-                  handlescheduleCandidateInfo(e, "clientid", option)
+                  handleInputChange(e, "clientId", option)
                 }
                 sx={{ width: 200 }}
                 renderInput={(params) => (
@@ -584,19 +657,28 @@ const ManageCandidates = () => {
                 label="Candidate's Name/PhoneNo"
                 type="search"
                 className="candidateSearchName"
-                onChange={(e) => handlePhoneNumberChange(e)}
+                onChange={(e) => handleInputChange(e, "phoneNumberOrName")}
                 size="small"
+                value={filters?.phoneNumberOrName}
               />
               <div className="filterDateWrapper">
                 <DatePicker
                   placeholderText="Select a date"
-                  onChange={(date) => setStartDate(date)}
+                  onChange={(date, e) => handleInputChange(e, "date", date)}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
                   className="filterDate"
+                  selected={startDate}
                 />
               </div>
-              <button className="resetBtn" onClick={getAllCandidates}>
+              <button className="searchFilterBtn" onClick={filterData}>
+                Search
+              </button>
+              <button
+                className="resetBtn"
+                onClick={getAllCandidates}
+                // onClick={() => window.location.reload()}
+              >
                 Reset
               </button>
             </div>
@@ -759,7 +841,7 @@ const ManageCandidates = () => {
               ) : (
                 <Box sx={{ height: 400, width: "100%" }}>
                   <DataGrid
-                    rows={rows}
+                    rows={filteredData}
                     columns={columns}
                     pageSize={pageSize}
                     checkboxSelection
