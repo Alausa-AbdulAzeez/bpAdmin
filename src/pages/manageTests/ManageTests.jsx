@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { BsTrashFill } from "react-icons/bs";
@@ -20,6 +20,7 @@ const ManageTests = () => {
   const toastId = React.useRef(null);
   const [pageSize, setPageSize] = useState(50);
   const [tableData, setTableData] = useState([]);
+  const [searchedTableData, setSearchedTableData] = useState([]);
   // const [error, setError] = useState(false)
 
   // DATA FOR TOGGLE ALERT
@@ -44,6 +45,7 @@ const ManageTests = () => {
 
       if (res.data) {
         setTableData(res.data?.data);
+        setSearchedTableData(res.data?.data);
         setLoading(false);
       } else {
         console.log(res.data);
@@ -54,6 +56,20 @@ const ManageTests = () => {
       console.log(error);
     }
   };
+
+  // SEARCH FUNCTIONALITY
+  const handleSearchParamsChange = (e) => {
+    let filteredPendingCandidatesArray;
+    console.log(tableData);
+    filteredPendingCandidatesArray = tableData.filter((tableDatum) =>
+      tableDatum?.testName
+        ?.toLowerCase()
+        .includes(e.target.value.trim().toLowerCase())
+    );
+    setSearchedTableData(filteredPendingCandidatesArray);
+    // console.log(filteredPendingCandidatesArray)
+  };
+  // END OF SEARCH FUNCTIONALITY
 
   // use effect to call the getAllTest function as the page loads
   useEffect(() => {
@@ -194,8 +210,22 @@ const ManageTests = () => {
             <Loading />
           ) : (
             <div className="manageTestsMainWrapper">
+              {/* <h3 className="pendingCandidatesMainTopTitle">Search</h3>
+              <div className="filterContainer">
+                
+              </div> */}
               <div className="manageTestsMainTop">
                 <h3>All Tests</h3>
+                <TextField
+                  id="outlined-search"
+                  label="Search"
+                  type="search"
+                  className="candidateSearchName"
+                  // onChange={(e) => handleInputChange(e, "phoneNumberOrName")}
+                  onChange={(e) => handleSearchParamsChange(e)}
+                  size="small"
+                  // value={filters?.phoneNumberOrName}
+                />
                 <Link to="/manageTests/addTest">
                   <button className="addClientBtn">
                     Add Test
@@ -208,7 +238,7 @@ const ManageTests = () => {
               <div className="partnerLabsMainBottom">
                 <Box sx={{ height: 500, width: "100%" }}>
                   <DataGrid
-                    rows={rows}
+                    rows={searchedTableData}
                     columns={columns}
                     pageSize={pageSize}
                     checkboxSelection
