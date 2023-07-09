@@ -49,7 +49,8 @@ const AddClient = () => {
   // end of function for setting client info
 
   // create client function
-  const addClient = async () => {
+  const addClient = async (event) => {
+    event.preventDefault();
     // const id = toast.loading('Please wait...')
     toastId.current = toast("Please wait...", {
       autoClose: false,
@@ -121,65 +122,82 @@ const AddClient = () => {
           <div className="addClientMainWrapper">
             <h2> Add New Client</h2>
             {/* <HorizontalStepper properties={properties} /> */}
-            <div className="formWrapper">
+            <form className="formWrapper" onSubmit={addClient}>
               <div className="inputsWrapper">
                 <div className="singleInput">
-                  <p>Client Name</p>
+                  <p>
+                    Client Name <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="text"
                       className="input"
+                      required
                       onChange={(e) => handleClientData(e, "clientName")}
                       value={client.clientName}
                     />
                   </div>
                 </div>
                 <div className="singleInput">
-                  <p>Address</p>
+                  <p>
+                    Address <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="text"
                       className="input"
                       onChange={(e) => handleClientData(e, "address")}
                       value={client.address}
+                      required
                     />
                   </div>
                 </div>
                 <div className="singleInput">
-                  <p>Email</p>
+                  <p>
+                    Email <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="email"
                       className="input"
+                      required
                       onChange={(e) => handleClientData(e, "email")}
                       value={client.email}
                     />
                   </div>
                 </div>
                 <div className="singleInput">
-                  <p>Phone Number</p>
+                  <p>
+                    Phone Number <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="number"
                       className="input"
                       onChange={(e) => handleClientData(e, "phoneNumber")}
                       value={client.phoneNumber}
+                      required
                     />
                   </div>
                 </div>
                 <div className="singleInput">
-                  <p>Contact Person</p>
+                  <p>
+                    Contact Person <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="string"
                       className="input"
                       onChange={(e) => handleClientData(e, "contactPerson")}
                       value={client.contactPerson}
+                      required
                     />
                   </div>
                 </div>
                 <div className="singleInput">
-                  <p>Email (Contact Person)</p>
+                  <p>
+                    Email (Contact Person)<span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="string"
@@ -188,11 +206,14 @@ const AddClient = () => {
                         handleClientData(e, "contactPersonEmail")
                       }
                       value={client.contactPersonEmail}
+                      required
                     />
                   </div>
                 </div>
                 <div className="singleInput">
-                  <p>Phone Number (Contact Person)</p>
+                  <p>
+                    Phone Number (Contact Person) <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="string"
@@ -201,6 +222,7 @@ const AddClient = () => {
                         handleClientData(e, "contactPersonPhone")
                       }
                       value={client.contactPersonPhone}
+                      required
                     />
                   </div>
                 </div>
@@ -216,12 +238,12 @@ const AddClient = () => {
 
               <button
                 className="addClientEditBtn"
-                onClick={addClient}
+                // onClick={addClient}
                 disabled={disableDoneAndCancelBtn}
               >
                 Done
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

@@ -297,7 +297,10 @@ const ScheduleCandidate = () => {
           <Topber />
           {/* <h3>Schedule Candidate</h3> */}
           <div className="scheduleCandidateMainWrapper">
-            <form className="scheduleCandidateFormWrapper">
+            <form
+              className="scheduleCandidateFormWrapper"
+              onSubmit={handleScheduleCandidate}
+            >
               <div className="inputsWrapper">
                 <div className="singleInput autoComplete">
                   <Autocomplete
@@ -362,7 +365,6 @@ const ScheduleCandidate = () => {
                     <input
                       type="text"
                       className="input"
-                      required
                       onChange={(e) =>
                         handlescheduleCandidateInfo(e, "address")
                       }
@@ -446,7 +448,7 @@ const ScheduleCandidate = () => {
                 <button
                   className="scheduleCandidateEditBtn"
                   type="submit"
-                  onClick={handleScheduleCandidate}
+                  // onClick={handleScheduleCandidate}
                   disabled={disableDoneAndCancelBtn}
                 >
                   Done

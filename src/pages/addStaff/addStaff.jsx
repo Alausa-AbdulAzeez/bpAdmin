@@ -153,7 +153,9 @@ const AddStaff = () => {
             >
               <div className="inputsWrapper">
                 <div className="singleInput">
-                  <p>Staff Name</p>
+                  <p>
+                    Staff Name <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="text"
@@ -166,7 +168,9 @@ const AddStaff = () => {
                 </div>
 
                 <div className="singleInput">
-                  <p>Email</p>
+                  <p>
+                    Email <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="email"
@@ -198,7 +202,9 @@ const AddStaff = () => {
                 </div>
 
                 <div className="singleInput">
-                  <p>Phone Number</p>
+                  <p>
+                    Phone Number <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="string"

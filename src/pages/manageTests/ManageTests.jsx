@@ -10,8 +10,9 @@ import { Link } from "react-router-dom";
 import { publicRequest } from "../../functions/requestMethods";
 import Loading from "../../components/loading/Loading";
 import AlertDialogSlide from "../../components/Dialogue";
-import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import axios from 'axios'
 
 const ManageTests = () => {
@@ -85,7 +86,8 @@ const ManageTests = () => {
           });
         })
         .then(() => {
-          return window.location.reload();
+          handleClose();
+          return getAllTests();
         });
     } catch (error) {
       console.log(error);
@@ -173,55 +175,58 @@ const ManageTests = () => {
   // END OF FUNCTIONS TO TOGGLE ALERT SLIDE
 
   return (
-    <div className="manageTestsWrapper">
-      <AlertDialogSlide
-        open={open}
-        handleClose={handleClose}
-        title="Delete"
-        link="/scheduleCandidate"
-        message="Warning!! Are you sure you want to delete this test? Action cannot be undone"
-        action={handleDeleteTest}
-      />
-      <Sidebar />
-      <div className="manageTestsRight">
-        <Topber />
+    <>
+      <ToastContainer />
+      <div className="manageTestsWrapper">
+        <AlertDialogSlide
+          open={open}
+          handleClose={handleClose}
+          title="Delete"
+          link="/scheduleCandidate"
+          message="Warning!! Are you sure you want to delete this test? Action cannot be undone"
+          action={handleDeleteTest}
+        />
+        <Sidebar />
+        <div className="manageTestsRight">
+          <Topber />
 
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className="manageTestsMainWrapper">
-            <div className="manageTestsMainTop">
-              <h3>All Tests</h3>
-              <Link to="/manageTests/addTest">
-                <button className="addClientBtn">
-                  Add Test
-                  <span>
-                    <RiAddLine className="addIcon" />
-                  </span>
-                </button>
-              </Link>
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="manageTestsMainWrapper">
+              <div className="manageTestsMainTop">
+                <h3>All Tests</h3>
+                <Link to="/manageTests/addTest">
+                  <button className="addClientBtn">
+                    Add Test
+                    <span>
+                      <RiAddLine className="addIcon" />
+                    </span>
+                  </button>
+                </Link>
+              </div>
+              <div className="partnerLabsMainBottom">
+                <Box sx={{ height: 500, width: "100%" }}>
+                  <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    pageSize={pageSize}
+                    checkboxSelection
+                    disableSelectionOnClick
+                    experimentalFeatures={{ newEditingApi: true }}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                    rowsPerPageOptions={[40, 50]}
+                    rowsP
+                    pagination
+                    getRowId={(row) => row.testId}
+                  />
+                </Box>
+              </div>
             </div>
-            <div className="partnerLabsMainBottom">
-              <Box sx={{ height: 500, width: "100%" }}>
-                <DataGrid
-                  rows={rows}
-                  columns={columns}
-                  pageSize={pageSize}
-                  checkboxSelection
-                  disableSelectionOnClick
-                  experimentalFeatures={{ newEditingApi: true }}
-                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                  rowsPerPageOptions={[40, 50]}
-                  rowsP
-                  pagination
-                  getRowId={(row) => row.testId}
-                />
-              </Box>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
