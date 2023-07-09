@@ -181,10 +181,18 @@ const AddTest = () => {
                 </div>
               </div>
               {/* <div className='bottomButtons'> */}
-              <button className="cancelTestBtn" onClick={handleClickOpen}>
+              <button
+                className="cancelTestBtn"
+                onClick={handleClickOpen}
+                disabled={disableDoneAndCancelBtn}
+              >
                 Cancel
               </button>
-              <button className="addTestEditBtn" type="submit">
+              <button
+                className="addTestEditBtn"
+                type="submit"
+                disabled={disableDoneAndCancelBtn}
+              >
                 Save
               </button>
               {/* </div> */}

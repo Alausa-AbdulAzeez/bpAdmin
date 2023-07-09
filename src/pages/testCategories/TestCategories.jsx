@@ -17,6 +17,9 @@ const TestCategories = () => {
   // CURRENT USER TOKEN
   const { token } = useSelector((state) => state?.user?.currentUser?.data);
 
+  // TO SET THE STATE OF THE DONE AND CANCEL BUTTONS
+  const [disableDoneAndCancelBtn, setDisableDoneAndCancelBtn] = useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -114,12 +117,15 @@ const TestCategories = () => {
   // end of function for testCategory info
 
   // function for creating a test category
-  const createTestCategory = async () => {
+  const createTestCategory = async (event) => {
+    event.preventDefault();
     // const id = toast.loading('Please wait...')
     toastId.current = toast("Please wait...", {
       autoClose: 2500,
       isLoading: true,
     });
+
+    setDisableDoneAndCancelBtn(true);
 
     try {
       await publicRequest
@@ -136,6 +142,7 @@ const TestCategories = () => {
             isLoading: false,
             autoClose: 2500,
           });
+          setDisableDoneAndCancelBtn(false);
         })
         .then(() => {
           window.location.reload();
@@ -153,6 +160,7 @@ const TestCategories = () => {
           "Something went wrong, please try again"
         }`,
       });
+      setDisableDoneAndCancelBtn(false);
     }
   };
   // end of function for creating a test category
@@ -177,7 +185,10 @@ const TestCategories = () => {
           <Topber />
           <div className="testCategoryMainWrapper">
             <h2> Add Test Category</h2>
-            <div className="testCategoryFormWrapper">
+            <form
+              className="testCategoryFormWrapper"
+              onSubmit={createTestCategory}
+            >
               <div className="inputsWrapper">
                 <div className="singleInput">
                   <Autocomplete
@@ -191,12 +202,14 @@ const TestCategories = () => {
                     // value={(option) => option.clientName}
                     sx={{ width: 400 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Client Name" />
+                      <TextField {...params} label="Client Name" required />
                     )}
                   />
                 </div>
                 <div className="singleInput">
-                  <p>Test Category Name</p>
+                  <p>
+                    Test Category Name <span>*</span>
+                  </p>
                   <div className="inputWrapper">
                     <input
                       type="text"
@@ -204,6 +217,7 @@ const TestCategories = () => {
                       onChange={(e) =>
                         handleTestCategoryInfo(e, "categoryName")
                       }
+                      required
                       value={testCategory.categoryName}
                     />
                   </div>
@@ -225,6 +239,7 @@ const TestCategories = () => {
                           {...params}
                           label="SelectedTests"
                           placeholder="Test"
+                          required
                         />
                       )}
                     />
@@ -233,7 +248,9 @@ const TestCategories = () => {
                 </div>
 
                 <div className="textAreaInput">
-                  <p>Description</p>
+                  <p>
+                    Description <span>*</span>
+                  </p>
                   <div className="textAreaWrapper">
                     <textarea
                       type="text"
@@ -253,17 +270,19 @@ const TestCategories = () => {
                 <button
                   className="cancelClientEditBtn"
                   onClick={handleClickOpen}
+                  disabled={disableDoneAndCancelBtn}
                 >
                   Cancel
                 </button>
                 <button
                   className="testCategoryEditBtn"
-                  onClick={createTestCategory}
+                  // onClick={createTestCategory}
+                  disabled={disableDoneAndCancelBtn}
                 >
                   Done
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
