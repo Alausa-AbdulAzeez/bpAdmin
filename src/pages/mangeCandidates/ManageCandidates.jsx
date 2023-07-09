@@ -150,6 +150,9 @@ const ManageCandidates = () => {
     date: "",
   });
 
+  // INPUT VALUE
+  const [inputValue, setInputValue] = useState("");
+
   // LOADING AND ERROR DATA
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -243,11 +246,9 @@ const ManageCandidates = () => {
       const correctDate = new Date(date);
 
       console.log(correctDate.toLocaleString());
-      const month = (date?.getMonth() + 1).toString().padStart(2, "0");
-      console.log(month);
+      const month = (date && date?.getMonth() + 1).toString().padStart(2, "0");
 
-      const year = date?.getFullYear();
-      console.log(year);
+      const year = date && date?.getFullYear();
 
       const newString = year && month ? year + "-" + month : "";
       console.log(newString);
@@ -575,9 +576,9 @@ const ManageCandidates = () => {
   // end of use effect to call the getAllClients function as the page loads
 
   // use effect to update filtered data
-  // useEffect(()=>{
-
-  // },[filteredData])
+  // useEffect(() => {
+  //   console.log(filters.clientId);
+  // }, [filters.clientId]);
   // end of use effect to update filtered data
 
   return (
@@ -639,7 +640,7 @@ const ManageCandidates = () => {
                 </div> */}
             <div className="filterContainer">
               <Autocomplete
-                disablePortal
+                // disablePortal
                 options={clients}
                 getOptionLabel={(option) =>
                   `${option.clientName} ${option.email}`
@@ -647,6 +648,7 @@ const ManageCandidates = () => {
                 onChange={(e, option) =>
                   handleInputChange(e, "clientId", option)
                 }
+                key={loading}
                 sx={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Client Name" size="small" />
