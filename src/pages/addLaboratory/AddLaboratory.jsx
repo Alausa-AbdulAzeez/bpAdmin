@@ -8,11 +8,57 @@ import 'react-toastify/dist/ReactToastify.css'
 import { publicRequest } from '../../functions/requestMethods'
 import { ToastContainer, toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
+import { Autocomplete, TextField } from '@mui/material'
 
 const AddLaboratory = () => {
   // TOAST
   const [open, setOpen] = React.useState(false)
   const toastId = React.useRef(null)
+
+  // STATES
+  const states = [
+    'Abia',
+    'Abuja',
+    'Adamawa',
+    'Akwa Ibom',
+    'Anambra',
+    'Bauchi',
+    'Bayelsa',
+    'Benue',
+    'Borno',
+    'Cross River',
+    'Delta',
+    'Ebonyi',
+    'Edo',
+    'Ekiti',
+    'Enugu',
+
+    'Gombe',
+    'Imo',
+    'Jigawa',
+    'Kaduna',
+    'Kano',
+    'Katsina',
+    'Kebbi',
+    'Kogi',
+    'Kwara',
+    'Lagos',
+    'Nasarawa',
+    'Niger',
+    'Ogun',
+    'Ondo',
+    'Osun',
+    'Oyo',
+    'Plateau',
+    'Rivers',
+    'Sokoto',
+    'Taraba',
+    'Yobe',
+    'Zamfara',
+  ]
+
+  // LAB TYPES
+  const labTypes = ['PartnerLab', 'Branch', 'MainLab']
 
   // LOGGED IN USER TOKEN
   const { token } = useSelector((state) => state?.user?.currentUser?.data)
@@ -28,28 +74,33 @@ const AddLaboratory = () => {
     setOpen(false)
   }
 
-  // FUNCTIONALITIES FOR CREATING A NEW CLIENT
+  // FUNCTIONALITIES FOR CREATING A NEW LAB
 
-  const [client, setClient] = useState({
-    clientName: '',
+  const [laboratory, setLaboratory] = useState({
+    laboratoryName: '',
     address: '',
-    phoneNumber: '',
-    email: '',
+    type: '',
+    state: '',
     contactPerson: '',
     contactPersonPhone: '',
     contactPersonEmail: '',
   })
 
-  // function for setting client info
-  const handleClientData = (e, dataName, data) => {
-    setClient((prev) => {
+  // FUNCTION TO SET LABORATORY STATE AND TYPE
+  const setLaboratoryInfo = (e, dataName, data) => {
+    console.log(dataName, data)
+  }
+
+  // function for setting laboratory info
+  const handleLaboratoryData = (e, dataName, data) => {
+    setLaboratory((prev) => {
       return { ...prev, [dataName]: data ? data.name : e.target.value }
     })
   }
-  // end of function for setting client info
+  // end of function for setting laboratory info
 
-  // create client function
-  const addClient = async (event) => {
+  // create laboratory function
+  const addLaboratory = async (event) => {
     event.preventDefault()
     // const id = toast.loading('Please wait...')
     toastId.current = toast('Please wait...', {
@@ -58,10 +109,11 @@ const AddLaboratory = () => {
     })
 
     setDisableDoneAndCancelBtn(true)
+    console.log(laboratory)
 
     try {
       await publicRequest
-        .post('/Client/profile-client', client, {
+        .post('/Laboratory', laboratory, {
           headers: {
             Accept: '*',
             Authorization: `Bearer ${token}`,
@@ -69,17 +121,18 @@ const AddLaboratory = () => {
         })
         .then((response) => {
           toast.update(toastId.current, {
-            render: 'Client has been added succesfully!',
+            render: 'Laboratory has been added succesfully!',
             type: 'success',
             isLoading: false,
             autoClose: 2500,
           })
+          console.log(response.data)
           setDisableDoneAndCancelBtn(false)
-          setClient({
-            clientName: '',
+          setLaboratory({
+            laboratoryName: '',
             address: '',
-            phoneNumber: '',
-            email: '',
+            type: '',
+            state: '',
             contactPerson: '',
             contactPersonPhone: '',
             contactPersonEmail: '',
@@ -100,15 +153,14 @@ const AddLaboratory = () => {
       setDisableDoneAndCancelBtn(false)
     }
   }
-  // end of create client function
+  // end of create laboratory function
   // useEffect to reset input to default
-  useEffect(() => {}, [client])
+  useEffect(() => {}, [laboratory])
   // end of useEffect to reset input to default
-  // END OF FUNCTIONALITIES FOR CREATING A NEW CLIENT
   return (
     <>
       <ToastContainer />
-      <div className='addClientWrapper'>
+      <div className='addLaboratoryWrapper'>
         <AlertDialogSlide
           open={open}
           handleClose={handleClose}
@@ -117,26 +169,43 @@ const AddLaboratory = () => {
           message='Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost.'
         />
         <Sidebar />
-        <div className='addClientRight'>
+        <div className='addLaboratoryRight'>
           <Topber />
-          <div className='addClientMainWrapper'>
-            <h2> Add New Client</h2>
+          <div className='addLaboratoryMainWrapper'>
+            <h2> Add New Laboratory</h2>
             {/* <HorizontalStepper properties={properties} /> */}
-            <form className='formWrapper' onSubmit={addClient}>
+            <form className='formWrapper' onSubmit={addLaboratory}>
               <div className='inputsWrapper'>
                 <div className='singleInput'>
                   <p>
-                    Client Name <span>*</span>
+                    Laboratory Name <span>*</span>
                   </p>
                   <div className='inputWrapper'>
                     <input
                       type='text'
                       className='input'
                       required
-                      onChange={(e) => handleClientData(e, 'clientName')}
-                      value={client.clientName}
+                      onChange={(e) =>
+                        handleLaboratoryData(e, 'laboratoryName')
+                      }
+                      value={laboratory.laboratoryName}
                     />
                   </div>
+                </div>
+                <div className='singleInput'>
+                  <Autocomplete
+                    disablePortal
+                    id='combo-box-demo'
+                    options={states}
+                    onChange={(e, option) =>
+                      setLaboratoryInfo(e, 'state', option)
+                    }
+                    state={disableDoneAndCancelBtn}
+                    sx={{ width: 400 }}
+                    renderInput={(params) => (
+                      <TextField {...params} label='State' required />
+                    )}
+                  />
                 </div>
                 <div className='singleInput'>
                   <p>
@@ -146,40 +215,13 @@ const AddLaboratory = () => {
                     <input
                       type='text'
                       className='input'
-                      onChange={(e) => handleClientData(e, 'address')}
-                      value={client.address}
+                      onChange={(e) => handleLaboratoryData(e, 'address')}
+                      value={laboratory.address}
                       required
                     />
                   </div>
                 </div>
-                <div className='singleInput'>
-                  <p>
-                    Email <span>*</span>
-                  </p>
-                  <div className='inputWrapper'>
-                    <input
-                      type='email'
-                      className='input'
-                      required
-                      onChange={(e) => handleClientData(e, 'email')}
-                      value={client.email}
-                    />
-                  </div>
-                </div>
-                <div className='singleInput'>
-                  <p>
-                    Phone Number <span>*</span>
-                  </p>
-                  <div className='inputWrapper'>
-                    <input
-                      type='number'
-                      className='input'
-                      onChange={(e) => handleClientData(e, 'phoneNumber')}
-                      value={client.phoneNumber}
-                      required
-                    />
-                  </div>
-                </div>
+
                 <div className='singleInput'>
                   <p>
                     Contact Person <span>*</span>
@@ -188,8 +230,8 @@ const AddLaboratory = () => {
                     <input
                       type='string'
                       className='input'
-                      onChange={(e) => handleClientData(e, 'contactPerson')}
-                      value={client.contactPerson}
+                      onChange={(e) => handleLaboratoryData(e, 'contactPerson')}
+                      value={laboratory.contactPerson}
                       required
                     />
                   </div>
@@ -200,12 +242,12 @@ const AddLaboratory = () => {
                   </p>
                   <div className='inputWrapper'>
                     <input
-                      type='string'
+                      type='email'
                       className='input'
                       onChange={(e) =>
-                        handleClientData(e, 'contactPersonEmail')
+                        handleLaboratoryData(e, 'contactPersonEmail')
                       }
-                      value={client.contactPersonEmail}
+                      value={laboratory.contactPersonEmail}
                       required
                     />
                   </div>
@@ -219,17 +261,32 @@ const AddLaboratory = () => {
                       type='string'
                       className='input'
                       onChange={(e) =>
-                        handleClientData(e, 'contactPersonPhone')
+                        handleLaboratoryData(e, 'contactPersonPhone')
                       }
-                      value={client.contactPersonPhone}
+                      value={laboratory.contactPersonPhone}
                       required
                     />
                   </div>
                 </div>
+                <div className='singleInput'>
+                  <Autocomplete
+                    disablePortal
+                    id='combo-box-demo'
+                    options={labTypes}
+                    onChange={(e, option) =>
+                      setLaboratoryInfo(e, 'type', option)
+                    }
+                    state={disableDoneAndCancelBtn}
+                    sx={{ width: 400 }}
+                    renderInput={(params) => (
+                      <TextField {...params} label='Lab Type' required />
+                    )}
+                  />
+                </div>
               </div>
 
               <button
-                className='cancelClientEditBtn'
+                className='cancelLaboratoryEditBtn'
                 onClick={handleClickOpen}
                 disabled={disableDoneAndCancelBtn}
               >
@@ -237,8 +294,8 @@ const AddLaboratory = () => {
               </button>
 
               <button
-                className='addClientEditBtn'
-                // onClick={addClient}
+                className='addLaboratoryEditBtn'
+                // onClick={addLaboratory}
                 disabled={disableDoneAndCancelBtn}
               >
                 Done
