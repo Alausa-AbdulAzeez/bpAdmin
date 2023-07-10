@@ -83,12 +83,13 @@ const AddLaboratory = () => {
     state: '',
     contactPerson: '',
     contactPersonPhone: '',
-    contactPersonEmail: '',
+    contactEmailAddress: '',
   })
 
   // FUNCTION TO SET LABORATORY STATE AND TYPE
   const setLaboratoryInfo = (e, dataName, data) => {
     console.log(dataName, data)
+    setLaboratory({ ...laboratory, [dataName]: data })
   }
 
   // function for setting laboratory info
@@ -135,7 +136,7 @@ const AddLaboratory = () => {
             state: '',
             contactPerson: '',
             contactPersonPhone: '',
-            contactPersonEmail: '',
+            contactEmailAddress: '',
           })
         })
     } catch (error) {
@@ -245,9 +246,9 @@ const AddLaboratory = () => {
                       type='email'
                       className='input'
                       onChange={(e) =>
-                        handleLaboratoryData(e, 'contactPersonEmail')
+                        handleLaboratoryData(e, 'contactEmailAddress')
                       }
-                      value={laboratory.contactPersonEmail}
+                      value={laboratory.contactEmailAddress}
                       required
                     />
                   </div>
