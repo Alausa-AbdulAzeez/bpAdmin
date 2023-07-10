@@ -6,6 +6,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  TextField,
   Typography,
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
@@ -23,8 +24,9 @@ import Error from '../../components/error/Error'
 import { useSelector } from 'react-redux'
 
 const ManageClients = () => {
-  const [pageSize, setPageSize] = useState(5)
+  const [pageSize, setPageSize] = useState(50)
   const [tableData, setTableData] = useState([])
+  const [searchedTableData, setSearchedTableData] = useState([])
 
   // SET LOADING AND ERROR FUNCTIONALITY
   const [loading, setLoading] = useState(false)
@@ -55,7 +57,7 @@ const ManageClients = () => {
 
       if (res.data) {
         setTableData(res?.data?.data)
-        console.log(res?.data?.data)
+        setSearchedTableData(res?.data?.data)
         setLoading(false)
       } else {
         console.log(res.data)
@@ -67,6 +69,20 @@ const ManageClients = () => {
       console.log(error)
     }
   }
+
+  // SEARCH FUNCTIONALITY
+  const handleSearchParamsChange = (e) => {
+    let filteredclientsArray
+    console.log(tableData)
+    filteredclientsArray = tableData.filter((tableDatum) =>
+      tableDatum?.clientName
+        ?.toLowerCase()
+        .includes(e.target.value.trim().toLowerCase())
+    )
+    setSearchedTableData(filteredclientsArray)
+    // console.log(filteredPendingCandidatesArray)
+  }
+  // END OF SEARCH FUNCTIONALITY
 
   // use effect to call the getAllClients function as the page loads
   useEffect(() => {
@@ -204,6 +220,14 @@ const ManageClients = () => {
           <div className='manageClientsMainWrapper'>
             <div className='manageClientsMainTop'>
               <h3>All Clients</h3>
+              <TextField
+                id='outlined-search'
+                label='Search'
+                type='search'
+                className='candidateSearchName'
+                onChange={(e) => handleSearchParamsChange(e)}
+                size='small'
+              />
               <Link to='/manageClients/addClient'>
                 <button className='addClientBtn'>
                   Add Client
@@ -298,14 +322,14 @@ const ManageClients = () => {
             <div className='partnerLabsMainBottom'>
               <Box sx={{ height: 400, width: '100%' }}>
                 <DataGrid
-                  rows={rows}
+                  rows={searchedTableData}
                   columns={columns}
                   pageSize={pageSize}
                   checkboxSelection
                   disableSelectionOnClick
                   experimentalFeatures={{ newEditingApi: true }}
                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                  rowsPerPageOptions={[5, 10, 20]}
+                  rowsPerPageOptions={[50, 150, 200]}
                   pagination
                   getRowId={(row) => row.clientId}
                   onRowClick={(row, e) => handleRowClick(row, e)}
