@@ -1,8 +1,8 @@
-import { Box } from '@mui/material'
+import { Autocomplete, Box, TextField } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import React, { useEffect, useState } from 'react'
 import { BsTrashFill } from 'react-icons/bs'
-import { MdEdit } from 'react-icons/md'
+import { MdCancel, MdEdit } from 'react-icons/md'
 import ErrorComponent from '../../components/error/Error'
 
 import { RiAddLine } from 'react-icons/ri'
@@ -17,6 +17,7 @@ import Loading from '../../components/loading/Loading'
 const PartnerLabs = () => {
   // MISCELLANEOUS
   const [pageSize, setPageSize] = useState(50)
+  const [resetDropdown, setResetDropdown] = useState(false)
 
   // LOGGED IN USER TOKEN
   const { token } = useSelector((state) => state?.user?.currentUser?.data)
@@ -25,6 +26,69 @@ const PartnerLabs = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
+
+  // CANDIDATE TO BE EDITED INFO
+  const [laboratoryToBeEdited, setlaboratoryToBeEdited] = useState({})
+  // CANDIDATE TO BE DELETED INFO
+  const [candidateToBeDeleted, setCandidateToBeDeleted] = useState({})
+
+  // DATA TO BE DISPLAYED IN THE INPUTS AND SENT TO THE BACKEND
+  const [updatedLaboratoryInfo, setUpdatedLaboratoryInfo] = useState({})
+
+  // SLIDE POSITION
+  const [position, setPosition] = useState('-100%')
+
+  // hide slide function
+  const handleHideSlide = () => {
+    setPosition('-100%')
+  }
+  // end of hide slide function
+
+  // STATES
+  const states = [
+    'Abia',
+    'Abuja',
+    'Adamawa',
+    'Akwa Ibom',
+    'Anambra',
+    'Bauchi',
+    'Bayelsa',
+    'Benue',
+    'Borno',
+    'Cross River',
+    'Delta',
+    'Ebonyi',
+    'Edo',
+    'Ekiti',
+    'Enugu',
+
+    'Gombe',
+    'Imo',
+    'Jigawa',
+    'Kaduna',
+    'Kano',
+    'Katsina',
+    'Kebbi',
+    'Kogi',
+    'Kwara',
+    'Lagos',
+    'Nasarawa',
+    'Niger',
+    'Ogun',
+    'Ondo',
+    'Osun',
+    'Oyo',
+    'Plateau',
+    'Rivers',
+    'Sokoto',
+    'Taraba',
+    'Yobe',
+    'Zamfara',
+  ]
+
+  // LAB TYPES
+  const labTypes = ['PartnerLab', 'Branch', 'MainLab']
+
   const columns = [
     { field: 'laboratoryName', headerName: 'Laboratory Name', width: 190 },
     {
@@ -63,11 +127,13 @@ const PartnerLabs = () => {
       description: 'This column has a value getter and is not sortable.',
       sortable: false,
       width: 260,
-      renderCell: () => {
+      renderCell: (props) => {
         return (
           <div className='buttons'>
             <div className='editWrapper'>
-              <div className='edit'>Edit</div>
+              <div className='edit' onClick={() => showSlide(props)}>
+                Edit
+              </div>
               <MdEdit className='editIcon' />
             </div>
             <div className='deleteWrapper'>
@@ -115,11 +181,77 @@ const PartnerLabs = () => {
   }
   // END OF FUNCTION TO GET AND SET ALL LABORATORIES
 
+  // SEARCH FUNCTIONALITY
+  const handleSearchParamsChange = (e) => {
+    let filteredLabsArray
+    filteredLabsArray = rows?.filter((tableDatum) =>
+      tableDatum?.laboratoryName
+        ?.toLowerCase()
+        .includes(e.target.value.trim().toLowerCase())
+    )
+    setFilteredData(filteredLabsArray)
+    // console.log(filteredPendingCandidatesArray)
+  }
+  // END OF SEARCH FUNCTIONALITY
+
+  // function for setting laboratory info
+  const handleLaboratoryData = (e, dataName, data) => {
+    setUpdatedLaboratoryInfo((prev) => {
+      return { ...prev, [dataName]: data ? data.name : e.target.value }
+    })
+  }
+  // end of function for setting laboratory info
+
+  // FUNCTION TO SET LABORATORY STATE AND TYPE
+  const setLaboratoryInfo = (e, dataName, data) => {
+    setUpdatedLaboratoryInfo({ ...updatedLaboratoryInfo, [dataName]: data })
+  }
+  // END OF // FUNCTION TO SET LABORATORY STATE AND TYPE
+
+  // handlerowclick function
+  const showSlide = (props) => {
+    // getCandidate(props?.row)
+    console.log(props?.row)
+    setlaboratoryToBeEdited(props?.row)
+    setUpdatedLaboratoryInfo(props?.row)
+    if (position !== '0') {
+      setPosition('0')
+    }
+  }
+  // end of  handlerowclick function
+
+  // function for seting laboratory info
+  const handleUpdateLabInfo = (e, dataName, data) => {
+    if (dataName === 'testCategory') {
+      setUpdatedLaboratoryInfo((prev) => {
+        return {
+          ...prev,
+          testcategory: data?.categoryName,
+        }
+      })
+    } else {
+      setUpdatedLaboratoryInfo((prev) => {
+        return {
+          ...prev,
+          [dataName]: e.target.value,
+        }
+      })
+    }
+  }
+  // end of function for seting candidate info
+
+  const handlePartnerLabUpdate = () => {
+    console.log(updatedLaboratoryInfo)
+  }
+
   // USE EFFECT TO GET AND SET ALL LABORATORIES AS THE PAGE LOADS
   useEffect(() => {
     getAllLaboratories()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // USE EFFECT TO SET SELECTED CANDIDATE
+  useEffect(() => {}, [laboratoryToBeEdited])
 
   return (
     <div className='partnerLabsWrapper'>
@@ -129,6 +261,14 @@ const PartnerLabs = () => {
         <div className='partnerLabsMainWrapper'>
           <div className='partnerLabsMainTop'>
             <h3>Partner Laboratories</h3>
+            <TextField
+              id='outlined-search'
+              label='Search'
+              type='search'
+              className='candidateSearchName'
+              onChange={(e) => handleSearchParamsChange(e)}
+              size='small'
+            />
             <Link to={'/partnerLabs/addLab'}>
               <button className='addLabBtn'>
                 Add Laboratory
@@ -137,6 +277,134 @@ const PartnerLabs = () => {
                 </span>
               </button>
             </Link>
+          </div>
+          <div
+            className='manageCandidatesSlide'
+            style={{
+              right: position,
+              visibility: position === '0' && 'visible',
+            }}
+          >
+            <div className='slideTop'>
+              <div className='cancelconWrapper' onClick={handleHideSlide}>
+                <MdCancel className='cancelIcon' />
+              </div>
+              <div className='initials'>
+                {laboratoryToBeEdited?.laboratoryName?.[0]}
+              </div>
+              <div className='slideFullname'>
+                {laboratoryToBeEdited?.laboratoryName}
+              </div>
+            </div>
+
+            <div className='updateUserSlideBottom'>
+              <div className='updateUserInputWrapper'>
+                <p>
+                  Laboratory Name <span>*</span>
+                </p>
+                <div className='inputWrapper'>
+                  <input
+                    type='text'
+                    className='updateLabInput'
+                    required
+                    onChange={(e) => handleUpdateLabInfo(e, 'laboratoryName')}
+                    value={updatedLaboratoryInfo.laboratoryName}
+                  />
+                </div>
+              </div>
+              <div className='updateUserInputWrapper'>
+                <Autocomplete
+                  disablePortal
+                  id='combo-box-demo'
+                  options={states}
+                  onChange={(e, option) =>
+                    setLaboratoryInfo(e, 'state', option)
+                  }
+                  // key={resetDropdown}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label='State' required />
+                  )}
+                />
+              </div>
+              <div className='updateUserInputWrapper'>
+                <p>
+                  Address <span>*</span>
+                </p>
+                <div className='inputWrapper'>
+                  <input
+                    type='text'
+                    className='updateLabInput'
+                    onChange={(e) => handleUpdateLabInfo(e, 'address')}
+                    value={updatedLaboratoryInfo.address}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className='updateUserInputWrapper'>
+                <p>
+                  Contact Person <span>*</span>
+                </p>
+                <div className='inputWrapper'>
+                  <input
+                    type='string'
+                    className='updateLabInput'
+                    onChange={(e) => handleUpdateLabInfo(e, 'contactPerson')}
+                    value={updatedLaboratoryInfo.contactPerson}
+                    required
+                  />
+                </div>
+              </div>
+              <div className='updateUserInputWrapper'>
+                <p>
+                  Email (Contact Person)<span>*</span>
+                </p>
+                <div className='inputWrapper'>
+                  <input
+                    type='email'
+                    className='updateLabInput'
+                    onChange={(e) =>
+                      handleUpdateLabInfo(e, 'contactEmailAddress')
+                    }
+                    value={updatedLaboratoryInfo.contactEmailAddress}
+                    required
+                  />
+                </div>
+              </div>
+              <div className='updateUserInputWrapper'>
+                <p>
+                  Phone Number (Contact Person) <span>*</span>
+                </p>
+                <div className='inputWrapper'>
+                  <input
+                    type='string'
+                    className='updateLabInput'
+                    onChange={(e) =>
+                      handleUpdateLabInfo(e, 'contactPhoneNumber')
+                    }
+                    value={updatedLaboratoryInfo.contactPhoneNumber}
+                    required
+                  />
+                </div>
+              </div>
+              <div className='updateUserInputWrapper'>
+                <Autocomplete
+                  disablePortal
+                  id='combo-box-demo'
+                  options={labTypes}
+                  onChange={(e, option) => setLaboratoryInfo(e, 'type', option)}
+                  key={resetDropdown}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label='Lab Type' required />
+                  )}
+                />
+              </div>
+            </div>
+            <div className='updateUserBtn' onClick={handlePartnerLabUpdate}>
+              Update
+            </div>
           </div>
           <div className='partnerLabsMainBottom'>
             {loading || error ? (
@@ -148,7 +416,7 @@ const PartnerLabs = () => {
             ) : (
               <Box sx={{ height: 500, width: '100%' }}>
                 <DataGrid
-                  rows={rows}
+                  rows={filteredData}
                   columns={columns}
                   pageSize={pageSize}
                   disableSelectionOnClick

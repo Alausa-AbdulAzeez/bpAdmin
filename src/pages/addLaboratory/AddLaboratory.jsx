@@ -91,7 +91,6 @@ const AddLaboratory = () => {
 
   // FUNCTION TO SET LABORATORY STATE AND TYPE
   const setLaboratoryInfo = (e, dataName, data) => {
-    console.log(dataName, data)
     setLaboratory({ ...laboratory, [dataName]: data })
   }
 
