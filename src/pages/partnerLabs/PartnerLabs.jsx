@@ -1,44 +1,61 @@
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsTrashFill } from 'react-icons/bs'
 import { MdEdit } from 'react-icons/md'
+import ErrorComponent from '../../components/error/Error'
 
 import { RiAddLine } from 'react-icons/ri'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Topber from '../../components/topbar/Topber'
 import './partnerLabs.scss'
 import { Link } from 'react-router-dom'
+import { publicRequest } from '../../functions/requestMethods'
+import { useSelector } from 'react-redux'
+import Loading from '../../components/loading/Loading'
 
 const PartnerLabs = () => {
+  // MISCELLANEOUS
   const [pageSize, setPageSize] = useState(50)
+
+  // LOGGED IN USER TOKEN
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
+
+  // LOADING AND ERROR DATA
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
   const columns = [
-    { field: 'id', headerName: 'Laboratory ID', width: 190 },
+    { field: 'laboratoryName', headerName: 'Laboratory Name', width: 190 },
     {
-      field: 'firstName',
-      headerName: 'Laboratory name',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'lastName',
-      headerName: 'Location',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'age',
-      headerName: 'Status',
+      field: 'state',
+      headerName: 'Laboratory Location',
       width: 200,
-      renderCell: (params) => {
-        return (
-          <>
-            <div className={`status ${params.row.status}`}>
-              {params.row.status}
-            </div>
-          </>
-        )
-      },
+      editable: true,
+    },
+    {
+      field: 'type',
+      headerName: 'Laboratory Type',
+      width: 200,
+      editable: true,
+    },
+    {
+      field: 'contactPerson',
+      headerName: 'Contact Person',
+      width: 200,
+      editable: true,
+    },
+    {
+      field: 'contactPhoneNumber',
+      headerName: 'Contact Person No.',
+      width: 200,
+      editable: true,
+    },
+    {
+      field: 'contactEmailAddress',
+      headerName: 'Contact Person Email',
+      width: 200,
+      editable: true,
     },
     {
       field: 'fullName',
@@ -63,71 +80,46 @@ const PartnerLabs = () => {
     },
   ]
 
-  const rows = [
-    {
-      id: 1,
-      lastName: 'Abuja',
-      firstName: 'Lab 1',
-      age: 35,
-      status: 'Inactive',
-    },
-    {
-      id: 2,
-      lastName: 'Abuja',
-      firstName: 'Lab 2',
-      age: 42,
-      status: 'Inactive',
-    },
-    {
-      id: 3,
-      lastName: 'Abuja',
-      firstName: 'Lab 3',
-      age: 45,
-      status: 'Active',
-    },
-    {
-      id: 4,
-      lastName: 'Kano',
-      firstName: 'Lab 4',
-      age: 16,
-      status: 'Inactive',
-    },
-    {
-      id: 5,
-      lastName: 'Lagos',
-      firstName: 'Lab 5',
-      age: null,
-      status: 'Active',
-    },
-    {
-      id: 6,
-      lastName: 'Lagos',
-      firstName: 'Lab 7',
-      age: 150,
-      status: 'Inactive',
-    },
-    {
-      id: 7,
-      lastName: 'Abuja',
-      firstName: 'Lab 8',
-      age: 44,
-      status: 'Inactive',
-    },
-    {
-      id: 8,
-      lastName: 'Abuja',
-      firstName: 'Lab 9',
-      age: 36,
-      status: 'Active',
-    },
-    {
-      id: 9,
-      lastName: 'Abuja',
-      firstName: 'Lab 10',
-      age: 65,
-      status: 'Active',
-    },
-  ]
+  // TABLE ROW DATA
+  const [rows, setRows] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+
+  // FUNCTION TO GET AND SET ALL LABORATORIES
+  const getAllLaboratories = async () => {
+    try {
+      setLoading(true)
+      const res = await publicRequest.get('/Laboratory', {
+        headers: {
+          Accept: '*',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (res.data) {
+        console.log(res.data?.data)
+
+        setRows(res.data?.data)
+        setFilteredData(res.data?.data)
+
+        setLoading(false)
+      } else {
+        console.log(res.data)
+      }
+    } catch (error) {
+      setLoading(false)
+      setError(true)
+      setErrorMessage(error)
+
+      console.log(error)
+    }
+  }
+  // END OF FUNCTION TO GET AND SET ALL LABORATORIES
+
+  // USE EFFECT TO GET AND SET ALL LABORATORIES AS THE PAGE LOADS
+  useEffect(() => {
+    getAllLaboratories()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className='partnerLabsWrapper'>
@@ -147,19 +139,26 @@ const PartnerLabs = () => {
             </Link>
           </div>
           <div className='partnerLabsMainBottom'>
-            <Box sx={{ height: 400, width: '100%' }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={pageSize}
-                checkboxSelection
-                disableSelectionOnClick
-                experimentalFeatures={{ newEditingApi: true }}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                rowsPerPageOptions={[50, 150, 200]}
-                pagination
-              />
-            </Box>
+            {loading || error ? (
+              loading ? (
+                <Loading />
+              ) : (
+                <ErrorComponent errorMessage={errorMessage && errorMessage} />
+              )
+            ) : (
+              <Box sx={{ height: 500, width: '100%' }}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  pageSize={pageSize}
+                  disableSelectionOnClick
+                  experimentalFeatures={{ newEditingApi: true }}
+                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                  rowsPerPageOptions={[50, 150, 200]}
+                  pagination
+                />
+              </Box>
+            )}
           </div>
         </div>
       </div>
