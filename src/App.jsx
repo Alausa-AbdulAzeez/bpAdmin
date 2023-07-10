@@ -32,32 +32,6 @@ function App() {
   return (
     <div className='appWrapper'>
       <BrowserRouter>
-        {/* {user === null ? (
-          <Routes>
-            <Route path='login' element={<Login />} />
-            <Route exact path='/' element={<Home />} />
-            <Route path='/partnerLabs' element={<PartnerLabs />} />
-            <Route path='/partnerLabs/addLab' element={<AddLaboratory />} />
-            <Route path='/manageStaff' element={<ManageStaff />} />
-            <Route path='/manageStaff/addStaff' element={<AddStaff />} />
-            <Route path='/manageClients' element={<ManageClients />} />
-            <Route path='/manageClients/addClient' element={<AddClient />} />
-            <Route
-              path='/testCategories/editCategory'
-              element={<EditCategory />}
-            />
-            <Route path='/manageTests' element={<ManageTests />} />
-            <Route path='/manageTests/addTest' element={<AddTest />} />
-            <Route path='/testCategories' element={<TestCategories />} />
-            <Route path='/scheduleCandidate' element={<ScheduleCandidate />} />
-
-            <Route path='/profile' element={<Profile />} />
-          </Routes>
-        ) : (
-          <Routes>
-            <Route path='/*' element={<Login />} />
-          </Routes>
-        )} */}
         <Routes>
           <Route element={<PrivateRoutes />}>
             <Route exact path='/' element={<Home />} />
@@ -67,7 +41,6 @@ function App() {
             <Route path='/manageStaff/addStaff' element={<AddStaff />} />
             <Route path='/manageClients' element={<ManageClients />} />
             <Route path='/manageCandidates' element={<ManageCandidates />} />
-            {/* <Route path='/manageCandidates' element={<ManageCandidates />} /> */}
             <Route
               path='/manageCandidates/editCandidate'
               element={<EditCandidate />}

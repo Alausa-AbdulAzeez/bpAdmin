@@ -11,6 +11,9 @@ import { useSelector } from 'react-redux'
 import { Autocomplete, TextField } from '@mui/material'
 
 const AddLaboratory = () => {
+  // MISCELLANEOUS
+  const [resetDropdown, setResetDropdown] = useState(false)
+
   // TOAST
   const [open, setOpen] = React.useState(false)
   const toastId = React.useRef(null)
@@ -82,7 +85,7 @@ const AddLaboratory = () => {
     type: '',
     state: '',
     contactPerson: '',
-    contactPersonPhone: '',
+    contactPhoneNumber: '',
     contactEmailAddress: '',
   })
 
@@ -129,13 +132,14 @@ const AddLaboratory = () => {
           })
           console.log(response.data)
           setDisableDoneAndCancelBtn(false)
+          setResetDropdown((prev) => !prev)
           setLaboratory({
             laboratoryName: '',
             address: '',
             type: '',
             state: '',
             contactPerson: '',
-            contactPersonPhone: '',
+            contactPhoneNumber: '',
             contactEmailAddress: '',
           })
         })
@@ -201,7 +205,7 @@ const AddLaboratory = () => {
                     onChange={(e, option) =>
                       setLaboratoryInfo(e, 'state', option)
                     }
-                    state={disableDoneAndCancelBtn}
+                    key={resetDropdown}
                     sx={{ width: 400 }}
                     renderInput={(params) => (
                       <TextField {...params} label='State' required />
@@ -262,9 +266,9 @@ const AddLaboratory = () => {
                       type='string'
                       className='input'
                       onChange={(e) =>
-                        handleLaboratoryData(e, 'contactPersonPhone')
+                        handleLaboratoryData(e, 'contactPhoneNumber')
                       }
-                      value={laboratory.contactPersonPhone}
+                      value={laboratory.contactPhoneNumber}
                       required
                     />
                   </div>
@@ -277,7 +281,7 @@ const AddLaboratory = () => {
                     onChange={(e, option) =>
                       setLaboratoryInfo(e, 'type', option)
                     }
-                    state={disableDoneAndCancelBtn}
+                    key={resetDropdown}
                     sx={{ width: 400 }}
                     renderInput={(params) => (
                       <TextField {...params} label='Lab Type' required />
