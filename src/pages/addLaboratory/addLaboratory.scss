@@ -1,31 +1,24 @@
-.addLabWrapper {
+.addClientWrapper {
   width: 100%;
   display: flex;
   height: calc(100% - 0px);
 
-  .addLabRight {
+  .addClientRight {
     flex: 5;
 
-    .addLabMainWrapper {
+    .addClientMainWrapper {
       height: 100%;
       padding: 10px 64px;
       overflow-y: auto;
 
-      .addLabFormWrapper {
-        height: 80%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+      .formWrapper {
         .inputsWrapper {
           display: flex;
           flex-wrap: wrap;
           margin-bottom: 50px;
           gap: 15px;
           .singleInput {
-            display: flex;
-            flex-direction: column;
             flex: 1;
-            justify-content: flex-end;
             p {
               margin-bottom: 0;
               font-weight: 500;
@@ -44,7 +37,59 @@
             }
           }
         }
-        .addLabEditBtn {
+        .testCategoryWrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+
+          & > .testCategoryTop {
+            height: 250px;
+            width: 100%;
+            box-shadow: 0px 0px 5px 0px rgba(196, 196, 196, 0.75);
+            border-radius: 10px;
+            padding: 10px;
+            overflow: auto;
+          }
+          & > .testCategoryBottom {
+            height: 150px;
+            box-shadow: 0px 0px 5px 0px rgba(196, 196, 196, 0.75);
+
+            border-radius: 10px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+            overflow: auto;
+
+            .testCategoryBottomTitle {
+              font-weight: bold;
+              position: sticky;
+              top: 0;
+              background-color: white;
+              z-index: 99;
+            }
+
+            .testCategoryBottomForm {
+              display: flex;
+              justify-content: space-around;
+              margin-top: 15px;
+              .testCategoryAutocompleteWrapper {
+                width: 60%;
+              }
+              .testCategoryBottomFormBtn {
+                padding: 5px 20px;
+                outline: none;
+                border: none;
+                background-color: #000;
+                color: white;
+                font-weight: bold;
+                cursor: pointer;
+                height: 50px;
+                font-size: 16px;
+              }
+            }
+          }
+        }
+        .addClientEditBtn {
           cursor: pointer;
           font-size: 16px;
           font-weight: bold;
@@ -55,6 +100,11 @@
           border: none;
           outline: none;
           border-radius: 10px;
+
+          &:disabled {
+            background-color: #7551f87c;
+            cursor: not-allowed;
+          }
         }
         .cancelClientEditBtn {
           cursor: pointer;
@@ -68,12 +118,12 @@
           outline: none;
           border-radius: 10px;
           margin-bottom: 20px;
+
+          &:disabled {
+            cursor: not-allowed;
+          }
         }
       }
     }
   }
-}
-
-#combo-box-demo {
-  height: 15px;
 }

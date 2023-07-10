@@ -3,16 +3,22 @@ import Sidebar from '../../components/sidebar/Sidebar'
 import Topber from '../../components/topbar/Topber'
 import './addLaboratory.scss'
 import AlertDialogSlide from '../../components/Dialogue'
-import { privateRequest, publicRequest } from '../../functions/requestMethods'
-import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
+import { publicRequest } from '../../functions/requestMethods'
+import { ToastContainer, toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 
 const AddLaboratory = () => {
+  // TOAST
   const [open, setOpen] = React.useState(false)
   const toastId = React.useRef(null)
 
+  // LOGGED IN USER TOKEN
   const { token } = useSelector((state) => state?.user?.currentUser?.data)
+
+  // TO SET THE STATE OF THE DONE AND CANCEL BUTTONS
+  const [disableDoneAndCancelBtn, setDisableDoneAndCancelBtn] = useState(false)
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -22,65 +28,40 @@ const AddLaboratory = () => {
     setOpen(false)
   }
 
-  // FUNCTIONALITIES PARTAINING TO FETCHING AND SETTING ROLES
+  // FUNCTIONALITIES FOR CREATING A NEW CLIENT
 
-  const [roles, setRoles] = useState([])
-
-  // fetch roles
-  const getRoles = async () => {
-    try {
-      const res = await publicRequest.get('/Account/roles', {
-        headers: {
-          Accept: '*',
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (res) {
-        setRoles(res.data.data)
-      } else {
-        console.log(res)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  // end of fetch roles
-
-  // use effect for fetching roles
-  useEffect(() => {
-    getRoles()
-  }, [])
-  // end of use effect for fetching roles
-
-  // END FUNCTIONALITIES PARTAINING TO ROLES
-
-  // FUNCTIONALITIES FOR CREATING A NEW STAFF
-  const [staff, setStaff] = useState({
-    name: '',
+  const [client, setClient] = useState({
+    clientName: '',
+    address: '',
     phoneNumber: '',
     email: '',
-    role: '',
+    contactPerson: '',
+    contactPersonPhone: '',
+    contactPersonEmail: '',
   })
 
-  // function for setting staff info
-  const handleStaffData = (e, dataName, data) => {
-    setStaff((prev) => {
+  // function for setting client info
+  const handleClientData = (e, dataName, data) => {
+    setClient((prev) => {
       return { ...prev, [dataName]: data ? data.name : e.target.value }
     })
   }
-  // end of function for setting staff info
+  // end of function for setting client info
 
-  const createStaff = async () => {
+  // create client function
+  const addClient = async (event) => {
+    event.preventDefault()
     // const id = toast.loading('Please wait...')
     toastId.current = toast('Please wait...', {
       autoClose: false,
       isLoading: true,
     })
 
+    setDisableDoneAndCancelBtn(true)
+
     try {
       await publicRequest
-        .post('/Account/profile-application-user', staff, {
+        .post('/Client/profile-client', client, {
           headers: {
             Accept: '*',
             Authorization: `Bearer ${token}`,
@@ -88,16 +69,27 @@ const AddLaboratory = () => {
         })
         .then((response) => {
           toast.update(toastId.current, {
-            render: 'Staff has been added succesfully!',
+            render: 'Client has been added succesfully!',
             type: 'success',
             isLoading: false,
+            autoClose: 2500,
+          })
+          setDisableDoneAndCancelBtn(false)
+          setClient({
+            clientName: '',
+            address: '',
+            phoneNumber: '',
+            email: '',
+            contactPerson: '',
+            contactPersonPhone: '',
+            contactPersonEmail: '',
           })
         })
     } catch (error) {
       console.log(error.response)
       toast.update(toastId.current, {
         type: 'error',
-        autoClose: 3000,
+        autoClose: 2500,
         isLoading: false,
         render: `${
           error.response.data.title ||
@@ -105,15 +97,18 @@ const AddLaboratory = () => {
           'Something went wrong, please try again'
         }`,
       })
+      setDisableDoneAndCancelBtn(false)
     }
   }
-
-  //END OF FUNCTIONALITIES FOR CREATING A NEW STAFF
-
+  // end of create client function
+  // useEffect to reset input to default
+  useEffect(() => {}, [client])
+  // end of useEffect to reset input to default
+  // END OF FUNCTIONALITIES FOR CREATING A NEW CLIENT
   return (
     <>
       <ToastContainer />
-      <div className='addLabWrapper'>
+      <div className='addClientWrapper'>
         <AlertDialogSlide
           open={open}
           handleClose={handleClose}
@@ -122,80 +117,133 @@ const AddLaboratory = () => {
           message='Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost.'
         />
         <Sidebar />
-        <div className='addLabRight'>
+        <div className='addClientRight'>
           <Topber />
-          <div className='addLabMainWrapper'>
-            <h2> Add New Laboratory</h2>
-            <div className='addLabFormWrapper'>
+          <div className='addClientMainWrapper'>
+            <h2> Add New Client</h2>
+            {/* <HorizontalStepper properties={properties} /> */}
+            <form className='formWrapper' onSubmit={addClient}>
               <div className='inputsWrapper'>
                 <div className='singleInput'>
-                  <p>Laboratory Name</p>
+                  <p>
+                    Client Name <span>*</span>
+                  </p>
                   <div className='inputWrapper'>
                     <input
                       type='text'
                       className='input'
-                      onChange={(e) => handleStaffData(e, 'name')}
+                      required
+                      onChange={(e) => handleClientData(e, 'clientName')}
+                      value={client.clientName}
                     />
                   </div>
                 </div>
-
                 <div className='singleInput'>
-                  <p>Email</p>
+                  <p>
+                    Address <span>*</span>
+                  </p>
+                  <div className='inputWrapper'>
+                    <input
+                      type='text'
+                      className='input'
+                      onChange={(e) => handleClientData(e, 'address')}
+                      value={client.address}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className='singleInput'>
+                  <p>
+                    Email <span>*</span>
+                  </p>
                   <div className='inputWrapper'>
                     <input
                       type='email'
                       className='input'
-                      onChange={(e) => handleStaffData(e, 'email')}
+                      required
+                      onChange={(e) => handleClientData(e, 'email')}
+                      value={client.email}
                     />
                   </div>
                 </div>
-
                 <div className='singleInput'>
-                  <p>Location</p>
+                  <p>
+                    Phone Number <span>*</span>
+                  </p>
                   <div className='inputWrapper'>
                     <input
-                      type='email'
+                      type='number'
                       className='input'
-                      onChange={(e) => handleStaffData(e, 'email')}
+                      onChange={(e) => handleClientData(e, 'phoneNumber')}
+                      value={client.phoneNumber}
+                      required
                     />
                   </div>
                 </div>
-
-                {/* <div className='singleInput'>
-                  <Autocomplete
-                    disablePortal
-                    id='combo-box-demo'
-                    options={roles}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(e, option) => handleStaffData(e, 'role', option)}
-                    sx={{ width: 400 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label='Role' />
-                    )}
-                  />
-                </div> */}
-
                 <div className='singleInput'>
-                  <p>Phone Number</p>
+                  <p>
+                    Contact Person <span>*</span>
+                  </p>
                   <div className='inputWrapper'>
                     <input
                       type='string'
                       className='input'
-                      onChange={(e) => handleStaffData(e, 'phoneNumber')}
+                      onChange={(e) => handleClientData(e, 'contactPerson')}
+                      value={client.contactPerson}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className='singleInput'>
+                  <p>
+                    Email (Contact Person)<span>*</span>
+                  </p>
+                  <div className='inputWrapper'>
+                    <input
+                      type='string'
+                      className='input'
+                      onChange={(e) =>
+                        handleClientData(e, 'contactPersonEmail')
+                      }
+                      value={client.contactPersonEmail}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className='singleInput'>
+                  <p>
+                    Phone Number (Contact Person) <span>*</span>
+                  </p>
+                  <div className='inputWrapper'>
+                    <input
+                      type='string'
+                      className='input'
+                      onChange={(e) =>
+                        handleClientData(e, 'contactPersonPhone')
+                      }
+                      value={client.contactPersonPhone}
+                      required
                     />
                   </div>
                 </div>
               </div>
-              <div className='bottomButtons'>
-                <button
-                  className='cancelClientEditBtn'
-                  onClick={handleClickOpen}
-                >
-                  Cancel
-                </button>
-                <button className='addLabEditBtn'>Save</button>
-              </div>
-            </div>
+
+              <button
+                className='cancelClientEditBtn'
+                onClick={handleClickOpen}
+                disabled={disableDoneAndCancelBtn}
+              >
+                Cancel
+              </button>
+
+              <button
+                className='addClientEditBtn'
+                // onClick={addClient}
+                disabled={disableDoneAndCancelBtn}
+              >
+                Done
+              </button>
+            </form>
           </div>
         </div>
       </div>
