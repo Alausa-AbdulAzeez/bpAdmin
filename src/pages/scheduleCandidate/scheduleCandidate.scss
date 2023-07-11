@@ -45,6 +45,7 @@
           .bulkUploadWrapper {
             // background-color: red;
             position: relative;
+            width: 500px;
 
             .bulkUploadButton {
               position: absolute;
@@ -133,7 +134,7 @@
           outline: none;
           border-radius: 10px;
 
-          &:disabled{
+          &:disabled {
             background-color: #7551f87c;
             cursor: not-allowed;
           }
@@ -152,8 +153,8 @@
           margin-bottom: 20px;
 
           &:disabled {
-              cursor: not-allowed;
-            }
+            cursor: not-allowed;
+          }
         }
       }
     }

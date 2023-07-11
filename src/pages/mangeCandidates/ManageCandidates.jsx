@@ -65,9 +65,21 @@ const ManageCandidates = () => {
       editable: false,
     },
     {
+      field: 'laboratory',
+      headerName: 'Screening Location',
+      width: 150,
+      editable: false,
+    },
+    {
       field: 'phoneNumber',
       headerName: 'Phone Number',
-      width: 120,
+      width: 150,
+      editable: false,
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      width: 150,
       editable: false,
     },
     {
