@@ -21,8 +21,8 @@ export const login = async (
   try {
     await publicRequest.post("/Account/login", user).then((res) => {
       if (
-        res?.data?.data?.role === "SuperAdmin" ||
-        res?.data?.data?.role === null
+        res?.data?.data?.role?.[0] === "SuperAdmin" ||
+        res?.data?.data?.role?.[0] === null
       ) {
         if (res?.data?.data?.isDefaultPassword === false) {
           setBtnDisabled(false);
@@ -48,6 +48,7 @@ export const login = async (
           });
         }
       } else {
+        console.log(res?.data);
         setBtnDisabled(false);
         throw new Error("Can not access this resource");
       }

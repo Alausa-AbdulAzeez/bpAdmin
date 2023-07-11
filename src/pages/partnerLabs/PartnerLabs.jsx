@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import Loading from "../../components/loading/Loading";
 import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer, toast } from "react-toastify";
+import AlertDialogSlide from "../../components/Dialogue";
 
 const PartnerLabs = () => {
   // MISCELLANEOUS
@@ -30,10 +31,13 @@ const PartnerLabs = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  // DATA FOR TOGGLE ALERT
+  const [open, setOpen] = React.useState(false);
+
   // CANDIDATE TO BE EDITED INFO
   const [laboratoryToBeEdited, setlaboratoryToBeEdited] = useState({});
   // CANDIDATE TO BE DELETED INFO
-  const [candidateToBeDeleted, setCandidateToBeDeleted] = useState({});
+  const [laboratoryToBeDeleted, setlaboratoryToBeDeleted] = useState({});
 
   // DATA TO BE DISPLAYED IN THE INPUTS AND SENT TO THE BACKEND
   const [updatedLaboratoryInfo, setUpdatedLaboratoryInfo] = useState({});
@@ -144,7 +148,9 @@ const PartnerLabs = () => {
               <MdEdit className="editIcon" />
             </div>
             <div className="deleteWrapper">
-              <div className="delete">Delete</div>
+              <div className="delete" onClick={() => handleClickOpen(props)}>
+                Delete
+              </div>
               <BsTrashFill className="deleteIcon" />
             </div>
           </div>
@@ -227,6 +233,19 @@ const PartnerLabs = () => {
   };
   // end of  handlerowclick function
 
+  // FUNCTIONS TO TOGGLE ALERT SLIDE
+  const handleClickOpen = (props) => {
+    console.log(props);
+    setOpen(true);
+    setlaboratoryToBeDeleted(props?.row);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    // handleDeleteTest()
+  };
+  // END OF FUNCTIONS TO TOGGLE ALERT SLIDE
+
   // function for seting laboratory info
   const handleUpdateLabInfo = (e, dataName, data) => {
     if (dataName === "testCategory") {
@@ -246,6 +265,8 @@ const PartnerLabs = () => {
     }
   };
   // end of function for seting candidate info
+
+  // FUNCTION TO UPDATE PARTNER LABS
 
   const handlePartnerLabUpdate = async () => {
     console.log(updatedLaboratoryInfo);
@@ -297,6 +318,53 @@ const PartnerLabs = () => {
     }
   };
 
+  // END OF FUNCTION TO UPDATE A PARTNER LAB
+
+  // FUNCTION TO DELETE SINGLE LABORATORY
+  const handleDeleteLaboratory = async () => {
+    toastId.current = toast("Please wait...", {
+      autoClose: 2500,
+      isLoading: true,
+    });
+
+    try {
+      await publicRequest
+        .delete(`Laboratory/${laboratoryToBeDeleted?.id}`, {
+          headers: {
+            Accept: "*",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          toast.update(toastId.current, {
+            render: "Laboratory deleted successfully!",
+            type: "success",
+            isLoading: false,
+            autoClose: 2500,
+          });
+        })
+        .then(async () => {
+          handleClose();
+          return await getAllLaboratories();
+        });
+    } catch (error) {
+      console.log(error);
+      toast.update(toastId.current, {
+        type: "error",
+        autoClose: 2500,
+        isLoading: false,
+        render: `${
+          error?.response?.data?.title ||
+          error?.response?.data?.description ||
+          error?.message ||
+          "Could not delete laboratory. Try again"
+        }`,
+      });
+      setOpen(false);
+    }
+  };
+  // END OF FUNCTION TO DELETE SINGLE LABORATORY
+
   // USE EFFECT TO GET AND SET ALL LABORATORIES AS THE PAGE LOADS
   useEffect(() => {
     getAllLaboratories();
@@ -310,6 +378,14 @@ const PartnerLabs = () => {
     <>
       <ToastContainer />
       <div className="partnerLabsWrapper">
+        <AlertDialogSlide
+          open={open}
+          handleClose={handleClose}
+          title="Delete"
+          link="/partnerLabs"
+          message="Warning!! Are you sure you want to delete this laboratory? Action cannot be undone"
+          action={handleDeleteLaboratory}
+        />
         <Sidebar />
         <div className="partnerLabsRight">
           <Topber />

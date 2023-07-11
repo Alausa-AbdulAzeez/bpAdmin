@@ -231,6 +231,7 @@
     padding: 6px 12px;
     gap: 6px;
     color: #0007b3;
+    cursor: pointer;
 
     .editIcon {
       font-size: 18px;
@@ -239,6 +240,7 @@
   .deleteWrapper {
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     background: #ba3c3c45;
 
