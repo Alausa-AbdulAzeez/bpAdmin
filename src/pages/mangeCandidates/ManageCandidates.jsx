@@ -43,7 +43,7 @@ const ManageCandidates = () => {
   // ALL LABORATORIES
   const [laboratories, setLaboratories] = useState([])
 
-  // ALL LABORATORIES
+  // SELECTED LABORATORY
   const [selectedLab, setSelectedLab] = useState('')
 
   // DISABLE SLIDE INPUT PROPERTIES

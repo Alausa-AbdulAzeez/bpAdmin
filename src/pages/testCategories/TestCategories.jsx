@@ -1,244 +1,244 @@
-import React, { useEffect, useState } from "react";
-import Sidebar from "../../components/sidebar/Sidebar";
-import Topber from "../../components/topbar/Topber";
-import "./testCategories.scss";
-import AlertDialogSlide from "../../components/Dialogue";
-import { Autocomplete, TextField } from "@mui/material";
-import { publicRequest } from "../../functions/requestMethods";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react'
+import Sidebar from '../../components/sidebar/Sidebar'
+import Topber from '../../components/topbar/Topber'
+import './testCategories.scss'
+import AlertDialogSlide from '../../components/Dialogue'
+import { Autocomplete, TextField } from '@mui/material'
+import { publicRequest } from '../../functions/requestMethods'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { useSelector } from 'react-redux'
 
 const TestCategories = () => {
   // MISCELLANEOUS
-  const toastId = React.useRef(null);
-  const [open, setOpen] = React.useState(false);
+  const toastId = React.useRef(null)
+  const [open, setOpen] = React.useState(false)
 
   // CURRENT USER TOKEN
-  const { token } = useSelector((state) => state?.user?.currentUser?.data);
+  const { token } = useSelector((state) => state?.user?.currentUser?.data)
 
   // TO SET THE STATE OF THE DONE AND CANCEL BUTTONS
-  const [disableDoneAndCancelBtn, setDisableDoneAndCancelBtn] = useState(false);
+  const [disableDoneAndCancelBtn, setDisableDoneAndCancelBtn] = useState(false)
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   // TEST DATA FUNCTIONALITIES
-  const [tests, setTests] = useState([]);
+  const [tests, setTests] = useState([])
   const getAllTests = async () => {
     try {
-      const res = await publicRequest.get("/Test", {
+      const res = await publicRequest.get('/Test', {
         headers: {
-          Accept: "*",
+          Accept: '*',
           Authorization: `Bearer ${token}`,
         },
-      });
+      })
 
       if (res.data) {
-        console.log(res.data);
-        setTests(res.data?.data);
+        console.log(res.data)
+        setTests(res.data?.data)
       } else {
-        console.log(res.data);
+        console.log(res.data)
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   // use effect to call the getAllTest function as the page loads
   useEffect(() => {
-    getAllTests();
-  }, []);
+    getAllTests()
+  }, [])
   // end of use effect to call the getAllTest function as the page loads
   // END OF TEST DATA FUNCTIONALITIES
 
   //  FUNCTIONALITIES FOR FETCHING AND CLIENTS
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState([])
   const getAllClients = async () => {
     try {
-      const res = await publicRequest.get("Client/Client-list", {
+      const res = await publicRequest.get('Client/Client-list', {
         headers: {
-          Accept: "*",
+          Accept: '*',
           Authorization: `Bearer ${token}`,
         },
-      });
+      })
 
       if (res.data) {
-        setClients(res.data.data);
-        console.log(res.data);
+        setClients(res.data.data)
+        console.log(res.data)
       } else {
-        console.log(res.data);
+        console.log(res.data)
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   // use effect to call the getAllClients function as the page loads
   useEffect(() => {
-    getAllClients();
-  }, []);
+    getAllClients()
+  }, [])
   // end of use effect to call the getAllClients function as the page loads
   //  END OF FUNCTIONALITIES FOR FETCHING AND CLIENTS
 
   // FUNCTIONALITIES FOR CREATING A NEW TEST CATEGORY
   const [testCategory, setTestCategory] = useState({
-    clientId: "",
-    categoryName: "",
-    categoryDescription: "",
+    clientId: '',
+    categoryName: '',
+    categoryDescription: '',
     tests: [],
-  });
+  })
 
   // function for setting testCategory info
   const handleTestCategoryInfo = (e, dataName, data) => {
-    if (dataName === "tests") {
+    if (dataName === 'tests') {
       const tests = data.map((singleTest) => {
         return {
           testId: singleTest.testId,
-        };
-      });
+        }
+      })
       setTestCategory((prev) => {
         return {
           ...prev,
           tests: [...tests],
-        };
-      });
+        }
+      })
     } else {
       setTestCategory((prev) => {
-        return { ...prev, [dataName]: data ? data.clientId : e.target.value };
-      });
+        return { ...prev, [dataName]: data ? data.clientId : e.target.value }
+      })
     }
-  };
+  }
   // end of function for testCategory info
 
   // function for creating a test category
   const createTestCategory = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     // const id = toast.loading('Please wait...')
-    toastId.current = toast("Please wait...", {
+    toastId.current = toast('Please wait...', {
       autoClose: 2500,
       isLoading: true,
-    });
+    })
 
-    setDisableDoneAndCancelBtn(true);
+    setDisableDoneAndCancelBtn(true)
 
     try {
       await publicRequest
-        .post("/Test/test-category", testCategory, {
+        .post('/Test/test-category', testCategory, {
           headers: {
-            Accept: "*",
+            Accept: '*',
             Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {
           toast.update(toastId.current, {
-            render: "Test category created succesfully!",
-            type: "success",
+            render: 'Test category created succesfully!',
+            type: 'success',
             isLoading: false,
             autoClose: 2500,
-          });
-          setDisableDoneAndCancelBtn(false);
+          })
+          setDisableDoneAndCancelBtn(false)
         })
         .then(() => {
-          window.location.reload();
-        });
+          window.location.reload()
+        })
     } catch (error) {
-      console.log(error.response);
+      console.log(error.response)
       toast.update(toastId.current, {
-        type: "error",
+        type: 'error',
         autoClose: 2500,
         isLoading: false,
         render: `${
           error?.response?.data?.title ||
           error?.response?.data?.description ||
           error?.message ||
-          "Something went wrong, please try again"
+          'Something went wrong, please try again'
         }`,
-      });
-      setDisableDoneAndCancelBtn(false);
+      })
+      setDisableDoneAndCancelBtn(false)
     }
-  };
+  }
   // end of function for creating a test category
 
   // USEEFFECT FOR RESETTING TEST CATEGOTY INPUT AFTER SUCCESSFUL CREATION
-  useEffect(() => {}, [testCategory]);
+  useEffect(() => {}, [testCategory])
 
   //END OF FUNCTIONALITIES FOR CREATING A NEW TEST CATEGORY
   return (
     <>
       <ToastContainer />
-      <div className="testCategoryWrapper">
+      <div className='testCategoryWrapper'>
         <AlertDialogSlide
           open={open}
           handleClose={handleClose}
-          title="Cancel"
-          link="/testCategories"
-          message="Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost."
+          title='Cancel'
+          link='/testCategories'
+          message='Warning!! Your changes have not been saved. Are you sure you want to leave this page? Any unsaved changes will be lost.'
         />
         <Sidebar />
-        <div className="testCategoryRight">
+        <div className='testCategoryRight'>
           <Topber />
-          <div className="testCategoryMainWrapper">
+          <div className='testCategoryMainWrapper'>
             <h2> Add Test Category</h2>
             <form
-              className="testCategoryFormWrapper"
+              className='testCategoryFormWrapper'
               onSubmit={createTestCategory}
             >
-              <div className="inputsWrapper">
-                <div className="singleInput">
+              <div className='inputsWrapper'>
+                <div className='singleInput'>
                   <Autocomplete
                     disablePortal
-                    id="combo-box-demo"
+                    id='combo-box-demo'
                     options={clients}
                     getOptionLabel={(option) => option.clientName}
                     onChange={(e, option) =>
-                      handleTestCategoryInfo(e, "clientId", option)
+                      handleTestCategoryInfo(e, 'clientId', option)
                     }
                     // value={(option) => option.clientName}
                     sx={{ width: 400 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Client Name" required />
+                      <TextField {...params} label='Client Name' required />
                     )}
                   />
                 </div>
-                <div className="singleInput">
+                <div className='singleInput'>
                   <p>
                     Test Category Name <span>*</span>
                   </p>
-                  <div className="inputWrapper">
+                  <div className='inputWrapper'>
                     <input
-                      type="text"
-                      className="input"
+                      type='text'
+                      className='input'
                       onChange={(e) =>
-                        handleTestCategoryInfo(e, "categoryName")
+                        handleTestCategoryInfo(e, 'categoryName')
                       }
                       required
                       value={testCategory.categoryName}
                     />
                   </div>
                 </div>
-                <div className="multipleSelectWrapper">
+                <div className='multipleSelectWrapper'>
                   {/* <div className="multipleSelectContainer"> */}
-                  <div className="multipleSelect">
+                  <div className='multipleSelect'>
                     <Autocomplete
                       multiple
-                      id="tags-outlined"
+                      id='tags-outlined'
                       options={tests}
                       getOptionLabel={(option) => option.testName}
                       onChange={(e, option) =>
-                        handleTestCategoryInfo(e, "tests", option)
+                        handleTestCategoryInfo(e, 'tests', option)
                       }
                       filterSelectedOptions
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label="SelectedTests"
-                          placeholder="Test"
+                          label='SelectedTests'
+                          placeholder='Test'
                           required
                         />
                       )}
@@ -247,35 +247,35 @@ const TestCategories = () => {
                   {/* </div> */}
                 </div>
 
-                <div className="textAreaInput">
+                <div className='textAreaInput'>
                   <p>
                     Description <span>*</span>
                   </p>
-                  <div className="textAreaWrapper">
+                  <div className='textAreaWrapper'>
                     <textarea
-                      type="text"
-                      className="textArea"
+                      type='text'
+                      className='textArea'
                       cols={50}
                       rows={5}
                       onChange={(e) =>
-                        handleTestCategoryInfo(e, "categoryDescription")
+                        handleTestCategoryInfo(e, 'categoryDescription')
                       }
-                      style={{ padding: "10px", outline: "none" }}
+                      style={{ padding: '10px', outline: 'none' }}
                       value={testCategory.categoryDescription}
                     />
                   </div>
                 </div>
               </div>
-              <div className="bottomButtons">
+              <div className='bottomButtons'>
                 <button
-                  className="cancelClientEditBtn"
+                  className='cancelClientEditBtn'
                   onClick={handleClickOpen}
                   disabled={disableDoneAndCancelBtn}
                 >
                   Cancel
                 </button>
                 <button
-                  className="testCategoryEditBtn"
+                  className='testCategoryEditBtn'
                   // onClick={createTestCategory}
                   disabled={disableDoneAndCancelBtn}
                 >
@@ -287,7 +287,7 @@ const TestCategories = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default TestCategories;
+export default TestCategories
