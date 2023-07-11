@@ -6,14 +6,13 @@ import { Autocomplete, Box, TextField } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { MdCancel, MdEdit } from 'react-icons/md'
 import { BsTrashFill } from 'react-icons/bs'
-import { privateRequest, publicRequest } from '../../functions/requestMethods'
+import { publicRequest } from '../../functions/requestMethods'
 import Loading from '../../components/loading/Loading'
 import ErrorComponent from '../../components/error/Error'
 import { format } from 'date-fns'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { RxReload } from 'react-icons/rx'
 import DatePicker from 'react-datepicker'
 import AlertDialogSlide from '../../components/Dialogue'
 import { useSelector } from 'react-redux'
@@ -41,8 +40,21 @@ const ManageCandidates = () => {
   // CANDIDATE TO BE DELETED INFO
   const [candidateToBeDeleted, setCandidateToBeDeleted] = useState(null)
 
+  // ALL LABORATORIES
+  const [laboratories, setLaboratories] = useState([])
+
+  // ALL LABORATORIES
+  const [selectedLab, setSelectedLab] = useState('')
+
+  // DISABLE SLIDE INPUT PROPERTIES
+  const [disableCandidateProperties, setDisableCandidateProperties] =
+    useState(false)
+
   // SLIDE POSITION
   const [position, setPosition] = useState('-100%')
+
+  // TO SET THE STATE OF THE UPDATE BUTTON
+  const [disableUpdateBtn, setDisableUpdateBtn] = useState(false)
 
   // DATA TO BE DISPLAYED IN THE INPUTS AND SENT TO THE BACKEND
   const [updatedCandidateInfo, setUpdatedCandidateInfo] = useState(null)
@@ -67,8 +79,27 @@ const ManageCandidates = () => {
     {
       field: 'laboratory',
       headerName: 'Screening Location',
-      width: 150,
+      width: 250,
       editable: false,
+      renderCell: (props) => {
+        return (
+          <div className='changeLaboratory'>
+            {console.log(props)}
+            <div className='labLocation'>{props?.row?.laboratory}</div>
+            {/* <div
+              className='changeBtn'
+              style={{ cursor: 'pointer' }}
+              onClick={() => showSlide(props)}
+            >
+              
+            </div> */}
+            <MdEdit
+              className='editLocationIcon'
+              onClick={() => showSlide(props, 'disabled')}
+            />
+          </div>
+        )
+      },
     },
     {
       field: 'phoneNumber',
@@ -130,7 +161,7 @@ const ManageCandidates = () => {
             <div
               className='editWrapper'
               style={{ cursor: 'pointer' }}
-              onClick={() => showSlide(props)}
+              onClick={() => showSlide(props, 'notDisabled')}
             >
               <div className='edit'>Edit</div>
               <MdEdit className='editIcon' />
@@ -297,6 +328,27 @@ const ManageCandidates = () => {
   }
   // END OF FUNCTION TO HANDLE PHONE NUMBER CHANGE
 
+  // function to get all Laboratories
+  const getAllLaboratories = async () => {
+    try {
+      const res = await publicRequest.get(`/Laboratory`, {
+        headers: {
+          Accept: '*',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (res.data) {
+        setLaboratories(res?.data?.data)
+      } else {
+        console.log(res.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // end of function to get all Laboratories
+
   // FUNCTION TO HANDLE CANDIDATE SEARCH
   const handleCandidateSearch = async () => {
     toastId.current = toast('Please wait...', {
@@ -366,12 +418,18 @@ const ManageCandidates = () => {
   //end of functionality to get and set candidate to be updated
 
   // handlerowclick function
-  const showSlide = (props) => {
+  const showSlide = (props, state) => {
     // getCandidate(props?.row)
     setCandidateToBeEdited(props?.row)
     setUpdatedCandidateInfo(props?.row)
     if (position !== '0') {
       setPosition('0')
+      if (state === 'notDisabled') {
+        setDisableCandidateProperties(false)
+      }
+      if (state === 'disabled') {
+        setDisableCandidateProperties(true)
+      }
     }
   }
   // end of  handlerowclick function
@@ -390,6 +448,13 @@ const ManageCandidates = () => {
     setStartDate(new Date(row?.row?.appointmentdate))
   }
   // END OF FUNCTION TO HANDLE ROW CLICK
+
+  // FUNCTION TO HANDLE LAB SELECTION (SLIDE)
+  const handleLabSelection = (row) => {
+    console.log(row)
+    setSelectedLab(row?.id)
+  }
+  // END OF FUNCTION TO HANDLE LAB SELECTION (SLIDE)
 
   // DATE SELECTION AND CHANGE FUNCTIONALITIES
   // function for handling date chande
@@ -428,10 +493,13 @@ const ManageCandidates = () => {
 
   // UPDATE USER FUNCTION
   const handleUpdateUser = async () => {
+    console.log('updateee')
     toastId.current = toast('Please wait...', {
       autoClose: 3000,
       isLoading: true,
     })
+
+    setDisableUpdateBtn(true)
 
     try {
       await publicRequest
@@ -452,17 +520,13 @@ const ManageCandidates = () => {
             isLoading: false,
             autoClose: 3000,
           })
+          setDisableUpdateBtn(true)
         })
-        .then(() => {
-          getAllCandidates().then(() => {
+        .then(async () => {
+          await getAllCandidates().then(() => {
             setPosition('-100%')
           })
-          // setPosition("-100%");
         })
-      // .then(() => {
-
-      //   window.location.reload();
-      // });
     } catch (error) {
       console.log(error)
       toast.update(toastId.current, {
@@ -476,9 +540,63 @@ const ManageCandidates = () => {
           'Something went wrong, please try again'
         }`,
       })
+      setDisableUpdateBtn(true)
     }
   }
   // END OF UPDATE USER FUNCTION
+
+  // UPDATE SCREENING LOCATION FUNCTION
+  const handleUpdateScreeningLocation = async () => {
+    toastId.current = toast('Please wait...', {
+      autoClose: 3000,
+      isLoading: true,
+    })
+
+    setDisableUpdateBtn(true)
+
+    try {
+      await publicRequest
+        .put(
+          `Candidate/route/${candidateToBeEdited?.candidateId}/${selectedLab}`,
+          updatedCandidateInfo,
+          {
+            headers: {
+              Accept: '*',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(() => {
+          toast.update(toastId.current, {
+            render: 'Candidate updated succesfully!',
+            type: 'success',
+            isLoading: false,
+            autoClose: 3000,
+          })
+          setDisableUpdateBtn(false)
+        })
+        .then(async () => {
+          await getAllCandidates().then(() => {
+            setPosition('-100%')
+          })
+        })
+    } catch (error) {
+      console.log(error)
+      toast.update(toastId.current, {
+        type: 'error',
+        autoClose: 3000,
+        isLoading: false,
+        render: `${
+          error?.response?.data?.title ||
+          error?.response?.data?.description ||
+          error?.message ||
+          'Something went wrong, please try again'
+        }`,
+      })
+      setDisableUpdateBtn(false)
+    }
+  }
+  // END OF UPDATE SCREENING LOCATION FUNCTION
 
   //  FUNCTIONALITIES FOR FETCHING AND SETTING TEST CATEGORIES
 
@@ -586,11 +704,12 @@ const ManageCandidates = () => {
   }, [])
   // end of use effect to call the getAllClients function as the page loads
 
-  // use effect to update filtered data
-  // useEffect(() => {
-  //   console.log(filters.clientId);
-  // }, [filters.clientId]);
-  // end of use effect to update filtered data
+  // use effect to call the getAllTestCategories function as the page loads
+  useEffect(() => {
+    getAllLaboratories()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  // end of use effect to call the getAllTestCategories function as the page loads
 
   return (
     <>
@@ -763,6 +882,7 @@ const ManageCandidates = () => {
                     className='updateUserInput'
                     value={updatedCandidateInfo?.email}
                     onChange={(e) => handleUpdateCandidateInfo(e, 'email')}
+                    disabled={disableCandidateProperties}
                   />
                 </div>
                 <div className='updateUserInputWrapper'>
@@ -775,17 +895,21 @@ const ManageCandidates = () => {
                     onChange={(e) =>
                       handleUpdateCandidateInfo(e, 'phoneNumber')
                     }
+                    disabled={disableCandidateProperties}
                   />
                 </div>
                 <div className='updateUserInputWrapper'>
-                  <label htmlFor='address'>Address</label>
-                  <input
-                    type='text'
-                    id='address'
-                    className='updateUserInput'
-                    value={updatedCandidateInfo?.address}
-                    onChange={(e) => handleUpdateCandidateInfo(e, 'address')}
-                  />
+                  <>
+                    <label htmlFor='address'>Address</label>
+                    <input
+                      type='text'
+                      id='address'
+                      className='updateUserInput'
+                      value={updatedCandidateInfo?.address}
+                      disabled={disableCandidateProperties}
+                      onChange={(e) => handleUpdateCandidateInfo(e, 'address')}
+                    />
+                  </>
                 </div>
                 <div className='updateUserInputWrapper'>
                   <label
@@ -800,6 +924,7 @@ const ManageCandidates = () => {
                     id='combo-box-demo'
                     options={testCategory}
                     getOptionLabel={(option) => `${option.categoryName}`}
+                    disabled={disableCandidateProperties}
                     onChange={(e, option) =>
                       handleUpdateCandidateInfo(e, 'testCategory', option)
                     }
@@ -822,6 +947,7 @@ const ManageCandidates = () => {
                 <div className='updateUserInputWrapper'>
                   <label htmlFor='email'>Appointment Date</label>
                   <DatePicker
+                    disabled={disableCandidateProperties}
                     selected={startDate}
                     onChange={(selectedDate) => handleDateChange(selectedDate)}
                     dateFormat='MMMM d, yyyy'
@@ -839,10 +965,39 @@ const ManageCandidates = () => {
                   />
                   {/* <input type='text' id='email' className='updateUserInput' /> */}
                 </div>
+                {disableCandidateProperties && (
+                  <div className='updateUserInputWrapper'>
+                    <Autocomplete
+                      disablePortal
+                      id='combo-box-demo'
+                      options={laboratories}
+                      getOptionLabel={(option) => `${option.laboratoryName}`}
+                      onChange={(e, option) => handleLabSelection(option)}
+                      key={loading}
+                      sx={{ width: 300 }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label='Screening Location'
+                          required
+                        />
+                      )}
+                    />
+                  </div>
+                )}
               </div>
-              <div className='updateUserBtn' onClick={handleUpdateUser}>
+
+              <button
+                className='updateUserBtn'
+                disabled={disableUpdateBtn}
+                onClick={
+                  disableCandidateProperties
+                    ? handleUpdateScreeningLocation
+                    : handleUpdateUser
+                }
+              >
                 Update
-              </div>
+              </button>
             </div>
             <div className='partnerLabsMainBottom'>
               {loading || error ? (
