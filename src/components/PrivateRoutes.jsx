@@ -34,11 +34,9 @@ const PrivateRoutes = () => {
           error?.response?.status === 401 ||
           error?.response?.status === 403
         ) {
-          dispatch(loggedOut())
-
           persistor
             .purge()
-            // .then(() => navigate('/login'))
+            .then(() => dispatch(loggedOut()))
             .then(() => {
               return toast.info('Session Expired Please login to continue', {
                 position: 'top-right',

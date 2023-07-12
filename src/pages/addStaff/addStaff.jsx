@@ -301,7 +301,7 @@ const AddStaff = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label='Section'
+                        label='Section/Role'
                         required
                         inputProps={{
                           ...params.inputProps,
