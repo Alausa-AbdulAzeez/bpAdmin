@@ -44,6 +44,9 @@ const ManageStaff = () => {
   // SELECTED CANDIDATE AFTER ROW CLICK
   const [selectedStaff, setSelecedStaff] = useState({})
 
+  // SELECTED CANDIDATE AFTER ROW CLICK
+  const [updatedCandidateInfo, setUpdatedCandidateInfo] = useState({})
+
   // INITIAL POSITION OF SLIDE
   const [position, setPosition] = useState('-100%')
 
@@ -122,6 +125,7 @@ const ManageStaff = () => {
   // HANDLE ROW CLICK
   const handleRowClick = (row, e) => {
     setSelecedStaff(row?.row)
+    setUpdatedCandidateInfo(row?.row)
 
     if (position !== '0') {
       setPosition('0')
@@ -134,6 +138,26 @@ const ManageStaff = () => {
     setPosition('-100%')
   }
   // END OF HANDLE ROW CLICK
+
+  // function for seting candidate info
+  const handleUpdateCandidateInfo = (e, dataName, data) => {
+    if (dataName === 'testCategory') {
+      setUpdatedCandidateInfo((prev) => {
+        return {
+          ...prev,
+          testcategory: data?.categoryName,
+        }
+      })
+    } else {
+      setUpdatedCandidateInfo((prev) => {
+        return {
+          ...prev,
+          [dataName]: e.target.value,
+        }
+      })
+    }
+  }
+  // end of function for seting candidate info
 
   // useeffect to call the fetchStaff function
   useEffect(() => {
@@ -205,31 +229,75 @@ const ManageStaff = () => {
                   {selectedStaff?.fullName?.toUpperCase()}
                 </div>
               </div>
-              <div className='staffDetails'>
-                <h3>Staff Laboratory</h3>
-                <p>{selectedStaff?.laboratory?.laboratoryName}</p>
-              </div>
-              <div className='staffDetails'>
-                <h3>Staff Email</h3>
-                <p>{selectedStaff?.email}</p>
-              </div>
-              <div className='staffDetails'>
-                <h3>Staff Section/Role</h3>
-                {loadingStaffRole || staffRoleErrorMessage ? (
-                  loadingStaffRole ? (
-                    'Loading...'
+              <div className='staffBasicDetailsWrapper'>
+                <div className='staffDetails'>
+                  <h3>Staff Laboratory</h3>
+                  <p>{selectedStaff?.laboratory?.laboratoryName}</p>
+                </div>
+                <div className='staffDetails'>
+                  <h3>Staff Email</h3>
+                  <p>{selectedStaff?.email}</p>
+                </div>
+                <div className='staffDetails'>
+                  <h3>Staff Section/Role</h3>
+                  {loadingStaffRole || staffRoleErrorMessage ? (
+                    loadingStaffRole ? (
+                      'Loading...'
+                    ) : (
+                      staffRoleErrorMessage?.response?.data?.description ||
+                      staffRoleErrorMessage?.response?.data?.title ||
+                      staffRoleErrorMessage?.message
+                    )
                   ) : (
-                    staffRoleErrorMessage?.message
-                  )
-                ) : (
-                  <p>{staffRole}</p>
-                )}
-              </div>
-              <div className='staffDetails'>
-                <h3>Staff Phone no</h3>
+                    <p>{staffRole}</p>
+                  )}
+                </div>
+                <div className='staffDetails'>
+                  <h3>Staff Phone no</h3>
 
-                <p>{selectedStaff?.phoneNumber}</p>
+                  <p>{selectedStaff?.phoneNumber}</p>
+                </div>
               </div>
+              <div className='staffDetailsWrapper'>
+                <div className='updateStaffInputWrapper'>
+                  <label htmlFor='email'>Name</label>
+                  <input
+                    type='text'
+                    id='name'
+                    className='updateStaffInput'
+                    value={updatedCandidateInfo?.fullName}
+                    onChange={(e) => handleUpdateCandidateInfo(e, 'fullName')}
+                  />
+                </div>
+                <div className='updateStaffInputWrapper'>
+                  <label htmlFor='email'>Email</label>
+                  <input
+                    type='text'
+                    id='email'
+                    className='updateStaffInput'
+                    value={updatedCandidateInfo?.email}
+                    onChange={(e) => handleUpdateCandidateInfo(e, 'email')}
+                  />
+                </div>
+                <div className='updateStaffInputWrapper'>
+                  <label htmlFor='email'>Phone Number</label>
+                  <input
+                    type='text'
+                    id='phoneNumber'
+                    className='updateStaffInput'
+                    value={updatedCandidateInfo?.phoneNumber}
+                    onChange={(e) =>
+                      handleUpdateCandidateInfo(e, 'phoneNumber')
+                    }
+                  />
+                </div>
+              </div>
+              <button
+                className='updateUserBtn'
+                // disabled={disableUpdateBtn}
+              >
+                Update
+              </button>
             </form>
             <div className='manageStaffMainBottom'>
               <Box sx={{ height: 400, width: '100%' }}>

@@ -134,8 +134,8 @@ const AddStaff = () => {
         autoClose: 2500,
         isLoading: false,
         render: `${
-          error.response.data.title ||
-          error.response.data.description ||
+          error.response?.data?.title ||
+          error.response?.data?.description ||
           'Something went wrong, please try again'
         }`,
       })

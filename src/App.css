@@ -1,6 +1,5 @@
 .appWrapper {
   height: calc(100vh - 50px);
-
   width: 100vw;
   overflow-x: hidden;
   overflow-y: hidden;
