@@ -14,7 +14,7 @@ import Error from '../../components/error/Error'
 import { useSelector } from 'react-redux'
 
 const ManageStaff = () => {
-  const [pageSize, setPageSize] = useState(50)
+  const [pageSize, setPageSize] = useState(100)
   const { token } = useSelector((state) => state?.user?.currentUser?.data)
   const columns = [
     {
@@ -69,10 +69,10 @@ const ManageStaff = () => {
       })
       // const res = await privateRequest.get('Staff')
       console.log('seccessS')
-      setStaff(res?.data?.data)
-      setSearchedTableData(res?.data?.data)
+      setStaff(res?.data?.data?.result)
+      setSearchedTableData(res?.data?.data?.result)
       setLoading(false)
-      console.log(res?.data?.data)
+      console.log(res?.data?.data?.result)
     } catch (error) {
       setLoading(false)
       setError(true)

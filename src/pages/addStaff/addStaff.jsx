@@ -72,18 +72,7 @@ const AddStaff = () => {
 
   // function for setting staff info
   const handleStaffData = (e, dataName, data) => {
-    if (dataName === 'role') {
-      const roles = data.map((singleRole) => {
-        return singleRole?.name
-      })
-      setStaff((prev) => {
-        console.log(roles)
-        return {
-          ...prev,
-          role: [...roles],
-        }
-      })
-    } else if (dataName === 'laboratoryId') {
+    if (dataName === 'laboratoryId') {
       setStaff((prev) => {
         return {
           ...prev,
@@ -289,24 +278,32 @@ const AddStaff = () => {
                 </div>
 
                 <div className='singleInput rolesInput'>
-                  <Autocomplete
-                    multiple
+                  {/* <Autocomplete
+                    // multiple
+                    disablePortal
                     id='tags-outlined'
                     options={roles}
                     key={loading}
                     getOptionLabel={(option) => option.name}
                     onChange={(e, option) => handleStaffData(e, 'role', option)}
                     sx={{ width: 400 }}
-                    filterSelectedOptions
+                    renderInput={(params) => (
+                      <TextField {...params} label='Section/Role' required />
+                    )}
+                  /> */}
+                  <Autocomplete
+                    disablePortal
+                    id='combo-box-demo'
+                    options={roles}
+                    key={loading}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(e, option) => handleStaffData(e, 'role', option)}
+                    sx={{ width: 400 }}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label='Section/Role'
+                        label='Assigned laboratory'
                         required
-                        inputProps={{
-                          ...params.inputProps,
-                          required: roles.length === 0,
-                        }}
                       />
                     )}
                   />

@@ -70,9 +70,9 @@ const Home = () => {
       })
       // const res = await privateRequest.get('Staff')
       console.log('seccessS')
-      setStaff(res?.data?.data)
+      setStaff(res?.data?.data?.result)
       setLoading(false)
-      console.log(res?.data?.data)
+      console.log(res?.data?.data?.result)
     } catch (error) {
       setLoading(false)
       setError(true)
