@@ -302,7 +302,7 @@ const AddStaff = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Assigned laboratory"
+                        label="Staff role/section"
                         required
                       />
                     )}
