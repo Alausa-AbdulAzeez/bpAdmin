@@ -92,6 +92,7 @@ const TestCategories = () => {
     categoryName: '',
     categoryDescription: '',
     tests: [],
+    amount: '',
   })
 
   // function for setting testCategory info
@@ -126,6 +127,7 @@ const TestCategories = () => {
     })
 
     setDisableDoneAndCancelBtn(true)
+    console.log(testCategory)
 
     try {
       await publicRequest
@@ -222,6 +224,42 @@ const TestCategories = () => {
                     />
                   </div>
                 </div>
+                <div className='amountAndDesc'>
+                  <div className='singleInput amount'>
+                    <p>
+                      Amount <span>*</span>
+                    </p>
+                    <div className='inputWrapper'>
+                      <input
+                        type='text'
+                        className='input'
+                        onChange={(e) => handleTestCategoryInfo(e, 'amount')}
+                        required
+                        value={testCategory.amount}
+                      />
+                    </div>
+                  </div>
+
+                  <div className='textAreaInput'>
+                    <p>
+                      Description <span>*</span>
+                    </p>
+                    <div className='textAreaWrapper'>
+                      <textarea
+                        type='text'
+                        className='textArea'
+                        cols={50}
+                        rows={5}
+                        onChange={(e) =>
+                          handleTestCategoryInfo(e, 'categoryDescription')
+                        }
+                        style={{ padding: '10px', outline: 'none' }}
+                        value={testCategory.categoryDescription}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className='multipleSelectWrapper'>
                   {/* <div className="multipleSelectContainer"> */}
                   <div className='multipleSelect'>
@@ -240,30 +278,15 @@ const TestCategories = () => {
                           label='SelectedTests'
                           placeholder='Test'
                           required
+                          inputProps={{
+                            ...params.inputProps,
+                            required: tests.length === 0,
+                          }}
                         />
                       )}
                     />
                   </div>
                   {/* </div> */}
-                </div>
-
-                <div className='textAreaInput'>
-                  <p>
-                    Description <span>*</span>
-                  </p>
-                  <div className='textAreaWrapper'>
-                    <textarea
-                      type='text'
-                      className='textArea'
-                      cols={50}
-                      rows={5}
-                      onChange={(e) =>
-                        handleTestCategoryInfo(e, 'categoryDescription')
-                      }
-                      style={{ padding: '10px', outline: 'none' }}
-                      value={testCategory.categoryDescription}
-                    />
-                  </div>
                 </div>
               </div>
               <div className='bottomButtons'>

@@ -23,12 +23,10 @@
           flex-wrap: wrap;
           margin-bottom: 50px;
           gap: 15px;
-
-
-
-
-
-
+          .amountAndDesc {
+            flex: 1;
+            margin-top: 5px;
+          }
 
           .singleInput {
             display: flex;
@@ -36,6 +34,7 @@
             flex: 1;
             justify-content: flex-end;
             align-self: flex-end;
+            // height: 100px;
 
             p {
               margin-bottom: 0;
@@ -47,7 +46,6 @@
               width: 400px;
               height: 40px;
               padding: 10px;
-              
 
               .input {
                 outline: none;
@@ -56,6 +54,10 @@
                 border: none;
               }
             }
+          }
+          .amount {
+            align-self: flex-start !important;
+            max-height: 60px;
           }
         }
 
@@ -72,9 +74,9 @@
           border-radius: 10px;
 
           &:disabled {
-              background-color: #7551f87c;
-              cursor: not-allowed;
-            }
+            background-color: #7551f87c;
+            cursor: not-allowed;
+          }
         }
 
         .cancelClientEditBtn {
@@ -91,57 +93,53 @@
           margin-bottom: 20px;
 
           &:disabled {
-              cursor: not-allowed;
-            }
+            cursor: not-allowed;
+          }
         }
       }
     }
   }
 }
 
-#combo-box-demo,#tags-outlined {
+#combo-box-demo,
+#tags-outlined {
   height: 15px;
 }
 
-#tags-outlined{
-width: 150px;
+#tags-outlined {
+  width: 150px;
 }
 
-.multipleSelectWrapper{
-    display: flex;
-    flex: 1;
-    height: 150px;
-    min-width: 400px;
-    margin-top: 20px;
+.multipleSelectWrapper {
+  display: flex;
+  flex: 1;
+  min-height: 60px;
+  min-width: 400px;
+  margin-top: 20px;
+  // background-color: red;
 
-    
-    
-    // .multipleSelectContainer{
-      
-      //   height: 200px;
-      //   overflow-y: auto;
-      .multipleSelect {
-          overflow-y: auto;
-          height: 100%;
-            padding-top: 5px;
-            // margin-top: auto;
-            // margin-top: 135px;
-            margin-top: auto;
-            
-            width: 400px;
-        
-        
-        
-          }
+  // .multipleSelectContainer{
 
-    // }
+  //   height: 200px;
+  //   overflow-y: auto;
+  .multipleSelect {
+    overflow-y: auto;
+    height: 100%;
+    padding-top: 5px;
+    // margin-top: auto;
+    // margin-top: 135px;
+    margin-top: auto;
+
+    width: 400px;
   }
-  
 
-.textAreaInput{
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        justify-content: flex-end;
-        align-self: flex-end;
+  // }
+}
+
+.textAreaInput {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-end;
+  align-self: flex-end;
 }
