@@ -22,7 +22,8 @@ export const login = async (
     await publicRequest.post("/Account/login", user).then((res) => {
       if (
         res?.data?.data?.role?.[0] === "SuperAdmin" ||
-        res?.data?.data?.role?.[0] === null
+        res?.data?.data?.role?.[0] === null ||
+        res?.data?.data?.role === null
       ) {
         if (res?.data?.data?.isDefaultPassword === false) {
           setBtnDisabled(false);
