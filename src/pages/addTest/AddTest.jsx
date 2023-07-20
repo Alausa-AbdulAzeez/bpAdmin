@@ -107,8 +107,9 @@ const AddTest = () => {
         autoClose: 3000,
         isLoading: false,
         render: `${
-          error.response.data.title ||
-          error.response.data.description ||
+          error?.response?.data?.title ||
+          error?.response?.data?.description ||
+          error?.message ||
           "Something went wrong, please try again"
         }`,
       });
