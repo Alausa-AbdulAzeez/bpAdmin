@@ -18,7 +18,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const ManageTests = () => {
   // MISCELLANEOUS
   const toastId = React.useRef(null)
-  const [pageSize, setPageSize] = useState(50)
+  const [pageSize, setPageSize] = useState(100)
   const [tableData, setTableData] = useState([])
   const [searchedTableData, setSearchedTableData] = useState([])
   // const [error, setError] = useState(false)
@@ -243,7 +243,7 @@ const ManageTests = () => {
                     disableSelectionOnClick
                     experimentalFeatures={{ newEditingApi: true }}
                     onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                    rowsPerPageOptions={[40, 50]}
+                    rowsPerPageOptions={[100, 150]}
                     rowsP
                     pagination
                     getRowId={(row) => row.testId}
