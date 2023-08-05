@@ -24,6 +24,7 @@ import Error from "../../components/error/Error";
 import { useSelector } from "react-redux";
 import { BsTrashFill } from "react-icons/bs";
 import { ToastContainer, toast } from "react-toastify";
+import AlertDialogSlide from "../../components/Dialogue";
 
 const ManageClients = () => {
   const [pageSize, setPageSize] = useState(50);
@@ -42,6 +43,9 @@ const ManageClients = () => {
 
   // CLIENT  TO BE EDITED INFO
   const [clientTobeEdited, setClientToBeEdited] = useState({});
+
+  // CLIENT  TO BE DELETED INFO
+  const [clientTobeDeleted, setClientToBeDeleted] = useState({});
 
   // DATA TO BE DISPLAYED IN THE INPUTS AND SENT TO THE BACKEND
   const [updatedClientInfo, setupdatedClientInfo] = useState({});
@@ -120,7 +124,8 @@ const ManageClients = () => {
   // end of  handlerowclick function
 
   // SHOW AND HIDE DIALOGUE
-  const handleClickOpen = () => {
+  const handleClickOpen = (props) => {
+    setClientToBeDeleted(props?.row);
     setOpen(true);
   };
 
@@ -346,12 +351,16 @@ const ManageClients = () => {
 
     try {
       await publicRequest
-        .put(`Client/toggle-status/${clientTobeEdited?.clientId}`, {
-          headers: {
-            Accept: "*",
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .put(
+          `Client/toggle-status/${clientTobeDeleted?.clientId}`,
+          {},
+          {
+            headers: {
+              Accept: "*",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then(() => {
           toast.update(toastId.current, {
             render: "Client deleted succesfully!",
@@ -359,6 +368,11 @@ const ManageClients = () => {
             isLoading: false,
             autoClose: 3000,
           });
+        })
+        .then(async () => {
+          handleClose();
+
+          return await getAllClients();
         });
     } catch (error) {
       console.log(error);
@@ -373,6 +387,7 @@ const ManageClients = () => {
           "Something went wrong, please try again"
         }`,
       });
+      handleClose();
     }
   };
 
@@ -390,6 +405,8 @@ const ManageClients = () => {
 
   // hide slide function
   const handleHideSlide = () => {
+    setdisableClientProperties(true);
+
     setPosition("-100%");
   };
   // end of hide slide function
@@ -400,10 +417,21 @@ const ManageClients = () => {
   // update errorMessage state
   useEffect(() => {}, [errorMessage]);
   // end of update errorMessage state
+
+  useEffect(() => {}, [clientTobeDeleted]);
+
   // END OF MISCELLANEOUS USEEFFECTS
   // useRedirectLoggedOutUser()
   return (
     <div className="manageClientsWrapper">
+      <AlertDialogSlide
+        open={open}
+        handleClose={handleClose}
+        title="Delete"
+        link="/"
+        message="Warning!! Are you sure you want to delete this client?"
+        action={deactivateClient}
+      />
       <ToastContainer />
       <Sidebar />
       <div className="manageClientsRight">
