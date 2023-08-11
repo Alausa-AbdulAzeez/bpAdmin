@@ -57,9 +57,7 @@ const ManageClients = () => {
   const [disableUpdateBtn, setDisableUpdateBtn] = useState(false);
 
   // useEffect to update error and loading state
-  useEffect(() => {
-    console.log(error, loading);
-  }, [error, loading]);
+  useEffect(() => {}, [error, loading]);
   // end of useEffect to update error and loading state
 
   // END OF SET LOADING AND ERROR FUNCTIONALITY
@@ -93,7 +91,6 @@ const ManageClients = () => {
   // SEARCH FUNCTIONALITY
   const handleSearchParamsChange = (e) => {
     let filteredclientsArray;
-    console.log(tableData);
     filteredclientsArray = tableData.filter((tableDatum) =>
       tableDatum?.clientName
         ?.toLowerCase()
@@ -109,12 +106,10 @@ const ManageClients = () => {
     // getCandidate(props?.row)
     setClientToBeEdited(props?.row);
     setupdatedClientInfo(props?.row);
-    console.log("function called");
     if (position !== "0") {
       setPosition("0");
       if (state === "notDisabled") {
         setdisableClientProperties(false);
-        console.log("aa");
       }
       if (state === "disabled") {
         setdisableClientProperties(true);
@@ -244,7 +239,6 @@ const ManageClients = () => {
   // functionalities for getting and updating client State
   //get client function
   const getClient = async (id) => {
-    console.log(id);
     try {
       setFetchingTestInfo(true);
       const res = await publicRequest.get(`Test/test-category/${id}`, {
@@ -255,7 +249,6 @@ const ManageClients = () => {
       });
       setClient(res.data);
       setFetchingTestInfo(false);
-      console.log(res.data);
     } catch (error) {
       console.log(error);
       setFetchingTestInfo(false);
@@ -465,11 +458,8 @@ const ManageClients = () => {
               </Link>
             </div>
             <div
-              className="slide"
-              style={{
-                right: position,
-                visibility: position === "0" && "visible",
-              }}
+              className={position === "-100%" ? "zeroWidth" : "slide"}
+              style={{ right: position }}
             >
               <div className="slideTop">
                 <div className="cancelconWrapper" onClick={handleHideSlide}>

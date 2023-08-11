@@ -1,15 +1,26 @@
 .manageClientsWrapper {
   width: 100%;
   display: flex;
+  height: calc(100vh - 0px);
 
   .manageClientsRight {
     flex: 5;
+        overflow-y: auto !important;
+          height: 100%;
 
     .manageClientsMainWrapper {
       // position: relative;
       padding: 30px 64px;
       // background-color: red;
       // height: calc(100% - 0px);
+
+      .zeroWidth {
+          position: absolute;
+          width: 0;
+          overflow-x: hidden;
+          transition: all ease-in-out 0.65s;
+      
+        }
 
       .slide {
         position: absolute;
@@ -209,4 +220,81 @@
   border-radius: 10px;
   color: rgba(2, 101, 0, 1);
   cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+  .manageClientsMainWrapper {
+    padding: 30px 16px !important;
+
+    .manageClientsMainTop{
+      margin-top: 10px;
+      display: flex;
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+
+    .slide {
+      width: 100% !important;
+      padding: 16px !important;
+
+      .updateClientBtn{
+        bottom: 30px !important;
+          right: 50px !important;
+      }
+
+              .slideTop {
+                  height: 100px;
+                  display: flex;
+                  align-items: center;margin-bottom: 10px;
+
+                  .cancelconWrapper {
+                      position: absolute;
+                      top: 30px !important;
+                      right: 30px !important;
+                  
+                    }
+              
+              
+              
+                  .initials {
+                    height: 70px !important;
+                    width: 70px !important;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: var(--main-purple);
+                    font-size: 32px !important;
+                    color: white;
+                    letter-spacing: 2px;
+                    margin-right: 30px;
+                  }
+              
+                  .slideFullname {
+                    font-size: 20px !important;
+                    font-weight: bold;
+                  }
+                }
+
+
+.slideMiddle{
+  gap: 20px;
+
+  .companyDetail{
+    width: 100% !important;
+
+    max-width: max-content;
+  }
+}
+
+      .updateStaffBtn {
+
+        position: fixed !important;
+        bottom: 30px !important;
+        right: 20px !important;
+
+      }
+    }
+  }
 }

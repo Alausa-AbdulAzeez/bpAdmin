@@ -1,15 +1,17 @@
 .addClientWrapper {
   width: 100%;
   display: flex;
-  height: calc(100% - 0px);
+  height: calc(100vh - 0px);
 
   .addClientRight {
     flex: 5;
+    overflow-y: auto !important;
+      height: 100%;
 
     .addClientMainWrapper {
-      height: 100%;
+      // height: 100%;
       padding: 10px 64px;
-      overflow-y: auto;
+      // overflow-y: auto;
 
       .formWrapper {
         .inputsWrapper {
@@ -125,5 +127,59 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+      .inputsWrapper {
+          justify-content: center !important;
+
+            .singleInput {
+                width: 400px !important;
+                align-items: center !important;
+                flex: none !important;
+
+                .inputWrapper {
+                    width: 400px !important;
+                
+                    .input {
+                      width: 100%;
+                    }
+                  }
+              }
+        }
+
+}
+
+
+@media screen and (max-width: 767px) {
+  .addClientWrapper {
+    padding: 10px 16px !important;
+
+    &>h2 {
+      text-align: center !important;
+    }
+
+
+    .inputsWrapper{
+      justify-content: center !important;
+    }
+
+    .singleInput {
+      width: 200px !important;
+      align-items: center;
+      justify-content: center;
+      flex: none !important;
+
+      .inputWrapper {
+        width: 200px !important;
+
+        .input {
+          width: 100%;
+        }
+      }
+    }
+
+
   }
 }
