@@ -1,19 +1,31 @@
+
 .partnerLabsWrapper {
   width: 100%;
   display: flex;
+  height: calc(100vh - 0px);
 
   .partnerLabsRight {
+    overflow-y: auto !important;
+    height: 100%;
     flex: 5;
 
     .partnerLabsMainWrapper {
       padding: 30px 64px;
+
+        .zeroWidth {
+            position: absolute;
+            width: 0;
+            overflow-x: hidden;
+            transition: all ease-in-out 0.65s;
+        
+          }
 
       .partnerLabsMainTop {
         display: flex;
         justify-content: space-between;
         align-items: center;
 
-        & > h3 {
+        &>h3 {
           color: var(--text-silver-color);
         }
 
@@ -29,7 +41,7 @@
           border: none;
           cursor: pointer;
 
-          & > span {
+          &>span {
             display: flex;
             align-items: center;
             margin-left: 4px;
@@ -41,12 +53,14 @@
           }
         }
       }
+
       .partnerLabsMainBottom {
         height: 500px;
         display: flex;
         align-items: center;
         justify-content: center;
       }
+
       .manageCandidatesSlide {
         position: absolute;
         overflow: auto;
@@ -61,7 +75,6 @@
         box-shadow: 1px 1px 40px 4px #6b6a6a6b;
         transition: all ease-in-out 0.65s;
         padding: 32px;
-        visibility: hidden;
 
         .slideMiddle {
           display: flex;
@@ -71,12 +84,12 @@
             width: 30%;
           }
 
-          & > .h3 > h3 {
+          &>.h3>h3 {
             margin-bottom: 0;
             // margin-top: 0;
           }
 
-          & > .h3 > p {
+          &>.h3>p {
             margin-bottom: 0;
             margin-top: 0;
             color: darkgray;
@@ -145,7 +158,7 @@
             margin: 0;
             // flex: ;
 
-            & > P {
+            &>P {
               margin: 0;
             }
 
@@ -154,6 +167,7 @@
               width: 300px;
               height: 40px;
               padding: 10px;
+
               .updateLabInput {
                 outline: none;
                 width: 100%;
@@ -220,9 +234,11 @@
   background: rgba(186, 60, 60, 0.27);
   color: #470000;
 }
+
 .buttons {
   display: flex;
   gap: 18px;
+
   .editWrapper {
     display: flex;
     align-items: center;
@@ -237,6 +253,7 @@
       font-size: 18px;
     }
   }
+
   .deleteWrapper {
     display: flex;
     align-items: center;
@@ -248,8 +265,30 @@
     padding: 6px 12px;
     gap: 6px;
     color: #470000;
+
     .deleteIcon {
       font-size: 18px;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .partnerLabsMainWrapper {
+    padding: 30px 16px !important;
+
+    .partnerLabsMainTop {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 10px;
+
+      &>h3 {
+        margin: 0;
+        margin-top: 10px;
+      }
+    }
+
+    .manageCandidatesSlide {
+      width: 100% !important;
     }
   }
 }

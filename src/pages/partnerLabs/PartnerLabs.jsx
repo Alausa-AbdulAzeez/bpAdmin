@@ -26,6 +26,10 @@ const PartnerLabs = () => {
   // LOGGED IN USER TOKEN
   const { token } = useSelector((state) => state?.user?.currentUser?.data);
 
+  // GET CURRENT LOGGED IN USER
+  const { currentUser } = useSelector((state) => state?.user);
+  const userData = currentUser?.data;
+
   // LOADING AND ERROR DATA
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -175,8 +179,6 @@ const PartnerLabs = () => {
       });
 
       if (res.data) {
-        console.log(res.data?.data);
-
         setRows(res.data?.data);
         setFilteredData(res.data?.data);
 
@@ -224,7 +226,6 @@ const PartnerLabs = () => {
   // handlerowclick function
   const showSlide = (props) => {
     // getCandidate(props?.row)
-    console.log(props?.row);
     setlaboratoryToBeEdited(props?.row);
     setUpdatedLaboratoryInfo(props?.row);
     if (position !== "0") {
@@ -235,7 +236,6 @@ const PartnerLabs = () => {
 
   // FUNCTIONS TO TOGGLE ALERT SLIDE
   const handleClickOpen = (props) => {
-    console.log(props);
     setOpen(true);
     setlaboratoryToBeDeleted(props?.row);
   };
@@ -269,8 +269,6 @@ const PartnerLabs = () => {
   // FUNCTION TO UPDATE PARTNER LABS
 
   const handlePartnerLabUpdate = async () => {
-    console.log(updatedLaboratoryInfo);
-
     toastId.current = toast("Please wait...", {
       autoClose: 2500,
       isLoading: true,
@@ -388,7 +386,7 @@ const PartnerLabs = () => {
         />
         <Sidebar />
         <div className="partnerLabsRight">
-          <Topber />
+          <Topber userData={userData} />
           <div className="partnerLabsMainWrapper">
             <div className="partnerLabsMainTop">
               <h3>Partner Laboratories</h3>
@@ -410,11 +408,10 @@ const PartnerLabs = () => {
               </Link>
             </div>
             <div
-              className="manageCandidatesSlide"
-              style={{
-                right: position,
-                visibility: position === "0" && "visible",
-              }}
+              className={
+                position === "-100%" ? "zeroWidth" : "manageCandidatesSlide"
+              }
+              style={{ right: position }}
             >
               <div className="slideTop">
                 <div className="cancelconWrapper" onClick={handleHideSlide}>
