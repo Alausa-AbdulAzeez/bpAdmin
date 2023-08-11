@@ -251,7 +251,8 @@ const AddStaff = () => {
                     key={loading}
                     getOptionLabel={(option) => `${option.laboratoryName}`}
                     onChange={(e, option) => handleLabSelection(e, option)}
-                    sx={{ width: 400 }}
+                    // sx={{ width: 400 }}
+                    className="autocompleteInput"
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -298,7 +299,8 @@ const AddStaff = () => {
                     key={loading}
                     getOptionLabel={(option) => option.name}
                     onChange={(e, option) => handleStaffData(e, "role", option)}
-                    sx={{ width: 400 }}
+                    // sx={{ width: 400 }}
+                    className="autocompleteInput"
                     renderInput={(params) => (
                       <TextField
                         {...params}

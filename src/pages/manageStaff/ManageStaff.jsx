@@ -353,7 +353,9 @@ const ManageStaff = () => {
                 </Link>
               </div>
               <form
-                className="manageStaffSlide"
+                className={
+                  position === "-100%" ? "zeroWidth" : "manageStaffSlide"
+                }
                 style={{ right: position }}
                 onSubmit={handleUpdateUser}
               >

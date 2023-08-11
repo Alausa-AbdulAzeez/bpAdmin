@@ -1,12 +1,23 @@
 .manageStaffWrapper {
   width: 100%;
   display: flex;
+  height: calc(100vh - 0px);
 
   .manageStaffRight {
     flex: 5;
+    overflow-y: auto !important;
+      height: 100%;
 
     .manageStaffMainWrapper {
       padding: 30px 64px;
+
+              .zeroWidth {
+                  position: absolute;
+                  width: 0;
+                  overflow-x: hidden;
+                  transition: all ease-in-out 0.65s;
+              
+                }
 
       .manageStaffSlide {
         overflow: auto;
@@ -209,6 +220,44 @@
 
     .deleteIcon {
       font-size: 18px;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .manageStaffMainWrapper {
+    padding: 30px 16px !important;
+
+    .manageStaffMainTop {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 10px;
+
+      &>h3 {
+        margin: 0;
+        margin-top: 10px;
+      }
+    }
+
+    .manageStaffSlide {
+      width: 100% !important;
+      padding: 16px !important;
+
+
+      .staffBasicDetailsWrapper{
+        // min-height: 200px !important;
+       height: 220px !important;
+       margin-top: 10px;
+
+        // background-color: red;
+      }
+                            .updateStaffBtn {
+                              
+                              position: fixed !important;
+                              bottom: 30px !important;
+                              right: 20px !important;
+                            
+                            }
     }
   }
 }

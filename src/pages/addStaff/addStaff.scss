@@ -1,7 +1,7 @@
 .addStaffWrapper {
   width: 100%;
   display: flex;
-  height: calc(100% - 0px);
+  height: calc(100vh - 0px);
 
   .addStaffRight {
     flex: 5;
@@ -28,6 +28,9 @@
             flex-direction: column;
             flex: 1;
             justify-content: flex-end;
+                  .autocompleteInput {
+                      width: 400px;
+                    }
             p {
               margin-bottom: 0;
               font-weight: 500;
@@ -91,4 +94,41 @@
 
 #combo-box-demo {
   height: 15px;
+}
+
+@media screen and (max-width: 1200px) {
+  .singleInput{
+    width: 400px !important;
+    align-items: center !important;
+  }
+}
+
+
+@media screen and (max-width: 767px) {
+  .addStaffMainWrapper{
+    padding: 10px 16px !important;
+
+    &> h2{
+      text-align: center !important;
+    }
+
+
+    .singleInput{
+      width: 200px !important;
+      align-items: center;
+
+      .autocompleteInput{
+        width: 200px !important;
+      }
+    .inputWrapper {
+        width: 200px !important;
+    
+        .input {
+          width: 100%;
+        }
+      }
+    }
+
+
+  }
 }
