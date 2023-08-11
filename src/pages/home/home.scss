@@ -1,18 +1,18 @@
 .homeWrapper {
-  width: 100%;
+  // width: 100%;
   display: flex;
 
   .homepageRight {
-    max-width: calc(100% - 240px);
-    min-width: calc(100% - 240px);
+    flex: 5;
+      overflow: auto;
 
-    .homeMainWrapperContainer {
-      width: 100%;
 
-      overflow-x: auto;
       .homeMainWrapper {
         padding: 30px 64px;
-        width: 100%;
+        height: calc(100vh - 50px);
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
 
         .homeMainTop {
           width: 100%;
@@ -20,7 +20,8 @@
           display: flex;
           overflow-x: auto;
           gap: 20px;
-          height: 160px;
+          min-height: 160px;
+            max-height: 160px;
         }
 
         // .homeMainTop {
@@ -35,6 +36,29 @@
           // }
         }
       }
+    
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .homeMainWrapper {
+
+    padding: 30px 16px !important;
+
+    .homeMainTop {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      flex-wrap: wrap;
+      min-height: 500px !important;
+      justify-content: center;
+    }
+
+
+    .homeMainBottom {
+      display: none;
     }
   }
+
+
 }

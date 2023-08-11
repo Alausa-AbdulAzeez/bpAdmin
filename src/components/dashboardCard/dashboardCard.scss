@@ -68,3 +68,11 @@
     }
   }
 }
+
+@media screen and (max-width: 767px) {
+  .dashboardCardWrapper {
+    min-width: 200px !important;
+    max-width: 250px !important;
+    ;
+  }
+}
