@@ -84,11 +84,9 @@ const ManageStaff = () => {
         },
       });
       // const res = await privateRequest.get('Staff')
-      console.log("seccessS");
       setStaff(res?.data?.data?.result);
       setSearchedTableData(res?.data?.data?.result);
       setLoading(false);
-      console.log(res?.data?.data?.result);
     } catch (error) {
       setLoading(false);
       setError(true);
@@ -116,7 +114,6 @@ const ManageStaff = () => {
 
       setStaffRole(res?.data?.data?.[0]);
       setLoadingStaffRole(false);
-      console.log(res?.data?.data?.[0]);
     } catch (error) {
       setLoadingStaffRole(false);
       setStaffRoleErrorMessage(error);
@@ -160,7 +157,6 @@ const ManageStaff = () => {
 
       if (res.data) {
         setLaboratories(res?.data?.data);
-        console.log(res?.data?.data);
       } else {
         console.log(res.data);
       }
@@ -173,7 +169,6 @@ const ManageStaff = () => {
   // FUNCTION TO HANDLE LAB SELECTION (SLIDE)
   const handleLabSelection = (e, option) => {
     setSelectedLab(option);
-    console.log(option);
   };
   // END OF FUNCTION TO HANDLE LAB SELECTION (SLIDE)
 
@@ -238,8 +233,6 @@ const ManageStaff = () => {
       role: updatedCandidateInfo?.role?.[0]?.name || staffRole,
       laboratoryId: selectedLab?.id || selectedStaff?.laboratory?.id,
     };
-
-    console.log(updatedStaff);
 
     toastId.current = toast("Please wait...", {
       autoClose: 2500,
@@ -306,9 +299,7 @@ const ManageStaff = () => {
   }, [selectedStaff]);
 
   // useEffect to update error and loading state
-  useEffect(() => {
-    console.log(error, loading);
-  }, [error, loading]);
+  useEffect(() => {}, [error, loading]);
   // end of useEffect to update error and loading state
 
   // USE EFFECT TO STAFF ROLES AND LABORATORIES AS PAGE LOADS

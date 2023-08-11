@@ -97,7 +97,6 @@ const AddStaff = () => {
       autoClose: false,
       isLoading: true,
     });
-    console.log(staff);
 
     setDisableDoneAndCancelBtn(true);
     try {
@@ -149,7 +148,6 @@ const AddStaff = () => {
   // FUNCTION TO HANDLE LAB SELECTION (SLIDE)
   const handleLabSelection = (e, option) => {
     handleStaffData(e, "laboratoryId", option?.id);
-    console.log(option);
     setSelectedLab(option);
   };
   // END OF FUNCTION TO HANDLE LAB SELECTION (SLIDE)
@@ -166,7 +164,6 @@ const AddStaff = () => {
 
       if (res.data) {
         setLaboratories(res?.data?.data);
-        console.log(res?.data?.data);
       } else {
         console.log(res.data);
       }

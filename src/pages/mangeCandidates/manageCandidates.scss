@@ -1,13 +1,24 @@
 .manageCandidatesWrapper {
   width: 100%;
   display: flex;
+    height: calc(100vh - 0px);
 
   .manageCandidatesRight {
     flex: 5;
+        overflow-y: auto !important;
+          height: 100%;
 
     .manageCandidatesMainWrapper {
       padding: 30px 64px;
       // background-color: red;
+
+      .zeroWidth {
+          position: absolute;
+          width: 0;
+          overflow-x: hidden;
+          transition: all ease-in-out 0.65s;
+      
+        }
 
       .filterContainer {
         height: 80px;
@@ -84,7 +95,6 @@
         box-shadow: 1px 1px 40px 4px #6b6a6a6b;
         transition: all ease-in-out 0.65s;
         padding: 32px;
-        visibility: hidden;
 
         .slideMiddle {
           display: flex;
@@ -304,5 +314,81 @@
     margin-left: 12px;
     cursor: pointer;
     // color: var(--main-purple);
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .candidateSearchMainWrapper {
+    padding: 30px 16px !important;
+
+    .filterContainer {
+      width: 600px !important;
+      padding: 0 20px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .candidateSearchMainWrapper {
+    padding: 30px 16px !important;
+
+    .filterContainer {
+      width: 100% !important;
+      flex-direction: column;
+      min-height: 250px;
+      height: auto !important;
+      padding: 0 20px !important;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      border-radius: 0px !important;
+      overflow-y: auto !important;
+
+      .resetBtn,
+      .searchFilterBtn {
+        margin-left: 0 !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .manageCandidatesMainWrapper {
+    padding: 30px 16px !important;
+
+    .manageCandidatesSlide{
+      width: 100% !important;
+      padding: 32px 16px !important;
+
+    }
+
+    .filterContainer {
+      width: 600px !important;
+      padding: 0 20px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .manageCandidatesMainWrapper {
+    padding: 30px 16px !important;
+
+    .filterContainer {
+      width: 100% !important;
+      flex-direction: column;
+      min-height: 250px;
+      height: auto !important;
+      padding: 0 20px !important;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      border-radius: 0px !important;
+      overflow-y: auto !important;
+
+      .resetBtn,
+      .searchFilterBtn {
+        margin-left: 0 !important;
+      }
+    }
   }
 }

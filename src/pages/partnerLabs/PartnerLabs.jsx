@@ -409,7 +409,7 @@ const PartnerLabs = () => {
             </div>
             <div
               className={
-                position === "-100%" ? "zeroWidth" : "manageCandidatesSlide"
+                position === "-100%" ? "zeroWidth" : "managePlSlide"
               }
               style={{ right: position }}
             >
