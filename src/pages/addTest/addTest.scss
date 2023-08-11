@@ -1,15 +1,17 @@
 .addTestWrapper {
   width: 100%;
   display: flex;
-  height: calc(100% - 0px);
+  height: calc(100vh - 0px);
 
   .addTestRight {
     flex: 5;
+        overflow-y: auto !important;
+          height: 100%;
 
     .addTestMainWrapper {
-      height: 100%;
+      // height: 100%;
       padding: 10px 64px;
-      overflow-y: auto;
+      // overflow-y: auto;
 
       .addTestFormWrapper {
         .addTestInputsWrapper {
@@ -90,4 +92,73 @@
       }
     }
   }
+}
+
+@media screen and (max-width: 767px) {
+  .addTestMainWrapper {
+    padding: 10px 16px !important;
+
+        &>h2 {
+            text-align: center !important;
+          }
+
+                                .addTestFormWrapper {
+                                  .addTestInputsWrapper {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    flex-direction: column;
+                                    margin-bottom: 50px;
+                                    gap: 15px;
+                
+                                    .addTestSingleInput {
+                                      flex: 1;
+                                      display: flex;
+                                      flex-direction: column;
+                                      align-items: center;
+
+                
+                                      p {
+                                        margin-bottom: 0;
+                                        font-weight: 500;
+                                      }
+                
+                                      .textAreaWrapper {
+                                    width: 100% !important;
+                                        height: 200px;
+                                        padding: 10px;
+                                        max-width: 400px !important;
+                
+                                        .textArea {
+                                          outline: none;
+                                          width: 100%;
+                                          height: 100%;
+                                          border: 1px solid grey;
+                                        }
+                                      }
+                
+                                      .addTestInputWrapper {
+                                        border: 1px solid grey;
+                                        width: 100% !important;
+                                        height: 40px;
+                                        padding: 10px;
+                                        max-width: 400px !important;
+                
+                                        .addTestInput {
+                                          outline: none;
+                                          width: 100%;
+                                          height: 100%;
+                                          border: none;
+                                        }
+                                      }
+                                    }
+                                  }
+  
+                                  
+                                }
+
+   
+    }
+
+
+  
 }

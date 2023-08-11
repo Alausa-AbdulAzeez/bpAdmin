@@ -44,3 +44,19 @@
     }
   }
 }
+
+@media screen and (max-width: 767px) {
+  .manageTestsMainWrapper {
+    padding: 30px 16px !important;
+
+    .manageTestsMainTop {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 10px;
+    }
+
+
+
+  }
+}

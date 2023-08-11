@@ -60,7 +60,6 @@ const ManageTests = () => {
   // SEARCH FUNCTIONALITY
   const handleSearchParamsChange = (e) => {
     let filteredPendingCandidatesArray
-    console.log(tableData)
     filteredPendingCandidatesArray = tableData.filter((tableDatum) =>
       tableDatum?.testName
         ?.toLowerCase()
