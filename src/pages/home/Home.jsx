@@ -47,9 +47,7 @@ const Home = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   // useEffect to update error and loading state
-  useEffect(() => {
-    console.log(error, loading);
-  }, [error, loading]);
+  useEffect(() => {}, [error, loading]);
   // end of useEffect to update error and loading state
 
   // END OF SET LOADING AND ERROR FUNCTIONALITY
@@ -69,10 +67,8 @@ const Home = () => {
         },
       });
       // const res = await privateRequest.get('Staff')
-      console.log("seccessS");
       setStaff(res?.data?.data?.result);
       setLoading(false);
-      console.log(res?.data?.data?.result);
     } catch (error) {
       setLoading(false);
       setError(true);
