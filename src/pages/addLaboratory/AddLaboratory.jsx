@@ -112,7 +112,6 @@ const AddLaboratory = () => {
     });
 
     setDisableDoneAndCancelBtn(true);
-    console.log(laboratory);
 
     try {
       await publicRequest

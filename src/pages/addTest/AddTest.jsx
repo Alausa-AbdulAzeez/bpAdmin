@@ -38,12 +38,6 @@ const AddTest = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      if (res) {
-        console.log(res.data.data);
-      } else {
-        console.log(res);
-      }
     } catch (error) {
       console.log(error);
     }

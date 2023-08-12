@@ -74,7 +74,6 @@ const ResetPassword = () => {
               navigate("/login");
             }, 2500);
           });
-        console.log(res);
       } else {
         toast.update(toastId.current, {
           render: "Passwords don't match!",

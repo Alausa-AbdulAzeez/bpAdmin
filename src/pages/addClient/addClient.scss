@@ -131,23 +131,26 @@
 }
 
 @media screen and (max-width: 1200px) {
-      .inputsWrapper {
-          justify-content: center !important;
+  .addClientWrapper{
 
-            .singleInput {
-                width: 400px !important;
-                align-items: center !important;
-                flex: none !important;
+    .inputsWrapper {
+        justify-content: center !important;
 
-                .inputWrapper {
-                    width: 400px !important;
-                
-                    .input {
-                      width: 100%;
-                    }
+          .singleInput {
+              width: 400px !important;
+              align-items: center !important;
+              flex: none !important;
+
+              .inputWrapper {
+                  width: 400px !important;
+              
+                  .input {
+                    width: 100%;
                   }
-              }
-        }
+                }
+            }
+      }
+  }
 
 }
 

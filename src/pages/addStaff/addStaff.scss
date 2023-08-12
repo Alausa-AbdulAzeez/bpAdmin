@@ -97,9 +97,12 @@
 }
 
 @media screen and (max-width: 1200px) {
-  .singleInput{
-    width: 400px !important;
-    align-items: center !important;
+  .addStaffMainWrapper{
+
+    .singleInput{
+      width: 400px !important;
+      align-items: center !important;
+    }
   }
 }
 
